@@ -18,11 +18,17 @@ export const Route = createFileRoute("/admin/configuracoes")({
 
 type Settings = {
   social_proof: { enabled: boolean };
+  whatsapp: { enabled: boolean; phone: string; message: string };
   order_emails: { customer: boolean; admin: boolean; admin_email: string };
 };
 
 const DEFAULTS: Settings = {
   social_proof: { enabled: true },
+  whatsapp: {
+    enabled: true,
+    phone: "",
+    message: "Olá! Gostaria de saber mais sobre os séruns NUVE Advanced.",
+  },
   order_emails: { customer: true, admin: true, admin_email: "nuveadvanced@gmail.com" },
 };
 
@@ -35,12 +41,14 @@ function AdminConfig() {
       const map = Object.fromEntries((data ?? []).map((r: any) => [r.key, r.value]));
       return {
         social_proof: { ...DEFAULTS.social_proof, ...(map["social_proof"] ?? {}) },
+        whatsapp: { ...DEFAULTS.whatsapp, ...(map["whatsapp"] ?? {}) },
         order_emails: { ...DEFAULTS.order_emails, ...(map["order_emails"] ?? {}) },
       } as Settings;
     },
   });
 
   const s = data ?? DEFAULTS;
+
 
   async function save(key: keyof Settings, value: unknown) {
     const { error } = await supabase
@@ -53,14 +61,48 @@ function AdminConfig() {
     toast.success("Configuração salva.");
     qc.invalidateQueries({ queryKey: ["admin-settings"] });
     qc.invalidateQueries({ queryKey: ["social-proof"] });
+    qc.invalidateQueries({ queryKey: ["setting", "whatsapp"] });
   }
 
   return (
     <div className="space-y-8">
       <header>
         <h1 className="font-display text-3xl text-ink">Configurações da loja</h1>
-        <p className="mt-1 text-sm text-ash">Notificações de prova social e avisos de pedido.</p>
+        <p className="mt-1 text-sm text-ash">Atendimento no WhatsApp, prova social e avisos de pedido.</p>
+
       </header>
+
+      <section className="border border-border bg-card p-5">
+        <h2 className="font-display text-2xl text-ink">Atendimento no WhatsApp</h2>
+        <p className="mt-1 text-sm text-ash">
+          Exibe um botão flutuante em todas as páginas da loja. Informe o número com DDD (ex.: 11 91234-5678).
+        </p>
+        <Toggle
+          label="Exibir botão do WhatsApp"
+          checked={s.whatsapp.enabled}
+          onChange={(v) => save("whatsapp", { ...s.whatsapp, enabled: v })}
+        />
+        <div className="mt-4 grid gap-4 sm:grid-cols-2">
+          <label className="block">
+            <span className="text-[11px] uppercase tracking-[0.14em] text-ash">Número (com DDD)</span>
+            <input
+              defaultValue={s.whatsapp.phone}
+              placeholder="11 91234-5678"
+              onBlur={(e) => save("whatsapp", { ...s.whatsapp, phone: e.target.value.trim() })}
+              className="mt-1 w-full border border-input bg-ivory px-3 py-2 text-sm"
+            />
+          </label>
+          <label className="block">
+            <span className="text-[11px] uppercase tracking-[0.14em] text-ash">Mensagem inicial</span>
+            <input
+              defaultValue={s.whatsapp.message}
+              onBlur={(e) => save("whatsapp", { ...s.whatsapp, message: e.target.value })}
+              className="mt-1 w-full border border-input bg-ivory px-3 py-2 text-sm"
+            />
+          </label>
+        </div>
+      </section>
+
 
       <section className="border border-border bg-card p-5">
         <h2 className="font-display text-2xl text-ink">Prova social</h2>
