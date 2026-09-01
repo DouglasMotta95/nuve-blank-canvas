@@ -4,27 +4,6 @@ import { ProductCard } from "@/components/site/ProductCard";
 import { AutoCarousel } from "@/components/site/AutoCarousel";
 import { HeroVisualSlider } from "@/components/site/HeroVisualSlider";
 import g1 from "@/assets/img-20260831-wa0026.jpg.asset.json";
-import g2 from "@/assets/img-20260831-wa0065.jpg.asset.json";
-import g3 from "@/assets/img-20260831-wa0066.jpg.asset.json";
-import g4 from "@/assets/img-20260831-wa0073.jpg.asset.json";
-import g5 from "@/assets/img-20260831-wa0079.jpg.asset.json";
-import g6 from "@/assets/img-20260831-wa0067.jpg.asset.json";
-import g7 from "@/assets/img-20260831-wa0078.jpg.asset.json";
-import g8 from "@/assets/img-20260831-wa0081.jpg.asset.json";
-import g9 from "@/assets/img-20260831-wa0036.jpg.asset.json";
-import g10 from "@/assets/img-20260831-wa0037.jpg.asset.json";
-
-const GALLERY_FALLBACK = [
-  { url: g2.url, alt: "Séruns NUVE GHK-Cu, 5 EM 1 e PDRN lado a lado" },
-  { url: g3.url, alt: "Séruns NUVE com suas embalagens" },
-  { url: g4.url, alt: "NUVE GHK-Cu e 5 EM 1 com as caixas originais" },
-  { url: g5.url, alt: "NUVE 5 EM 1 Serum com respingos de água e embalagem" },
-  { url: g6.url, alt: "NUVE PDRN Copper Peptide com a embalagem" },
-  { url: g7.url, alt: "NUVE PDRN Copper Peptide em textura de gel rosa" },
-  { url: g8.url, alt: "Frasco do NUVE 5 EM 1 Serum em fundo claro" },
-  { url: g9.url, alt: "NUVE 5 EM 1 Serum 30 ml" },
-  { url: g10.url, alt: "Mulheres aplicando sérum NUVE" },
-];
 
 const DEFAULT_PILLARS = [
   { title: "Formulações desenvolvidas no Japão", text: "Tecnologia e conhecimento em skincare traduzidos para uma rotina moderna de cuidados com a pele." },
@@ -79,14 +58,16 @@ function Home() {
   const editorial = (banners ?? []).filter((banner) => ["science", "editorial", "promotional", "fixed"].includes(banner.placement));
   const lineDetails = (banners ?? []).filter((banner) => banner.placement === "line_details");
   const pillars = home?.pillars?.length ? home.pillars : DEFAULT_PILLARS;
+  const featuredProducts = (products ?? []).filter((product) => product.featured);
 
   const heroSlides = heroBanners.length
     ? heroBanners.map((banner) => ({ id: banner.id, image_desktop: banner.image_desktop, image_mobile: banner.image_mobile, title: banner.alt_text ?? banner.title }))
     : [{ id: "fallback-hero", image_desktop: g1.url, image_mobile: null, title: "NUVE Advance Skincare" }];
 
-  const gallerySlides = lineDetails.length
-    ? lineDetails.map((banner) => ({ url: banner.image_desktop, alt: banner.alt_text ?? banner.title ?? "NUVE Advance Skincare" }))
-    : GALLERY_FALLBACK;
+  const gallerySlides = lineDetails.map((banner) => ({
+    url: banner.image_desktop,
+    alt: banner.alt_text ?? banner.title ?? "NUVE Advance Skincare",
+  }));
 
   return (
     <div className="nuve-reveal overflow-x-hidden">
@@ -117,7 +98,7 @@ function Home() {
       {home?.show_products !== false && (
         <section className="mx-auto max-w-6xl px-4 py-14 sm:px-6 md:py-18 lg:px-4 lg:py-20">
           <div className="text-center"><p className="eyebrow">{home?.products_eyebrow ?? "A linha"}</p><h2 className="mt-2 font-display text-4xl text-ink md:text-5xl">{home?.products_title ?? "Séruns para diferentes formas de cuidar."}</h2><p className="mx-auto mt-4 max-w-[58ch] text-sm leading-relaxed text-ash">{home?.products_subtitle ?? "Escolha a fórmula que mais combina com sua rotina ou combine dois produtos e receba 10% OFF automático quando elegível."}</p></div>
-          <div className="mt-10 grid gap-6 sm:grid-cols-2 xl:grid-cols-3">{(products ?? []).map((product) => <ProductCard key={product.id} product={product} />)}</div>
+          <div className="mt-10 grid gap-6 sm:grid-cols-2 xl:grid-cols-3">{featuredProducts.map((product) => <ProductCard key={product.id} product={product} />)}</div>
         </section>
       )}
 
@@ -128,7 +109,7 @@ function Home() {
         </section>
       )}
 
-      {home?.show_line_details !== false && (
+      {home?.show_line_details !== false && gallerySlides.length > 0 && (
         <section className="border-y border-border bg-cream/60 py-12 sm:py-14 md:py-16">
           <div className="mx-auto w-full max-w-[1500px] px-3 sm:px-5 lg:px-6"><div className="text-center"><p className="eyebrow">{home?.line_details_eyebrow ?? "Universo NUVE"}</p><h2 className="mt-2 font-display text-4xl text-ink">{home?.line_details_title ?? "A linha em detalhes"}</h2></div><div className="mt-8 overflow-hidden border border-border bg-card"><AutoCarousel slides={gallerySlides} /></div></div>
         </section>
