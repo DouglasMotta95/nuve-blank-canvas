@@ -113,7 +113,9 @@ function AdminEstoque() {
 
       <div className="space-y-4">
         {(products ?? []).map((p) => {
-          const low = p.stock <= 10;
+          const reserved = p.reserved_stock ?? 0;
+          const available = p.stock - reserved;
+          const low = available <= 10;
           return (
             <div key={p.id} className="border border-border bg-card p-5">
               <div className="flex flex-wrap items-baseline justify-between gap-3">
@@ -121,9 +123,15 @@ function AdminEstoque() {
                   <p className="font-display text-xl text-ink">{p.name}</p>
                   <p className="text-[11px] uppercase tracking-[0.14em] text-ash">{p.sku}</p>
                 </div>
-                <p className={`text-lg ${low ? "text-destructive" : "text-ink"}`}>
-                  {p.stock} un. {low && <span className="text-[11px] uppercase tracking-[0.14em]">· estoque baixo</span>}
-                </p>
+                <div className="text-right">
+                  <p className={`text-lg ${low ? "text-destructive" : "text-ink"}`}>
+                    {available} un. disponíveis
+                    {low && <span className="ml-2 text-[11px] uppercase tracking-[0.14em]">· estoque baixo</span>}
+                  </p>
+                  <p className="text-[11px] uppercase tracking-[0.14em] text-ash">
+                    Total {p.stock} · reservado {reserved}
+                  </p>
+                </div>
               </div>
 
               <div className="mt-4 flex flex-wrap items-center gap-2">
@@ -146,6 +154,12 @@ function AdminEstoque() {
                   placeholder="Qtd. total"
                   className="w-28 border border-input bg-ivory px-3 py-2 text-sm"
                 />
+                <input
+                  value={note[p.id] ?? ""}
+                  onChange={(e) => setNote((s) => ({ ...s, [p.id]: e.target.value }))}
+                  placeholder="Motivo (ex.: recebimento NF 123)"
+                  className="min-w-[200px] flex-1 border border-input bg-ivory px-3 py-2 text-sm"
+                />
                 <button
                   type="button"
                   disabled={busy === p.id}
@@ -158,6 +172,7 @@ function AdminEstoque() {
             </div>
           );
         })}
+
       </div>
 
       <section>
