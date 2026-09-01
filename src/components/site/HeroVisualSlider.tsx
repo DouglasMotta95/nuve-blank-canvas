@@ -25,46 +25,31 @@ export function HeroVisualSlider({ slides }: { slides: HeroVisual[] }) {
 
   if (usable.length === 0) return null;
 
+  const current = usable[active] ?? usable[0];
+
   return (
     <div
       className="relative w-full overflow-hidden bg-cream"
       aria-roledescription="carrossel"
       aria-label="Campanhas NUVE"
     >
-      <div className="relative aspect-[16/10] w-full sm:aspect-[16/9]">
-        {usable.map((slide, index) => (
-          <div
-            key={slide.id}
-            className={`absolute inset-0 transition-opacity duration-1000 ease-out ${
-              index === active ? "z-10 opacity-100" : "z-0 opacity-0"
-            }`}
-            aria-hidden={index !== active}
-          >
-            <img
-              src={slide.image_desktop}
-              alt=""
-              aria-hidden="true"
-              className="absolute inset-0 size-full scale-105 object-cover object-center opacity-18 blur-2xl"
-            />
-            <picture className="absolute inset-0 flex items-center justify-center">
-              {slide.image_mobile && <source media="(max-width: 639px)" srcSet={slide.image_mobile} />}
-              <img
-                src={slide.image_desktop}
-                alt={slide.title ? `${slide.title} — NUVE Advance Skincare` : "NUVE Advance Skincare"}
-                className="block size-full object-contain object-center"
-                width={1920}
-                height={1080}
-                sizes="100vw"
-                fetchPriority={index === 0 ? "high" : "auto"}
-                loading={index === 0 ? "eager" : "lazy"}
-              />
-            </picture>
-          </div>
-        ))}
-      </div>
+      <picture key={current.id} className="block w-full">
+        {current.image_mobile && <source media="(max-width: 639px)" srcSet={current.image_mobile} />}
+        <img
+          src={current.image_desktop}
+          alt={current.title ? `${current.title} — NUVE Advance Skincare` : "NUVE Advance Skincare"}
+          className="block h-auto w-full object-contain object-center"
+          width={1920}
+          height={1080}
+          sizes="100vw"
+          fetchPriority={active === 0 ? "high" : "auto"}
+          loading={active === 0 ? "eager" : "lazy"}
+          decoding="async"
+        />
+      </picture>
 
       {usable.length > 1 && (
-        <div className="absolute bottom-3 left-1/2 z-20 flex -translate-x-1/2 items-center gap-2 rounded-full bg-ivory/82 px-3 py-2 backdrop-blur-sm sm:bottom-4">
+        <div className="absolute bottom-3 left-1/2 z-20 flex -translate-x-1/2 items-center gap-2 rounded-full bg-ivory/90 px-3 py-2 shadow-sm backdrop-blur-sm sm:bottom-4">
           {usable.map((slide, index) => (
             <button
               key={slide.id}
