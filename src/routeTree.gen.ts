@@ -22,6 +22,7 @@ import { Route as LojaRouteImport } from './routes/loja'
 import { Route as RastreioRouteImport } from './routes/rastreio'
 import { Route as SobreRouteImport } from './routes/sobre'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
+import { Route as AdminAuditoriaRouteImport } from './routes/admin.auditoria'
 import { Route as AdminBannersRouteImport } from './routes/admin.banners'
 import { Route as AdminConfiguracoesRouteImport } from './routes/admin.configuracoes'
 import { Route as AdminCuponsRouteImport } from './routes/admin.cupons'
@@ -98,6 +99,11 @@ const AdminIndexRoute = AdminIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminAuditoriaRoute = AdminAuditoriaRouteImport.update({
+  id: '/auditoria',
+  path: '/auditoria',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminBannersRoute = AdminBannersRouteImport.update({
   id: '/banners',
   path: '/banners',
@@ -163,6 +169,7 @@ export interface FileRoutesByFullPath {
   '/loja': typeof LojaRoute
   '/rastreio': typeof RastreioRoute
   '/sobre': typeof SobreRoute
+  '/admin/auditoria': typeof AdminAuditoriaRoute
   '/admin/banners': typeof AdminBannersRoute
   '/admin/configuracoes': typeof AdminConfiguracoesRoute
   '/admin/cupons': typeof AdminCuponsRoute
@@ -187,6 +194,7 @@ export interface FileRoutesByTo {
   '/loja': typeof LojaRoute
   '/rastreio': typeof RastreioRoute
   '/sobre': typeof SobreRoute
+  '/admin/auditoria': typeof AdminAuditoriaRoute
   '/admin/banners': typeof AdminBannersRoute
   '/admin/configuracoes': typeof AdminConfiguracoesRoute
   '/admin/cupons': typeof AdminCuponsRoute
@@ -213,6 +221,7 @@ export interface FileRoutesById {
   '/loja': typeof LojaRoute
   '/rastreio': typeof RastreioRoute
   '/sobre': typeof SobreRoute
+  '/admin/auditoria': typeof AdminAuditoriaRoute
   '/admin/banners': typeof AdminBannersRoute
   '/admin/configuracoes': typeof AdminConfiguracoesRoute
   '/admin/cupons': typeof AdminCuponsRoute
@@ -240,6 +249,7 @@ export interface FileRouteTypes {
     | '/loja'
     | '/rastreio'
     | '/sobre'
+    | '/admin/auditoria'
     | '/admin/banners'
     | '/admin/configuracoes'
     | '/admin/cupons'
@@ -264,6 +274,7 @@ export interface FileRouteTypes {
     | '/loja'
     | '/rastreio'
     | '/sobre'
+    | '/admin/auditoria'
     | '/admin/banners'
     | '/admin/configuracoes'
     | '/admin/cupons'
@@ -289,6 +300,7 @@ export interface FileRouteTypes {
     | '/loja'
     | '/rastreio'
     | '/sobre'
+    | '/admin/auditoria'
     | '/admin/banners'
     | '/admin/configuracoes'
     | '/admin/cupons'
@@ -414,6 +426,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminIndexRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/auditoria': {
+      id: '/admin/auditoria'
+      path: '/auditoria'
+      fullPath: '/admin/auditoria'
+      preLoaderRoute: typeof AdminAuditoriaRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/banners': {
       id: '/admin/banners'
       path: '/banners'
@@ -488,6 +507,7 @@ declare module '@tanstack/react-router' {
 }
 
 interface AdminRouteChildren {
+  AdminAuditoriaRoute: typeof AdminAuditoriaRoute
   AdminBannersRoute: typeof AdminBannersRoute
   AdminConfiguracoesRoute: typeof AdminConfiguracoesRoute
   AdminCuponsRoute: typeof AdminCuponsRoute
@@ -498,6 +518,7 @@ interface AdminRouteChildren {
 }
 
 const AdminRouteChildren: AdminRouteChildren = {
+  AdminAuditoriaRoute: AdminAuditoriaRoute,
   AdminBannersRoute: AdminBannersRoute,
   AdminConfiguracoesRoute: AdminConfiguracoesRoute,
   AdminCuponsRoute: AdminCuponsRoute,
