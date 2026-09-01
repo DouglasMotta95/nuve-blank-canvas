@@ -46,6 +46,7 @@ function ProdutoPage() {
 
   const price = priceOf(product);
   const images = product.product_images;
+  const beforeAfter = images.filter((i) => i.is_before_after);
   const others = (all ?? []).filter((p) => p.id !== product.id);
 
   return (
