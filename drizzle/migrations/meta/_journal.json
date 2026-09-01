@@ -8,6 +8,13 @@
       "when": 1788269247470,
       "tag": "0000_nuve_ecommerce_schema",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1788269980760,
+      "tag": "0001_orders_tracking_code",
+      "breakpoints": true
     }
   ]
 }

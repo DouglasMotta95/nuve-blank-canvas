@@ -330,6 +330,7 @@ export type Database = {
       }
       orders: {
         Row: {
+          admin_notes: string | null
           coupon_code: string | null
           coupon_discount_cents: number
           created_at: string
@@ -346,10 +347,12 @@ export type Database = {
           status: string
           subtotal_cents: number
           total_cents: number
+          tracking_code: string | null
           updated_at: string
           user_id: string | null
         }
         Insert: {
+          admin_notes?: string | null
           coupon_code?: string | null
           coupon_discount_cents?: number
           created_at?: string
@@ -366,10 +369,12 @@ export type Database = {
           status?: string
           subtotal_cents?: number
           total_cents?: number
+          tracking_code?: string | null
           updated_at?: string
           user_id?: string | null
         }
         Update: {
+          admin_notes?: string | null
           coupon_code?: string | null
           coupon_discount_cents?: number
           created_at?: string
@@ -386,6 +391,7 @@ export type Database = {
           status?: string
           subtotal_cents?: number
           total_cents?: number
+          tracking_code?: string | null
           updated_at?: string
           user_id?: string | null
         }
