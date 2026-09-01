@@ -112,18 +112,8 @@ function AdminConfig() {
       </section>
 
 
-      <section className="border border-border bg-card p-5">
-        <h2 className="font-display text-2xl text-ink">Prova social</h2>
-        <p className="mt-1 text-sm text-ash">
-          Mostra no site avisos discretos do tipo “Ana de São Paulo/SP acabou de comprar”, usando pedidos reais dos
-          últimos 14 dias (apenas primeiro nome e cidade).
-        </p>
-        <Toggle
-          label="Exibir avisos de compra recente"
-          checked={s.social_proof.enabled}
-          onChange={(v) => save("social_proof", { enabled: v })}
-        />
-      </section>
+      <SocialProofSection value={s.social_proof} onSave={(v) => save("social_proof", v)} />
+
 
       <section className="border border-border bg-card p-5">
         <h2 className="font-display text-2xl text-ink">E-mails de pedido</h2>
