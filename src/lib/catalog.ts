@@ -9,7 +9,6 @@ export type ProductImage = {
   is_cover: boolean;
   fit: string;
   is_before_after: boolean;
-  active: boolean;
 };
 
 export type ActiveItem = { name: string; text: string };
@@ -63,7 +62,7 @@ export type Banner = {
   alt_text: string | null;
 };
 
-const SELECT = "*, product_images(id,url,alt,sort_order,is_cover,fit,is_before_after,active)";
+const SELECT = "*, product_images(id,url,alt,sort_order,is_cover,fit,is_before_after)";
 
 function normalize(row: Record<string, unknown>): Product {
   const rawImages = Array.isArray(row.product_images) ? row.product_images : [];
@@ -72,9 +71,7 @@ function normalize(row: Record<string, unknown>): Product {
     benefits: Array.isArray(row.benefits) ? row.benefits : [],
     actives: Array.isArray(row.actives) ? row.actives : [],
     how_to_use: Array.isArray(row.how_to_use) ? row.how_to_use : [],
-    product_images: (rawImages as ProductImage[])
-      .filter((image) => image.active !== false)
-      .sort((a, b) => a.sort_order - b.sort_order),
+    product_images: (rawImages as ProductImage[]).sort((a, b) => a.sort_order - b.sort_order),
   } as Product;
 }
 
@@ -118,11 +115,10 @@ export function useBanners(placement?: BannerPlacement | string) {
   return useQuery({
     queryKey: ["banners", placement ?? "all"],
     queryFn: async (): Promise<Banner[]> => {
-      let query = supabase.from("banners").select("*").eq("active", true);
-      if (placement) query = query.eq("placement", placement);
-      const { data, error } = await query.order("sort_order");
+      const { data, error } = await supabase.from("banners").select("*").eq("active", true).order("sort_order");
       if (error) throw error;
-      return (data ?? []) as Banner[];
+      const banners = (data ?? []) as unknown as Banner[];
+      return placement ? banners.filter((banner) => banner.placement === placement) : banners;
     },
   });
 }
