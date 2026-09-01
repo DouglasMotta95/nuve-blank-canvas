@@ -108,6 +108,21 @@ function Home() {
         </div>
       </section>
 
+      {/* Carrossel automático da linha */}
+      <section className="border-y border-border bg-cream/60 py-14">
+        <div className="mx-auto max-w-5xl px-4">
+          <div className="text-center">
+            <p className="eyebrow">Galeria</p>
+            <h2 className="mt-2 font-display text-4xl text-ink">A linha NUVE em detalhes</h2>
+          </div>
+          <div className="mt-8 border border-border">
+            <AutoCarousel slides={GALLERY} />
+          </div>
+        </div>
+      </section>
+
+
+
       {/* Banners editoriais */}
       {secondary.map((b, i) => (
         <section key={b.id} className={i % 2 === 0 ? "bg-cream" : "bg-blush/40"}>
