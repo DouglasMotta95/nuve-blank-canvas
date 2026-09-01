@@ -1,6 +1,31 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useBanners, useProducts, useReviews } from "@/lib/catalog";
 import { ProductCard } from "@/components/site/ProductCard";
+import { AutoCarousel } from "@/components/site/AutoCarousel";
+import g1 from "@/assets/img-20260831-wa0026.jpg.asset.json";
+import g2 from "@/assets/img-20260831-wa0065.jpg.asset.json";
+import g3 from "@/assets/img-20260831-wa0066.jpg.asset.json";
+import g4 from "@/assets/img-20260831-wa0073.jpg.asset.json";
+import g5 from "@/assets/img-20260831-wa0079.jpg.asset.json";
+import g6 from "@/assets/img-20260831-wa0067.jpg.asset.json";
+import g7 from "@/assets/img-20260831-wa0078.jpg.asset.json";
+import g8 from "@/assets/img-20260831-wa0081.jpg.asset.json";
+import g9 from "@/assets/img-20260831-wa0036.jpg.asset.json";
+import g10 from "@/assets/img-20260831-wa0037.jpg.asset.json";
+
+const GALLERY = [
+  { url: g1.url, alt: "NUVE Advanced Skin Care — a linha completa de séruns" },
+  { url: g2.url, alt: "Séruns NUVE GHK-Cu, 5 EM 1 e PDRN lado a lado" },
+  { url: g3.url, alt: "Séruns NUVE com suas embalagens e benefícios" },
+  { url: g4.url, alt: "NUVE GHK-Cu e 5 EM 1 com as caixas originais" },
+  { url: g5.url, alt: "NUVE 5 EM 1 Serum com respingos de água e embalagem" },
+  { url: g6.url, alt: "NUVE PDRN Copper Peptide com a embalagem" },
+  { url: g7.url, alt: "NUVE PDRN Copper Peptide em textura de gel rosa" },
+  { url: g8.url, alt: "Frasco do NUVE 5 EM 1 Serum em fundo claro" },
+  { url: g9.url, alt: "NUVE 5 EM 1 Serum, sérum facial multifuncional 30ml" },
+  { url: g10.url, alt: "Mulheres aplicando o sérum NUVE GHK-Cu" },
+];
+
 
 export const Route = createFileRoute("/")({
   head: () => ({
