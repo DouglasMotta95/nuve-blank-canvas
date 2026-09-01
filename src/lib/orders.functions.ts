@@ -221,18 +221,30 @@ export const createOrder = createServerFn({ method: "POST" })
     return { order_id: order.id, order_number: order.order_number, total_cents: order.total_cents };
   });
 
+const ORDER_SELECT =
+  "id, order_number, status, payment_status, tracking_code, subtotal_cents, promo_discount_cents, coupon_discount_cents, shipping_cents, total_cents, coupon_code, created_at, updated_at, customer_name, order_items(name, sku, quantity, unit_price_cents, total_cents)";
+
+async function loadEvents(admin: any, orderId: string) {
+  const { data } = await admin
+    .from("order_status_events")
+    .select("id, status, payment_status, tracking_code, note, created_at")
+    .eq("order_id", orderId)
+    .order("created_at", { ascending: true });
+  return data ?? [];
+}
+
 export const getOrderPublic = createServerFn({ method: "POST" })
   .inputValidator((d: unknown) => z.object({ order_id: z.string().uuid() }).parse(d))
   .handler(async ({ data }) => {
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const { data: order } = await supabaseAdmin
       .from("orders")
-      .select(
-        "id, order_number, status, payment_status, subtotal_cents, promo_discount_cents, coupon_discount_cents, shipping_cents, total_cents, coupon_code, created_at, customer_name, order_items(name, sku, quantity, unit_price_cents, total_cents)",
-      )
+      .select(ORDER_SELECT)
       .eq("id", data.order_id)
       .maybeSingle();
-    return order ?? null;
+    if (!order) return null;
+    return { ...order, events: await loadEvents(supabaseAdmin, order.id) };
+
   });
 
 export const subscribeNewsletter = createServerFn({ method: "POST" })
