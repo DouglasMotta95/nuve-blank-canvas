@@ -15,7 +15,7 @@ import g9 from "@/assets/img-20260831-wa0036.jpg.asset.json";
 import g10 from "@/assets/img-20260831-wa0037.jpg.asset.json";
 
 const GALLERY = [
-  { url: g1.url, alt: "NUVE Advanced Skin Care — linha de séruns" },
+  { url: g1.url, alt: "NUVE Advance Skincare — linha de séruns" },
   { url: g2.url, alt: "Séruns NUVE GHK-Cu, 5 EM 1 e PDRN lado a lado" },
   { url: g3.url, alt: "Séruns NUVE com suas embalagens" },
   { url: g4.url, alt: "NUVE GHK-Cu e 5 EM 1 com as caixas originais" },
@@ -30,13 +30,13 @@ const GALLERY = [
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "NUVE Advanced Skin Care — Tecnologia, ativos e autocuidado" },
+      { title: "NUVE Advance Skincare — Tecnologia, ativos e autocuidado" },
       {
         name: "description",
         content:
           "Conheça NUVE 5 EM 1, GHK-Cu e PDRN + Peptídeo de Cobre. Skincare sofisticado, formulações desenvolvidas no Japão e 10% OFF levando 2 ou mais unidades elegíveis.",
       },
-      { property: "og:title", content: "NUVE Advanced Skin Care" },
+      { property: "og:title", content: "NUVE Advance Skincare" },
       {
         property: "og:description",
         content: "Tecnologia japonesa. Ativos selecionados. Skincare para a vida real.",
@@ -85,7 +85,7 @@ function Home() {
             id: "fallback-hero",
             image_desktop: g1.url,
             image_mobile: null,
-            title: "NUVE Advanced Skin Care",
+            title: "NUVE Advance Skincare",
           },
         ];
 
@@ -98,7 +98,7 @@ function Home() {
 
         <div className="mx-auto max-w-6xl px-4 py-9 sm:px-6 sm:py-11 lg:px-4 lg:py-14">
           <div className="mx-auto max-w-4xl text-center">
-            <p className="eyebrow">NUVE Advanced Skin Care</p>
+            <p className="eyebrow">NUVE Advance Skincare</p>
             <h1 className="mx-auto mt-3 max-w-[17ch] font-display text-[38px] leading-[1.02] text-ink sm:text-[46px] md:text-[54px] lg:text-[62px]">
               {hero?.title ?? "Tecnologia japonesa. Ativos selecionados. Skincare para a vida real."}
             </h1>
@@ -106,7 +106,7 @@ function Home() {
               {hero?.subtitle ??
                 "A Nuve une a sofisticação do skincare japonês a fórmulas cuidadosamente desenvolvidas com ativos selecionados para transformar o cuidado com a pele em uma experiência simples, prática e especial."}
             </p>
-            <div className="mt-7 flex flex-col items-stretch justify-center gap-3 sm:flex-row sm:items-center sm:flex-wrap">
+            <div className="mt-7 flex flex-col items-stretch justify-center gap-3 sm:flex-row sm:flex-wrap sm:items-center">
               <Link to="/loja" className="inline-flex min-h-12 items-center justify-center bg-ink px-8 py-4 text-[11px] uppercase tracking-[0.22em] text-ivory">
                 Conheça os produtos
               </Link>
@@ -125,7 +125,7 @@ function Home() {
       </section>
 
       <section className="border-y border-border bg-cream">
-        <div className="mx-auto grid max-w-6xl gap-7 px-4 py-10 sm:grid-cols-2 sm:px-6 lg:grid-cols-4 lg:px-4">
+        <div className="mx-auto grid max-w-6xl gap-7 px-4 py-10 sm:grid-cols-2 sm:px-6 xl:grid-cols-4 xl:px-4">
           {PILLARS.map((p) => (
             <div key={p.title} className="border-t border-clay/35 pt-4">
               <h2 className="font-display text-xl leading-tight text-ink">{p.title}</h2>
@@ -143,7 +143,7 @@ function Home() {
             Escolha a fórmula que mais combina com sua rotina ou combine dois produtos e receba 10% OFF automático quando elegível.
           </p>
         </div>
-        <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-10 grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
           {(products ?? []).map((p) => (
             <ProductCard key={p.id} product={p} />
           ))}
@@ -151,8 +151,8 @@ function Home() {
       </section>
 
       <section className="overflow-hidden bg-[#2b2528] text-ivory">
-        <div className="mx-auto grid max-w-6xl items-stretch lg:grid-cols-2">
-          <div className="order-2 px-5 py-11 sm:px-8 sm:py-12 lg:order-1 lg:px-10 lg:py-16">
+        <div className="mx-auto grid max-w-[1500px] items-stretch xl:grid-cols-[0.9fr_1.1fr]">
+          <div className="order-2 px-5 py-11 sm:px-8 sm:py-12 xl:order-1 xl:px-12 xl:py-16">
             <p className="text-[10px] uppercase tracking-[0.28em] text-champagne">Inspiração japonesa</p>
             <h2 className="mt-3 max-w-[15ch] font-display text-4xl leading-[1.04] md:text-5xl">
               Formulações desenvolvidas no Japão
@@ -170,24 +170,24 @@ function Home() {
               Descubra a história da NUVE
             </Link>
           </div>
-          <div className="order-1 flex min-h-[260px] items-center justify-center bg-cream p-3 sm:min-h-[360px] sm:p-5 lg:order-2 lg:min-h-full lg:p-6">
+          <div className="order-1 flex min-h-[360px] items-center justify-center bg-cream sm:min-h-[480px] xl:order-2 xl:min-h-[620px]">
             <img
               src={japaneseVisual}
               alt="NUVE — tecnologia, formulação e inspiração japonesa"
               loading="lazy"
-              className="block max-h-[620px] w-full object-contain object-center"
+              className="block max-h-[760px] h-full w-full object-contain object-center"
             />
           </div>
         </div>
       </section>
 
       <section className="border-y border-border bg-cream/60 py-12 sm:py-14 md:py-16">
-        <div className="mx-auto max-w-5xl px-4 sm:px-6">
+        <div className="mx-auto max-w-6xl px-4 sm:px-6">
           <div className="text-center">
             <p className="eyebrow">Universo NUVE</p>
             <h2 className="mt-2 font-display text-4xl text-ink">A linha em detalhes</h2>
           </div>
-          <div className="mt-8 overflow-hidden border border-border bg-card p-2 sm:p-3">
+          <div className="mt-8 overflow-hidden border border-border bg-card">
             <AutoCarousel slides={GALLERY} />
           </div>
         </div>
@@ -196,22 +196,22 @@ function Home() {
       {secondary.slice(1).map((b, i) => (
         <section key={b.id} className={i % 2 === 0 ? "bg-ivory" : "bg-blush/35"}>
           <div
-            className={`mx-auto grid max-w-6xl items-center gap-7 px-4 py-12 sm:px-6 sm:py-14 lg:grid-cols-2 lg:gap-10 lg:px-4 lg:py-16 ${
-              i % 2 === 0 ? "" : "lg:[&>*:first-child]:order-2"
+            className={`mx-auto grid max-w-[1500px] items-center gap-8 px-4 py-12 sm:px-6 sm:py-14 xl:grid-cols-[1.25fr_0.75fr] xl:gap-12 xl:px-8 xl:py-16 ${
+              i % 2 === 0 ? "" : "xl:[&>*:first-child]:order-2"
             }`}
           >
-            <picture className="flex w-full items-center justify-center overflow-hidden bg-cream/50 p-2 sm:p-4">
+            <picture className="flex min-h-[360px] w-full items-center justify-center overflow-hidden bg-cream/50 sm:min-h-[480px] xl:min-h-[560px]">
               {b.image_mobile && <source media="(max-width: 639px)" srcSet={b.image_mobile} />}
               <img
                 src={b.image_desktop}
-                alt={b.title ?? "NUVE Advanced Skin Care"}
+                alt={b.title ?? "NUVE Advance Skincare"}
                 loading="lazy"
-                className="block max-h-[560px] w-full object-contain object-center"
+                className="block h-full max-h-[760px] w-full object-contain object-center"
               />
             </picture>
-            <div>
+            <div className="mx-auto w-full max-w-xl xl:mx-0">
               <p className="eyebrow">NUVE</p>
-              <h2 className="mt-3 font-display text-3xl leading-tight text-ink md:text-4xl">{b.title}</h2>
+              <h2 className="mt-3 font-display text-3xl leading-tight text-ink md:text-4xl xl:text-5xl">{b.title}</h2>
               <p className="mt-3 max-w-[52ch] text-sm leading-relaxed text-ash">{b.subtitle}</p>
               <Link
                 to="/loja"
@@ -230,7 +230,7 @@ function Home() {
             <p className="eyebrow">Experiências NUVE</p>
             <h2 className="mt-2 font-display text-4xl text-ink">O que nossas clientes contam</h2>
           </div>
-          <div className="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          <div className="mt-10 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
             {(reviews ?? []).slice(0, 3).map((r: any) => (
               <figure key={r.id} className="border border-border bg-card p-6">
                 <div className="text-clay">{"★".repeat(r.rating)}</div>
