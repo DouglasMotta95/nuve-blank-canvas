@@ -40,6 +40,7 @@ const PLACEMENTS = [
   ["promotional", "Banner promocional"],
   ["fixed", "Banner fixo"],
   ["line_details", "A linha em detalhes"],
+  ["about", "A Marca / Sobre"],
 ] as const;
 
 function placementLabel(value: string) {
