@@ -17,11 +17,14 @@ export const Route = createFileRoute("/admin")({
 
 const LINKS = [
   { to: "/admin", label: "Visão geral", exact: true },
-  { to: "/admin/produtos", label: "Produtos" },
   { to: "/admin/pedidos", label: "Pedidos" },
+  { to: "/admin/produtos", label: "Produtos" },
+  { to: "/admin/estoque", label: "Estoque" },
   { to: "/admin/cupons", label: "Cupons" },
   { to: "/admin/banners", label: "Banners" },
+  { to: "/admin/configuracoes", label: "Configurações" },
 ] as const;
+
 
 function AdminLayout() {
   const { user, loading } = useSession();
