@@ -109,6 +109,28 @@ function ProdutoPage() {
       </div>
 
       <div className="mx-auto max-w-6xl space-y-12 px-4 pb-8">
+        {beforeAfter.length > 0 && (
+          <section>
+            <p className="eyebrow">Antes e depois</p>
+            <h2 className="mt-2 font-display text-3xl text-ink">Resultados reais com {product.name}</h2>
+            <div className={`mt-5 grid gap-6 ${beforeAfter.length > 1 ? "md:grid-cols-2" : ""}`}>
+              {beforeAfter.map((img) => (
+                <figure key={img.id} className="overflow-hidden border border-border bg-cream">
+                  <img
+                    src={img.url}
+                    alt={img.alt ?? `Antes e depois com ${product.name}`}
+                    loading="lazy"
+                    className="w-full object-contain"
+                  />
+                </figure>
+              ))}
+            </div>
+            <p className="mt-3 text-[12px] text-ash">
+              Imagens ilustrativas. Resultados variam conforme o tipo de pele e a constância do uso.
+            </p>
+          </section>
+        )}
+
         {product.description && (
           <section>
             <p className="eyebrow">Sobre o produto</p>
