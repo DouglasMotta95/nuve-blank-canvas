@@ -21,6 +21,9 @@ import { Route as KitsRouteImport } from './routes/kits'
 import { Route as LojaRouteImport } from './routes/loja'
 import { Route as SobreRouteImport } from './routes/sobre'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
+import { Route as AdminBannersRouteImport } from './routes/admin.banners'
+import { Route as AdminCuponsRouteImport } from './routes/admin.cupons'
+import { Route as AdminPedidosRouteImport } from './routes/admin.pedidos'
 import { Route as AdminProdutosRouteImport } from './routes/admin.produtos'
 import { Route as PedidoIdRouteImport } from './routes/pedido.$id'
 import { Route as PoliticasSlugRouteImport } from './routes/politicas.$slug'
@@ -87,6 +90,21 @@ const AdminIndexRoute = AdminIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminBannersRoute = AdminBannersRouteImport.update({
+  id: '/banners',
+  path: '/banners',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminCuponsRoute = AdminCuponsRouteImport.update({
+  id: '/cupons',
+  path: '/cupons',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminPedidosRoute = AdminPedidosRouteImport.update({
+  id: '/pedidos',
+  path: '/pedidos',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminProdutosRoute = AdminProdutosRouteImport.update({
   id: '/produtos',
   path: '/produtos',
@@ -126,6 +144,9 @@ export interface FileRoutesByFullPath {
   '/kits': typeof KitsRoute
   '/loja': typeof LojaRoute
   '/sobre': typeof SobreRoute
+  '/admin/banners': typeof AdminBannersRoute
+  '/admin/cupons': typeof AdminCuponsRoute
+  '/admin/pedidos': typeof AdminPedidosRoute
   '/admin/produtos': typeof AdminProdutosRoute
   '/pedido/$id': typeof PedidoIdRoute
   '/politicas/$slug': typeof PoliticasSlugRoute
@@ -144,6 +165,9 @@ export interface FileRoutesByTo {
   '/kits': typeof KitsRoute
   '/loja': typeof LojaRoute
   '/sobre': typeof SobreRoute
+  '/admin/banners': typeof AdminBannersRoute
+  '/admin/cupons': typeof AdminCuponsRoute
+  '/admin/pedidos': typeof AdminPedidosRoute
   '/admin/produtos': typeof AdminProdutosRoute
   '/pedido/$id': typeof PedidoIdRoute
   '/politicas/$slug': typeof PoliticasSlugRoute
@@ -164,6 +188,9 @@ export interface FileRoutesById {
   '/kits': typeof KitsRoute
   '/loja': typeof LojaRoute
   '/sobre': typeof SobreRoute
+  '/admin/banners': typeof AdminBannersRoute
+  '/admin/cupons': typeof AdminCuponsRoute
+  '/admin/pedidos': typeof AdminPedidosRoute
   '/admin/produtos': typeof AdminProdutosRoute
   '/pedido/$id': typeof PedidoIdRoute
   '/politicas/$slug': typeof PoliticasSlugRoute
@@ -185,6 +212,9 @@ export interface FileRouteTypes {
     | '/kits'
     | '/loja'
     | '/sobre'
+    | '/admin/banners'
+    | '/admin/cupons'
+    | '/admin/pedidos'
     | '/admin/produtos'
     | '/pedido/$id'
     | '/politicas/$slug'
@@ -203,6 +233,9 @@ export interface FileRouteTypes {
     | '/kits'
     | '/loja'
     | '/sobre'
+    | '/admin/banners'
+    | '/admin/cupons'
+    | '/admin/pedidos'
     | '/admin/produtos'
     | '/pedido/$id'
     | '/politicas/$slug'
@@ -222,6 +255,9 @@ export interface FileRouteTypes {
     | '/kits'
     | '/loja'
     | '/sobre'
+    | '/admin/banners'
+    | '/admin/cupons'
+    | '/admin/pedidos'
     | '/admin/produtos'
     | '/pedido/$id'
     | '/politicas/$slug'
@@ -334,6 +370,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminIndexRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/banners': {
+      id: '/admin/banners'
+      path: '/banners'
+      fullPath: '/admin/banners'
+      preLoaderRoute: typeof AdminBannersRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/cupons': {
+      id: '/admin/cupons'
+      path: '/cupons'
+      fullPath: '/admin/cupons'
+      preLoaderRoute: typeof AdminCuponsRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/pedidos': {
+      id: '/admin/pedidos'
+      path: '/pedidos'
+      fullPath: '/admin/pedidos'
+      preLoaderRoute: typeof AdminPedidosRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/produtos': {
       id: '/admin/produtos'
       path: '/produtos'
@@ -373,11 +430,17 @@ declare module '@tanstack/react-router' {
 }
 
 interface AdminRouteChildren {
+  AdminBannersRoute: typeof AdminBannersRoute
+  AdminCuponsRoute: typeof AdminCuponsRoute
+  AdminPedidosRoute: typeof AdminPedidosRoute
   AdminProdutosRoute: typeof AdminProdutosRoute
   AdminIndexRoute: typeof AdminIndexRoute
 }
 
 const AdminRouteChildren: AdminRouteChildren = {
+  AdminBannersRoute: AdminBannersRoute,
+  AdminCuponsRoute: AdminCuponsRoute,
+  AdminPedidosRoute: AdminPedidosRoute,
   AdminProdutosRoute: AdminProdutosRoute,
   AdminIndexRoute: AdminIndexRoute,
 }
