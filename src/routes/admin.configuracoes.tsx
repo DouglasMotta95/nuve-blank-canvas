@@ -18,11 +18,17 @@ export const Route = createFileRoute("/admin/configuracoes")({
 
 type Settings = {
   social_proof: { enabled: boolean };
+  whatsapp: { enabled: boolean; phone: string; message: string };
   order_emails: { customer: boolean; admin: boolean; admin_email: string };
 };
 
 const DEFAULTS: Settings = {
   social_proof: { enabled: true },
+  whatsapp: {
+    enabled: true,
+    phone: "",
+    message: "Olá! Gostaria de saber mais sobre os séruns NUVE Advanced.",
+  },
   order_emails: { customer: true, admin: true, admin_email: "nuveadvanced@gmail.com" },
 };
 
@@ -35,12 +41,14 @@ function AdminConfig() {
       const map = Object.fromEntries((data ?? []).map((r: any) => [r.key, r.value]));
       return {
         social_proof: { ...DEFAULTS.social_proof, ...(map["social_proof"] ?? {}) },
+        whatsapp: { ...DEFAULTS.whatsapp, ...(map["whatsapp"] ?? {}) },
         order_emails: { ...DEFAULTS.order_emails, ...(map["order_emails"] ?? {}) },
       } as Settings;
     },
   });
 
   const s = data ?? DEFAULTS;
+
 
   async function save(key: keyof Settings, value: unknown) {
     const { error } = await supabase
