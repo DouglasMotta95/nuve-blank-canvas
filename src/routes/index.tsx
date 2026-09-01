@@ -151,38 +151,36 @@ function Home() {
       </section>
 
       <section className="overflow-hidden bg-[#2b2528] text-ivory">
-        <div className="mx-auto grid max-w-[1500px] items-stretch xl:grid-cols-[0.9fr_1.1fr]">
-          <div className="order-2 px-5 py-11 sm:px-8 sm:py-12 xl:order-1 xl:px-12 xl:py-16">
-            <p className="text-[10px] uppercase tracking-[0.28em] text-champagne">Inspiração japonesa</p>
-            <h2 className="mt-3 max-w-[15ch] font-display text-4xl leading-[1.04] md:text-5xl">
-              Formulações desenvolvidas no Japão
-            </h2>
-            <p className="mt-5 max-w-[52ch] text-sm leading-relaxed text-ivory/75">
-              A NUVE nasce inspirada na sofisticação do skincare japonês, unindo tecnologia, conhecimento em formulação e ativos selecionados a uma rotina moderna de cuidados com a pele.
-            </p>
-            <p className="mt-3 max-w-[52ch] text-sm leading-relaxed text-ivory/75">
-              A proposta valoriza textura, experiência e cuidado contínuo — traduzidos para uma rotina mais simples, prática e sofisticada para a vida real.
-            </p>
-            <Link
-              to="/sobre"
-              className="mt-7 inline-block border-b border-champagne pb-1 text-[11px] uppercase tracking-[0.2em] text-champagne"
-            >
-              Descubra a história da NUVE
-            </Link>
-          </div>
-          <div className="order-1 flex min-h-[360px] items-center justify-center bg-cream sm:min-h-[480px] xl:order-2 xl:min-h-[620px]">
-            <img
-              src={japaneseVisual}
-              alt="NUVE — tecnologia, formulação e inspiração japonesa"
-              loading="lazy"
-              className="block max-h-[760px] h-full w-full object-contain object-center"
-            />
-          </div>
+        <div className="w-full bg-cream">
+          <img
+            src={japaneseVisual}
+            alt="NUVE — tecnologia, formulação e inspiração japonesa"
+            loading="lazy"
+            className="block h-auto w-full object-contain object-center"
+          />
+        </div>
+        <div className="mx-auto max-w-6xl px-5 py-11 sm:px-8 sm:py-12 lg:py-16">
+          <p className="text-[10px] uppercase tracking-[0.28em] text-champagne">Inspiração japonesa</p>
+          <h2 className="mt-3 max-w-[15ch] font-display text-4xl leading-[1.04] md:text-5xl">
+            Formulações desenvolvidas no Japão
+          </h2>
+          <p className="mt-5 max-w-[52ch] text-sm leading-relaxed text-ivory/75">
+            A NUVE nasce inspirada na sofisticação do skincare japonês, unindo tecnologia, conhecimento em formulação e ativos selecionados a uma rotina moderna de cuidados com a pele.
+          </p>
+          <p className="mt-3 max-w-[52ch] text-sm leading-relaxed text-ivory/75">
+            A proposta valoriza textura, experiência e cuidado contínuo — traduzidos para uma rotina mais simples, prática e sofisticada para a vida real.
+          </p>
+          <Link
+            to="/sobre"
+            className="mt-7 inline-block border-b border-champagne pb-1 text-[11px] uppercase tracking-[0.2em] text-champagne"
+          >
+            Descubra a história da NUVE
+          </Link>
         </div>
       </section>
 
       <section className="border-y border-border bg-cream/60 py-12 sm:py-14 md:py-16">
-        <div className="mx-auto max-w-6xl px-4 sm:px-6">
+        <div className="mx-auto w-full max-w-[1500px] px-3 sm:px-5 lg:px-6">
           <div className="text-center">
             <p className="eyebrow">Universo NUVE</p>
             <h2 className="mt-2 font-display text-4xl text-ink">A linha em detalhes</h2>
@@ -195,31 +193,25 @@ function Home() {
 
       {secondary.slice(1).map((b, i) => (
         <section key={b.id} className={i % 2 === 0 ? "bg-ivory" : "bg-blush/35"}>
-          <div
-            className={`mx-auto grid max-w-[1500px] items-center gap-8 px-4 py-12 sm:px-6 sm:py-14 xl:grid-cols-[1.25fr_0.75fr] xl:gap-12 xl:px-8 xl:py-16 ${
-              i % 2 === 0 ? "" : "xl:[&>*:first-child]:order-2"
-            }`}
-          >
-            <picture className="flex min-h-[360px] w-full items-center justify-center overflow-hidden bg-cream/50 sm:min-h-[480px] xl:min-h-[560px]">
-              {b.image_mobile && <source media="(max-width: 639px)" srcSet={b.image_mobile} />}
-              <img
-                src={b.image_desktop}
-                alt={b.title ?? "NUVE Advance Skincare"}
-                loading="lazy"
-                className="block h-full max-h-[760px] w-full object-contain object-center"
-              />
-            </picture>
-            <div className="mx-auto w-full max-w-xl xl:mx-0">
-              <p className="eyebrow">NUVE</p>
-              <h2 className="mt-3 font-display text-3xl leading-tight text-ink md:text-4xl xl:text-5xl">{b.title}</h2>
-              <p className="mt-3 max-w-[52ch] text-sm leading-relaxed text-ash">{b.subtitle}</p>
-              <Link
-                to="/loja"
-                className="mt-6 inline-block border-b border-clay pb-1 text-[11px] uppercase tracking-[0.2em] text-clay"
-              >
-                {b.cta_label ?? "Ver a linha"}
-              </Link>
-            </div>
+          <picture className="block w-full bg-cream/50">
+            {b.image_mobile && <source media="(max-width: 639px)" srcSet={b.image_mobile} />}
+            <img
+              src={b.image_desktop}
+              alt={b.title ?? "NUVE Advance Skincare"}
+              loading="lazy"
+              className="block h-auto w-full object-contain object-center"
+            />
+          </picture>
+          <div className="mx-auto max-w-6xl px-5 py-10 sm:px-8 sm:py-12 lg:py-14">
+            <p className="eyebrow">NUVE</p>
+            <h2 className="mt-3 max-w-[18ch] font-display text-3xl leading-tight text-ink md:text-4xl xl:text-5xl">{b.title}</h2>
+            <p className="mt-3 max-w-[52ch] text-sm leading-relaxed text-ash">{b.subtitle}</p>
+            <Link
+              to="/loja"
+              className="mt-6 inline-block border-b border-clay pb-1 text-[11px] uppercase tracking-[0.2em] text-clay"
+            >
+              {b.cta_label ?? "Ver a linha"}
+            </Link>
           </div>
         </section>
       ))}
