@@ -41,14 +41,21 @@ function AdminProdutos() {
       return;
     }
     const { error } = await supabase.from("products").update({ price_cents: price, stock }).eq("id", p.id);
-    if (error) return toast.error("Sem permissão ou erro ao salvar.");
+    if (error) {
+      toast.error("Sem permissão ou erro ao salvar.");
+      return;
+    }
     toast.success("Produto atualizado.");
     qc.invalidateQueries({ queryKey: ["admin-products"] });
   }
 
   async function toggle(p: any, field: "active" | "featured") {
-    const { error } = await supabase.from("products").update({ [field]: !p[field] }).eq("id", p.id);
-    if (error) return toast.error("Não foi possível atualizar.");
+    const patch = field === "active" ? { active: !p.active } : { featured: !p.featured };
+    const { error } = await supabase.from("products").update(patch).eq("id", p.id);
+    if (error) {
+      toast.error("Não foi possível atualizar.");
+      return;
+    }
     qc.invalidateQueries({ queryKey: ["admin-products"] });
   }
 

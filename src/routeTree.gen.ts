@@ -10,14 +10,18 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AtivosRouteImport } from './routes/ativos'
 import { Route as CarrinhoRouteImport } from './routes/carrinho'
 import { Route as CheckoutRouteImport } from './routes/checkout'
+import { Route as ContaRouteImport } from './routes/conta'
 import { Route as ContatoRouteImport } from './routes/contato'
 import { Route as FaqRouteImport } from './routes/faq'
 import { Route as KitsRouteImport } from './routes/kits'
 import { Route as LojaRouteImport } from './routes/loja'
 import { Route as SobreRouteImport } from './routes/sobre'
+import { Route as AdminIndexRouteImport } from './routes/admin.index'
+import { Route as AdminProdutosRouteImport } from './routes/admin.produtos'
 import { Route as PedidoIdRouteImport } from './routes/pedido.$id'
 import { Route as PoliticasSlugRouteImport } from './routes/politicas.$slug'
 import { Route as ProdutoSlugRouteImport } from './routes/produto.$slug'
@@ -26,6 +30,11 @@ import { Route as ApiPublicWebhooksMercadopagoRouteImport } from './routes/api/p
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminRoute = AdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AtivosRoute = AtivosRouteImport.update({
@@ -41,6 +50,11 @@ const CarrinhoRoute = CarrinhoRouteImport.update({
 const CheckoutRoute = CheckoutRouteImport.update({
   id: '/checkout',
   path: '/checkout',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ContaRoute = ContaRouteImport.update({
+  id: '/conta',
+  path: '/conta',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ContatoRoute = ContatoRouteImport.update({
@@ -68,6 +82,16 @@ const SobreRoute = SobreRouteImport.update({
   path: '/sobre',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminIndexRoute = AdminIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminProdutosRoute = AdminProdutosRouteImport.update({
+  id: '/produtos',
+  path: '/produtos',
+  getParentRoute: () => AdminRoute,
+} as any)
 const PedidoIdRoute = PedidoIdRouteImport.update({
   id: '/pedido/$id',
   path: '/pedido/$id',
@@ -92,17 +116,21 @@ const ApiPublicWebhooksMercadopagoRoute =
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/admin': typeof AdminRouteWithChildren
   '/ativos': typeof AtivosRoute
   '/carrinho': typeof CarrinhoRoute
   '/checkout': typeof CheckoutRoute
+  '/conta': typeof ContaRoute
   '/contato': typeof ContatoRoute
   '/faq': typeof FaqRoute
   '/kits': typeof KitsRoute
   '/loja': typeof LojaRoute
   '/sobre': typeof SobreRoute
+  '/admin/produtos': typeof AdminProdutosRoute
   '/pedido/$id': typeof PedidoIdRoute
   '/politicas/$slug': typeof PoliticasSlugRoute
   '/produto/$slug': typeof ProdutoSlugRoute
+  '/admin/': typeof AdminIndexRoute
   '/api/public/webhooks/mercadopago': typeof ApiPublicWebhooksMercadopagoRoute
 }
 export interface FileRoutesByTo {
@@ -110,47 +138,58 @@ export interface FileRoutesByTo {
   '/ativos': typeof AtivosRoute
   '/carrinho': typeof CarrinhoRoute
   '/checkout': typeof CheckoutRoute
+  '/conta': typeof ContaRoute
   '/contato': typeof ContatoRoute
   '/faq': typeof FaqRoute
   '/kits': typeof KitsRoute
   '/loja': typeof LojaRoute
   '/sobre': typeof SobreRoute
+  '/admin/produtos': typeof AdminProdutosRoute
   '/pedido/$id': typeof PedidoIdRoute
   '/politicas/$slug': typeof PoliticasSlugRoute
   '/produto/$slug': typeof ProdutoSlugRoute
+  '/admin': typeof AdminIndexRoute
   '/api/public/webhooks/mercadopago': typeof ApiPublicWebhooksMercadopagoRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/admin': typeof AdminRouteWithChildren
   '/ativos': typeof AtivosRoute
   '/carrinho': typeof CarrinhoRoute
   '/checkout': typeof CheckoutRoute
+  '/conta': typeof ContaRoute
   '/contato': typeof ContatoRoute
   '/faq': typeof FaqRoute
   '/kits': typeof KitsRoute
   '/loja': typeof LojaRoute
   '/sobre': typeof SobreRoute
+  '/admin/produtos': typeof AdminProdutosRoute
   '/pedido/$id': typeof PedidoIdRoute
   '/politicas/$slug': typeof PoliticasSlugRoute
   '/produto/$slug': typeof ProdutoSlugRoute
+  '/admin/': typeof AdminIndexRoute
   '/api/public/webhooks/mercadopago': typeof ApiPublicWebhooksMercadopagoRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/admin'
     | '/ativos'
     | '/carrinho'
     | '/checkout'
+    | '/conta'
     | '/contato'
     | '/faq'
     | '/kits'
     | '/loja'
     | '/sobre'
+    | '/admin/produtos'
     | '/pedido/$id'
     | '/politicas/$slug'
     | '/produto/$slug'
+    | '/admin/'
     | '/api/public/webhooks/mercadopago'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -158,37 +197,46 @@ export interface FileRouteTypes {
     | '/ativos'
     | '/carrinho'
     | '/checkout'
+    | '/conta'
     | '/contato'
     | '/faq'
     | '/kits'
     | '/loja'
     | '/sobre'
+    | '/admin/produtos'
     | '/pedido/$id'
     | '/politicas/$slug'
     | '/produto/$slug'
+    | '/admin'
     | '/api/public/webhooks/mercadopago'
   id:
     | '__root__'
     | '/'
+    | '/admin'
     | '/ativos'
     | '/carrinho'
     | '/checkout'
+    | '/conta'
     | '/contato'
     | '/faq'
     | '/kits'
     | '/loja'
     | '/sobre'
+    | '/admin/produtos'
     | '/pedido/$id'
     | '/politicas/$slug'
     | '/produto/$slug'
+    | '/admin/'
     | '/api/public/webhooks/mercadopago'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AdminRoute: typeof AdminRouteWithChildren
   AtivosRoute: typeof AtivosRoute
   CarrinhoRoute: typeof CarrinhoRoute
   CheckoutRoute: typeof CheckoutRoute
+  ContaRoute: typeof ContaRoute
   ContatoRoute: typeof ContatoRoute
   FaqRoute: typeof FaqRoute
   KitsRoute: typeof KitsRoute
@@ -207,6 +255,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/ativos': {
@@ -228,6 +283,13 @@ declare module '@tanstack/react-router' {
       path: '/checkout'
       fullPath: '/checkout'
       preLoaderRoute: typeof CheckoutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/conta': {
+      id: '/conta'
+      path: '/conta'
+      fullPath: '/conta'
+      preLoaderRoute: typeof ContaRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/contato': {
@@ -265,6 +327,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SobreRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/': {
+      id: '/admin/'
+      path: '/'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AdminIndexRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/produtos': {
+      id: '/admin/produtos'
+      path: '/produtos'
+      fullPath: '/admin/produtos'
+      preLoaderRoute: typeof AdminProdutosRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/pedido/$id': {
       id: '/pedido/$id'
       path: '/pedido/$id'
@@ -296,11 +372,25 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface AdminRouteChildren {
+  AdminProdutosRoute: typeof AdminProdutosRoute
+  AdminIndexRoute: typeof AdminIndexRoute
+}
+
+const AdminRouteChildren: AdminRouteChildren = {
+  AdminProdutosRoute: AdminProdutosRoute,
+  AdminIndexRoute: AdminIndexRoute,
+}
+
+const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AdminRoute: AdminRouteWithChildren,
   AtivosRoute: AtivosRoute,
   CarrinhoRoute: CarrinhoRoute,
   CheckoutRoute: CheckoutRoute,
+  ContaRoute: ContaRoute,
   ContatoRoute: ContatoRoute,
   FaqRoute: FaqRoute,
   KitsRoute: KitsRoute,
