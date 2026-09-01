@@ -34,7 +34,7 @@ export function Header() {
 
           <Link to="/" className="flex flex-col items-center leading-none md:items-start">
             <span className="font-display text-xl tracking-[0.3em] text-ink">NUVE</span>
-            <span className="text-[8px] tracking-[0.34em] text-clay">ADVANCED SKIN CARE</span>
+            <span className="mt-1 text-[8px] tracking-[0.24em] text-clay">ADVANCE SKINCARE</span>
           </Link>
 
           <nav className="hidden items-center gap-7 md:flex">
