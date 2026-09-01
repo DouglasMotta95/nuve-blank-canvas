@@ -8,6 +8,7 @@ export type ProductImage = {
   sort_order: number;
   is_cover: boolean;
   fit: string;
+  is_before_after: boolean;
 };
 
 export type ActiveItem = { name: string; text: string };
@@ -37,7 +38,7 @@ export type Product = {
   product_images: ProductImage[];
 };
 
-const SELECT = "*, product_images(id,url,alt,sort_order,is_cover,fit)";
+const SELECT = "*, product_images(id,url,alt,sort_order,is_cover,fit,is_before_after)";
 
 function normalize(row: any): Product {
   return {
