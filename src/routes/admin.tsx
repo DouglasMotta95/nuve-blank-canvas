@@ -19,6 +19,7 @@ const LINKS = [
   { to: "/admin", label: "Visão geral", exact: true },
   { to: "/admin/pedidos", label: "Pedidos" },
   { to: "/admin/produtos", label: "Produtos" },
+  { to: "/admin/produtos/novo", label: "+ Produto" },
   { to: "/admin/estoque", label: "Estoque" },
   { to: "/admin/banners", label: "Conteúdo do site" },
   { to: "/admin/cupons", label: "Cupons" },
