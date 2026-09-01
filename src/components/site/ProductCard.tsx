@@ -10,9 +10,9 @@ export function ProductCard({ product }: { product: Product }) {
     <Link
       to="/produto/$slug"
       params={{ slug: product.slug }}
-      className="group flex flex-col border border-border/70 bg-card transition-shadow hover:shadow-[0_18px_50px_-30px_rgba(60,30,20,0.5)]"
+      className="group flex min-w-0 flex-col border border-border/70 bg-card transition-shadow hover:shadow-[0_18px_50px_-30px_rgba(60,30,20,0.5)]"
     >
-      <div className="aspect-[4/5] overflow-hidden bg-cream">
+      <div className="flex min-h-[360px] items-center justify-center overflow-hidden bg-cream p-3 sm:min-h-[420px] sm:p-4 lg:min-h-[460px]">
         {cover && (
           <img
             key={cover.url}
@@ -20,7 +20,7 @@ export function ProductCard({ product }: { product: Product }) {
             alt={cover.alt ?? product.name}
             loading="lazy"
             decoding="async"
-            className="size-full object-contain p-4 transition-transform duration-700 group-hover:scale-[1.03]"
+            className="block max-h-[440px] max-w-full object-contain object-center transition-transform duration-700 group-hover:scale-[1.02]"
           />
         )}
       </div>
