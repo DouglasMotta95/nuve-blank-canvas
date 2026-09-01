@@ -73,6 +73,38 @@ function AdminConfig() {
       </header>
 
       <section className="border border-border bg-card p-5">
+        <h2 className="font-display text-2xl text-ink">Atendimento no WhatsApp</h2>
+        <p className="mt-1 text-sm text-ash">
+          Exibe um botão flutuante em todas as páginas da loja. Informe o número com DDD (ex.: 11 91234-5678).
+        </p>
+        <Toggle
+          label="Exibir botão do WhatsApp"
+          checked={s.whatsapp.enabled}
+          onChange={(v) => save("whatsapp", { ...s.whatsapp, enabled: v })}
+        />
+        <div className="mt-4 grid gap-4 sm:grid-cols-2">
+          <label className="block">
+            <span className="text-[11px] uppercase tracking-[0.14em] text-ash">Número (com DDD)</span>
+            <input
+              defaultValue={s.whatsapp.phone}
+              placeholder="11 91234-5678"
+              onBlur={(e) => save("whatsapp", { ...s.whatsapp, phone: e.target.value.trim() })}
+              className="mt-1 w-full border border-input bg-ivory px-3 py-2 text-sm"
+            />
+          </label>
+          <label className="block">
+            <span className="text-[11px] uppercase tracking-[0.14em] text-ash">Mensagem inicial</span>
+            <input
+              defaultValue={s.whatsapp.message}
+              onBlur={(e) => save("whatsapp", { ...s.whatsapp, message: e.target.value })}
+              className="mt-1 w-full border border-input bg-ivory px-3 py-2 text-sm"
+            />
+          </label>
+        </div>
+      </section>
+
+
+      <section className="border border-border bg-card p-5">
         <h2 className="font-display text-2xl text-ink">Prova social</h2>
         <p className="mt-1 text-sm text-ash">
           Mostra no site avisos discretos do tipo “Ana de São Paulo/SP acabou de comprar”, usando pedidos reais dos
