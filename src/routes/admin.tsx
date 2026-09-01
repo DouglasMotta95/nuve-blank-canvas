@@ -21,6 +21,7 @@ const LINKS = [
   { to: "/admin/produtos", label: "Produtos" },
   { to: "/admin/produtos/novo", label: "+ Produto" },
   { to: "/admin/estoque", label: "Estoque" },
+  { to: "/admin/kits", label: "Kits" },
   { to: "/admin/home", label: "Página inicial" },
   { to: "/admin/banners", label: "Imagens e banners" },
   { to: "/admin/avaliacoes", label: "Avaliações" },
