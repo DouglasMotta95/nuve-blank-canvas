@@ -185,9 +185,19 @@ function Checkout() {
         <h2 className="font-display text-2xl text-ink">Resumo</h2>
         <ul className="mt-4 space-y-3 border-b border-border pb-4">
           {cart.items.map((i) => (
-            <li key={i.product_id} className="flex justify-between gap-3 text-sm">
-              <span className="text-ash">
-                {i.quantity}× {i.name}
+            <li key={i.product_id} className="flex items-center justify-between gap-3 text-sm">
+              <span className="flex items-center gap-3 text-ash">
+                {i.image && (
+                  <img
+                    src={i.image}
+                    alt={i.name}
+                    loading="lazy"
+                    className="size-12 shrink-0 border border-border bg-cream object-contain p-1"
+                  />
+                )}
+                <span>
+                  {i.quantity}× {i.name}
+                </span>
               </span>
               <span className="text-ink">{brl(i.unit_price_cents * i.quantity)}</span>
             </li>
