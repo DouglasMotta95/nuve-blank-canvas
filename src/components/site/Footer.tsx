@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "@tanstack/react-router";
-import { Instagram } from "lucide-react";
+import { Instagram, Settings } from "lucide-react";
 import { toast } from "sonner";
 import { subscribeNewsletter } from "@/lib/orders.functions";
 
@@ -123,9 +123,18 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="mt-12 flex flex-col gap-2 border-t border-border pt-6 text-[11px] text-ash md:flex-row md:items-center md:justify-between">
+        <div className="mt-12 flex flex-col gap-3 border-t border-border pt-6 text-[11px] text-ash md:flex-row md:items-center md:justify-between">
           <span>© {new Date().getFullYear()} NUVE Advanced Skin Care. Todos os direitos reservados.</span>
-          <span>Pagamentos processados por Mercado Pago · Pix, cartão e boleto</span>
+          <div className="flex flex-wrap items-center gap-4">
+            <span>Pagamentos processados por Mercado Pago · Pix, cartão e boleto</span>
+            <Link
+              to="/admin"
+              aria-label="Acessar painel administrativo"
+              className="inline-flex items-center gap-1 text-[9px] uppercase tracking-[0.16em] text-ash/60 transition-colors hover:text-ink"
+            >
+              <Settings className="size-3" /> Admin
+            </Link>
+          </div>
         </div>
       </div>
     </footer>
