@@ -51,9 +51,15 @@ function PedidoPage() {
       <p className="eyebrow">Pedido {order.order_number}</p>
       <h1 className="mt-2 font-display text-4xl text-ink">Obrigada, {order.customer_name.split(" ")[0]}!</h1>
       <p className="mt-3 text-sm text-ash">
-        Status: <strong className="text-ink">{LABEL[order.payment_status] ?? order.payment_status}</strong>. Você
-        receberá as atualizações por e-mail.
+        Status do pedido: <strong className="text-ink">{STATUS_LABEL[order.status] ?? order.status}</strong> ·
+        pagamento: <strong className="text-ink">{LABEL[order.payment_status] ?? order.payment_status}</strong>. Esta
+        página atualiza sozinha.
       </p>
+
+      <div className="mt-8 border border-border bg-white/60 p-5">
+        <OrderTimeline status={order.status} trackingCode={order.tracking_code} events={order.events as any} />
+      </div>
+
 
       <ul className="mt-8 divide-y divide-border border-y border-border">
         {(order.order_items ?? []).map((i: any) => (
