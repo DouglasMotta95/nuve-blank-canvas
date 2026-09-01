@@ -2,6 +2,8 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { getOrderPublic } from "@/lib/orders.functions";
 import { brl } from "@/lib/format";
+import { OrderTimeline, STATUS_LABEL } from "@/components/site/OrderTimeline";
+
 
 export const Route = createFileRoute("/pedido/$id")({
   head: () => ({
