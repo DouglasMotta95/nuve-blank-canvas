@@ -94,7 +94,6 @@ function NovoProduto() {
           sort_order: 0,
           is_cover: true,
           fit: "contain",
-          active: true,
         });
         if (imageError) throw imageError;
       }
