@@ -17,19 +17,27 @@ export const Route = createFileRoute("/admin/estoque")({
   component: AdminEstoque,
 });
 
-type Product = { id: string; name: string; sku: string; stock: number; active: boolean };
+type Product = {
+  id: string;
+  name: string;
+  sku: string;
+  stock: number;
+  reserved_stock: number;
+  active: boolean;
+};
 
 function AdminEstoque() {
   const qc = useQueryClient();
   const [busy, setBusy] = useState<string | null>(null);
   const [entry, setEntry] = useState<Record<string, string>>({});
+  const [note, setNote] = useState<Record<string, string>>({});
 
   const { data: products } = useQuery({
     queryKey: ["admin-stock"],
     queryFn: async () => {
       const { data } = await supabase
         .from("products")
-        .select("id, name, sku, stock, active")
+        .select("id, name, sku, stock, reserved_stock, active")
         .order("sort_order");
       return (data ?? []) as Product[];
     },
@@ -40,7 +48,7 @@ function AdminEstoque() {
     queryFn: async () => {
       const { data } = await supabase
         .from("inventory_movements")
-        .select("id, delta, reason, created_at, product_id")
+        .select("id, delta, reason, note, movement_type, created_by_email, stock_after, created_at, product_id")
         .order("created_at", { ascending: false })
         .limit(20);
       return data ?? [];
@@ -60,12 +68,24 @@ function AdminEstoque() {
       toast.error("Não foi possível atualizar o estoque.");
       return;
     }
-    await supabase.from("inventory_movements").insert({ product_id: p.id, delta, reason });
+    const { data: auth } = await supabase.auth.getUser();
+    await supabase.from("inventory_movements").insert({
+      product_id: p.id,
+      delta,
+      reason,
+      movement_type: "ajuste",
+      stock_after: next,
+      note: (note[p.id] ?? "").trim() || null,
+      created_by: auth.user?.id ?? null,
+      created_by_email: auth.user?.email ?? null,
+    });
     setBusy(null);
     toast.success(`${p.name}: ${next} un. em estoque.`);
     setEntry((e) => ({ ...e, [p.id]: "" }));
+    setNote((n) => ({ ...n, [p.id]: "" }));
     qc.invalidateQueries({ queryKey: ["admin-stock"] });
     qc.invalidateQueries({ queryKey: ["admin-stock-movements"] });
+    qc.invalidateQueries({ queryKey: ["admin-audit"] });
     qc.invalidateQueries({ queryKey: ["admin-overview"] });
   }
 
@@ -78,6 +98,7 @@ function AdminEstoque() {
     }
     await apply(p, value - p.stock, "ajuste manual");
   }
+
 
   const nameById = new Map((products ?? []).map((p) => [p.id, p.name]));
 
