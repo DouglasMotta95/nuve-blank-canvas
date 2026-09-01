@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useProduct, useProducts, useReviews, priceOf } from "@/lib/catalog";
 import { brl, installments } from "@/lib/format";
@@ -48,12 +48,8 @@ function ProdutoPage() {
   const beforeAfter = product.product_images.filter((i) => i.is_before_after);
   const galleryImages = product.product_images.filter((i) => !i.is_before_after).slice(0, 4);
   const others = (all ?? []).filter((p) => p.id !== product.id);
-
-  useEffect(() => {
-    setActive(0);
-  }, [product.id]);
-
-  const activeImage = galleryImages[active] ?? galleryImages[0];
+  const safeActive = Math.min(active, Math.max(galleryImages.length - 1, 0));
+  const activeImage = galleryImages[safeActive] ?? galleryImages[0];
 
   return (
     <div className="nuve-reveal">
@@ -83,9 +79,9 @@ function ProdutoPage() {
                   type="button"
                   onClick={() => setActive(i)}
                   aria-label={`Ver foto ${i + 1} de ${product.name}`}
-                  aria-current={i === active ? "true" : undefined}
+                  aria-current={i === safeActive ? "true" : undefined}
                   className={`aspect-square overflow-hidden border bg-cream transition-colors ${
-                    i === active ? "border-clay" : "border-border/60 hover:border-clay/60"
+                    i === safeActive ? "border-clay" : "border-border/60 hover:border-clay/60"
                   }`}
                 >
                   <img src={img.url} alt="" loading="lazy" className="size-full object-contain p-2" />
