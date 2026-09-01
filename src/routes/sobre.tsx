@@ -8,10 +8,10 @@ export const Route = createFileRoute("/sobre")({
       {
         name: "description",
         content:
-          "Conheça a NUVE Advance Skincare: skincare premium com tecnologia japonesa, ativos selecionados e uma rotina simples.",
+          "Conheça a NUVE Advance Skincare: skincare premium com tecnologia japonesa, ativos de última geração e rotina simples.",
       },
       { property: "og:title", content: "A Marca — NUVE Advance Skincare" },
-      { property: "og:description", content: "Tecnologia japonesa e ativos selecionados em skincare NUVE." },
+      { property: "og:description", content: "Tecnologia japonesa e ativos selecionados em três séruns." },
     ],
   }),
   component: Sobre,
@@ -55,13 +55,13 @@ function Sobre() {
         <div>
           <h2 className="font-display text-2xl text-ink">Simplicidade</h2>
           <p className="mt-2 text-sm leading-relaxed text-ash">
-            Uma proposta pensada para simplificar a rotina e favorecer a constância no cuidado diário.
+            Um sérum resolve o que antes exigia cinco frascos. Menos etapas, mais constância.
           </p>
         </div>
         <div>
-          <h2 className="font-display text-2xl text-ink">Experiência</h2>
+          <h2 className="font-display text-2xl text-ink">Consciência</h2>
           <p className="mt-2 text-sm leading-relaxed text-ash">
-            Texturas e fórmulas desenvolvidas para transformar o skincare em um ritual prático e sofisticado.
+            Fórmulas veganas, cruelty free e embalagens pensadas para durar todo o tratamento.
           </p>
         </div>
       </div>
