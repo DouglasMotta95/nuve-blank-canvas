@@ -9,7 +9,7 @@ import { uploadMedia } from "@/lib/media.functions";
 export const Route = createFileRoute("/admin/banners")({
   head: () => ({
     meta: [
-      { title: "Conteúdo do site — Painel NUVE" },
+      { title: "Imagens e banners — Painel NUVE" },
       { name: "description", content: "Gerencie banners, imagens e textos da página inicial NUVE." },
       { name: "robots", content: "noindex,nofollow" },
     ],
@@ -66,9 +66,12 @@ function AdminBanners() {
   const { data, isLoading } = useQuery({
     queryKey: ["admin-banners"],
     queryFn: async (): Promise<BannerRow[]> => {
-      const { data, error } = await supabase.from("banners").select("*").order("placement").order("sort_order");
+      const { data, error } = await supabase.from("banners").select("*").order("sort_order");
       if (error) throw error;
-      return (data ?? []) as BannerRow[];
+      return ((data ?? []) as unknown as BannerRow[]).sort((a, b) => {
+        const placement = a.placement.localeCompare(b.placement);
+        return placement || a.sort_order - b.sort_order;
+      });
     },
   });
 
@@ -83,22 +86,20 @@ function AdminBanners() {
   }
 
   async function createBanner() {
-    if (!newFile) {
-      toast.error("Escolha uma imagem para criar o conteúdo.");
-      return;
-    }
+    if (!newFile) return toast.error("Escolha uma imagem para criar o conteúdo.");
     setCreating(true);
     try {
       const uploaded = await uploadFile(newFile);
       const siblings = (data ?? []).filter((item) => item.placement === newPlacement);
-      const { error } = await supabase.from("banners").insert({
+      const payload = {
         placement: newPlacement,
         title: newTitle.trim() || null,
         image_desktop: uploaded.url,
         image_fit: "contain",
         sort_order: (siblings.at(-1)?.sort_order ?? -1) + 1,
         active: true,
-      });
+      };
+      const { error } = await supabase.from("banners").insert(payload as never);
       if (error) throw error;
       toast.success("Conteúdo adicionado ao site.");
       setNewFile(null);
@@ -114,9 +115,9 @@ function AdminBanners() {
   return (
     <div className="space-y-8">
       <header>
-        <h1 className="font-display text-3xl text-ink">Conteúdo visual do site</h1>
+        <h1 className="font-display text-3xl text-ink">Imagens e banners</h1>
         <p className="mt-1 max-w-3xl text-sm leading-relaxed text-ash">
-          Cada imagem tem um local definido. Alterar o Slider não troca mais a seção Japão ou os banners fixos.
+          Cada imagem tem um local definido. Trocar o Slider não troca mais a seção Japão, Ciência ou os banners fixos.
         </p>
       </header>
 
@@ -144,25 +145,14 @@ function AdminBanners() {
       </section>
 
       {isLoading && <div className="h-40 animate-pulse bg-cream" />}
-
       <div className="space-y-5">
-        {(data ?? []).map((banner) => (
-          <BannerEditor key={banner.id} banner={banner} onChanged={refresh} uploadFile={uploadFile} />
-        ))}
+        {(data ?? []).map((banner) => <BannerEditor key={banner.id} banner={banner} onChanged={refresh} uploadFile={uploadFile} />)}
       </div>
     </div>
   );
 }
 
-function BannerEditor({
-  banner,
-  onChanged,
-  uploadFile,
-}: {
-  banner: BannerRow;
-  onChanged: () => void;
-  uploadFile: (file: File) => Promise<{ url: string }>;
-}) {
+function BannerEditor({ banner, onChanged, uploadFile }: { banner: BannerRow; onChanged: () => void; uploadFile: (file: File) => Promise<{ url: string }> }) {
   const desktopRef = useRef<HTMLInputElement>(null);
   const mobileRef = useRef<HTMLInputElement>(null);
   const [busy, setBusy] = useState(false);
@@ -178,7 +168,7 @@ function BannerEditor({
   }));
 
   async function save() {
-    const { error } = await supabase.from("banners").update({
+    const payload = {
       placement: form.placement,
       title: form.title.trim() || null,
       subtitle: form.subtitle.trim() || null,
@@ -187,11 +177,9 @@ function BannerEditor({
       alt_text: form.alt_text.trim() || null,
       sort_order: Number(form.sort_order) || 0,
       active: form.active,
-    }).eq("id", banner.id);
-    if (error) {
-      toast.error("Não foi possível salvar este conteúdo.");
-      return;
-    }
+    };
+    const { error } = await supabase.from("banners").update(payload as never).eq("id", banner.id);
+    if (error) return toast.error("Não foi possível salvar este conteúdo.");
     toast.success("Alterações salvas.");
     onChanged();
   }
@@ -201,8 +189,8 @@ function BannerEditor({
     setBusy(true);
     try {
       const uploaded = await uploadFile(file);
-      const patch = kind === "desktop" ? { image_desktop: uploaded.url } : { image_mobile: uploaded.url };
-      const { error } = await supabase.from("banners").update(patch).eq("id", banner.id);
+      const payload = kind === "desktop" ? { image_desktop: uploaded.url } : { image_mobile: uploaded.url };
+      const { error } = await supabase.from("banners").update(payload).eq("id", banner.id);
       if (error) throw error;
       toast.success(kind === "desktop" ? "Imagem para computador trocada." : "Imagem para celular trocada.");
       onChanged();
@@ -236,65 +224,27 @@ function BannerEditor({
         <div>
           <p className="mb-2 text-[10px] uppercase tracking-[0.18em] text-clay">{placementLabel(banner.placement)}</p>
           <img src={banner.image_desktop} alt={banner.alt_text ?? banner.title ?? "Banner NUVE"} className="h-44 w-full bg-cream object-contain" />
-          {banner.image_mobile && (
-            <div className="mt-3">
-              <p className="mb-1 text-[10px] uppercase tracking-[0.14em] text-ash">Versão celular</p>
-              <img src={banner.image_mobile} alt="" className="h-28 w-full bg-cream object-contain" />
-            </div>
-          )}
+          {banner.image_mobile && <div className="mt-3"><p className="mb-1 text-[10px] uppercase tracking-[0.14em] text-ash">Versão celular</p><img src={banner.image_mobile} alt="" className="h-28 w-full bg-cream object-contain" /></div>}
         </div>
 
         <div className="space-y-4">
           <div className="grid gap-4 sm:grid-cols-2">
-            <label>
-              <span className="text-[11px] uppercase tracking-[0.14em] text-ash">Local da imagem</span>
-              <select value={form.placement} onChange={(e) => setForm((f) => ({ ...f, placement: e.target.value }))} className="mt-1 w-full border border-input bg-ivory px-3 py-2 text-sm">
-                {PLACEMENTS.map(([value, label]) => <option key={value} value={value}>{label}</option>)}
-              </select>
-            </label>
-            <label>
-              <span className="text-[11px] uppercase tracking-[0.14em] text-ash">Ordem de exibição</span>
-              <input value={form.sort_order} onChange={(e) => setForm((f) => ({ ...f, sort_order: e.target.value }))} className="mt-1 w-full border border-input bg-ivory px-3 py-2 text-sm" />
-            </label>
-            <label className="sm:col-span-2">
-              <span className="text-[11px] uppercase tracking-[0.14em] text-ash">Título</span>
-              <input value={form.title} onChange={(e) => setForm((f) => ({ ...f, title: e.target.value }))} className="mt-1 w-full border border-input bg-ivory px-3 py-2 text-sm" />
-            </label>
-            <label className="sm:col-span-2">
-              <span className="text-[11px] uppercase tracking-[0.14em] text-ash">Subtítulo / texto</span>
-              <textarea value={form.subtitle} onChange={(e) => setForm((f) => ({ ...f, subtitle: e.target.value }))} rows={3} className="mt-1 w-full border border-input bg-ivory px-3 py-2 text-sm" />
-            </label>
-            <label>
-              <span className="text-[11px] uppercase tracking-[0.14em] text-ash">Texto do botão</span>
-              <input value={form.cta_label} onChange={(e) => setForm((f) => ({ ...f, cta_label: e.target.value }))} className="mt-1 w-full border border-input bg-ivory px-3 py-2 text-sm" />
-            </label>
-            <label>
-              <span className="text-[11px] uppercase tracking-[0.14em] text-ash">Link do botão</span>
-              <input value={form.cta_link} onChange={(e) => setForm((f) => ({ ...f, cta_link: e.target.value }))} placeholder="/loja" className="mt-1 w-full border border-input bg-ivory px-3 py-2 text-sm" />
-            </label>
-            <label className="sm:col-span-2">
-              <span className="text-[11px] uppercase tracking-[0.14em] text-ash">Descrição da imagem (ALT)</span>
-              <input value={form.alt_text} onChange={(e) => setForm((f) => ({ ...f, alt_text: e.target.value }))} className="mt-1 w-full border border-input bg-ivory px-3 py-2 text-sm" />
-            </label>
+            <label><span className="text-[11px] uppercase tracking-[0.14em] text-ash">Local da imagem</span><select value={form.placement} onChange={(e) => setForm((f) => ({ ...f, placement: e.target.value }))} className="mt-1 w-full border border-input bg-ivory px-3 py-2 text-sm">{PLACEMENTS.map(([value, label]) => <option key={value} value={value}>{label}</option>)}</select></label>
+            <label><span className="text-[11px] uppercase tracking-[0.14em] text-ash">Ordem de exibição</span><input value={form.sort_order} onChange={(e) => setForm((f) => ({ ...f, sort_order: e.target.value }))} className="mt-1 w-full border border-input bg-ivory px-3 py-2 text-sm" /></label>
+            <label className="sm:col-span-2"><span className="text-[11px] uppercase tracking-[0.14em] text-ash">Título</span><input value={form.title} onChange={(e) => setForm((f) => ({ ...f, title: e.target.value }))} className="mt-1 w-full border border-input bg-ivory px-3 py-2 text-sm" /></label>
+            <label className="sm:col-span-2"><span className="text-[11px] uppercase tracking-[0.14em] text-ash">Subtítulo / texto</span><textarea value={form.subtitle} onChange={(e) => setForm((f) => ({ ...f, subtitle: e.target.value }))} rows={3} className="mt-1 w-full border border-input bg-ivory px-3 py-2 text-sm" /></label>
+            <label><span className="text-[11px] uppercase tracking-[0.14em] text-ash">Texto do botão</span><input value={form.cta_label} onChange={(e) => setForm((f) => ({ ...f, cta_label: e.target.value }))} className="mt-1 w-full border border-input bg-ivory px-3 py-2 text-sm" /></label>
+            <label><span className="text-[11px] uppercase tracking-[0.14em] text-ash">Link do botão</span><input value={form.cta_link} onChange={(e) => setForm((f) => ({ ...f, cta_link: e.target.value }))} placeholder="/loja" className="mt-1 w-full border border-input bg-ivory px-3 py-2 text-sm" /></label>
+            <label className="sm:col-span-2"><span className="text-[11px] uppercase tracking-[0.14em] text-ash">Descrição da imagem (ALT)</span><input value={form.alt_text} onChange={(e) => setForm((f) => ({ ...f, alt_text: e.target.value }))} className="mt-1 w-full border border-input bg-ivory px-3 py-2 text-sm" /></label>
           </div>
 
           <div className="grid gap-3 md:grid-cols-2">
-            <label className="border border-input p-3 text-sm text-ash">
-              <span className="block text-[10px] uppercase tracking-[0.14em]">Trocar imagem para computador</span>
-              <input ref={desktopRef} type="file" accept="image/jpeg,image/png,image/webp" disabled={busy} onChange={(e) => replaceImage("desktop", e.target.files?.[0])} className="mt-2 block w-full text-xs" />
-            </label>
-            <label className="border border-input p-3 text-sm text-ash">
-              <span className="block text-[10px] uppercase tracking-[0.14em]">Imagem para celular</span>
-              <input ref={mobileRef} type="file" accept="image/jpeg,image/png,image/webp" disabled={busy} onChange={(e) => replaceImage("mobile", e.target.files?.[0])} className="mt-2 block w-full text-xs" />
-              {banner.image_mobile && <button type="button" onClick={removeMobile} className="mt-2 text-[10px] uppercase tracking-[0.12em] underline">Remover versão celular</button>}
-            </label>
+            <label className="border border-input p-3 text-sm text-ash"><span className="block text-[10px] uppercase tracking-[0.14em]">Trocar imagem para computador</span><input ref={desktopRef} type="file" accept="image/jpeg,image/png,image/webp" disabled={busy} onChange={(e) => replaceImage("desktop", e.target.files?.[0])} className="mt-2 block w-full text-xs" /></label>
+            <label className="border border-input p-3 text-sm text-ash"><span className="block text-[10px] uppercase tracking-[0.14em]">Imagem para celular</span><input ref={mobileRef} type="file" accept="image/jpeg,image/png,image/webp" disabled={busy} onChange={(e) => replaceImage("mobile", e.target.files?.[0])} className="mt-2 block w-full text-xs" />{banner.image_mobile && <button type="button" onClick={removeMobile} className="mt-2 text-[10px] uppercase tracking-[0.12em] underline">Remover versão celular</button>}</label>
           </div>
 
           <div className="flex flex-wrap items-center gap-4">
-            <label className="flex items-center gap-2 text-sm text-ink">
-              <input type="checkbox" checked={form.active} onChange={(e) => setForm((f) => ({ ...f, active: e.target.checked }))} />
-              Exibir no site
-            </label>
+            <label className="flex items-center gap-2 text-sm text-ink"><input type="checkbox" checked={form.active} onChange={(e) => setForm((f) => ({ ...f, active: e.target.checked }))} /> Exibir no site</label>
             <button type="button" onClick={save} className="bg-ink px-5 py-2.5 text-[11px] uppercase tracking-[0.16em] text-ivory">Salvar</button>
             <button type="button" onClick={removeBanner} className="text-[11px] uppercase tracking-[0.14em] text-ash underline">Excluir</button>
           </div>
