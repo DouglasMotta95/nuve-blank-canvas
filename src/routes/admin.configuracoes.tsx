@@ -70,6 +70,7 @@ function AdminConfig() {
     qc.invalidateQueries({ queryKey: ["admin-settings"] });
     qc.invalidateQueries({ queryKey: ["social-proof"] });
     qc.invalidateQueries({ queryKey: ["setting", "whatsapp"] });
+    qc.invalidateQueries({ queryKey: ["setting", "social_proof"] });
   }
 
   return (
