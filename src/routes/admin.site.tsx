@@ -40,7 +40,7 @@ function AdminSite() {
   async function save() {
     const { error } = await supabase.from("site_settings").upsert({
       key: "site_identity",
-      value: form,
+      value: form as never,
       updated_at: new Date().toISOString(),
     }, { onConflict: "key" });
     if (error) return toast.error("Não foi possível salvar os dados do site.");
