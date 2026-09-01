@@ -80,17 +80,19 @@ export const createOrder = createServerFn({ method: "POST" })
     const ids = data.items.map((i) => i.product_id);
     const { data: products, error: prodError } = await supabaseAdmin
       .from("products")
-      .select("id, sku, name, price_cents, sale_price_cents, stock, active")
+      .select("id, sku, name, price_cents, sale_price_cents, stock, reserved_stock, active")
       .in("id", ids);
     if (prodError) throw new Error("Não foi possível carregar os produtos.");
 
     const lines = data.items.map((item) => {
       const p = products?.find((x) => x.id === item.product_id);
       if (!p || !p.active) throw new Error("Produto indisponível no carrinho.");
-      if (p.stock < item.quantity) throw new Error(`Estoque insuficiente para ${p.name}.`);
+      const available = p.stock - (p.reserved_stock ?? 0);
+      if (available < item.quantity) throw new Error(`Estoque insuficiente para ${p.name}.`);
       const unit = p.sale_price_cents && p.sale_price_cents > 0 ? p.sale_price_cents : p.price_cents;
       return { product: p, quantity: item.quantity, unit_price_cents: unit };
     });
+
 
     // 2. promoção por quantidade (regra administrável)
     const { data: promo } = await supabaseAdmin
@@ -168,18 +170,34 @@ export const createOrder = createServerFn({ method: "POST" })
       })),
     );
 
-    // 5. baixa de estoque + movimentações (evita overselling)
+    // 5. reserva atômica de estoque (evita vender acima do limite com pedidos simultâneos)
+    const reserved: typeof lines = [];
     for (const l of lines) {
-      await supabaseAdmin
-        .from("products")
-        .update({ stock: l.product.stock - l.quantity })
-        .eq("id", l.product.id);
+      const { data: ok, error: reserveError } = await supabaseAdmin.rpc("reserve_stock", {
+        _product_id: l.product.id,
+        _qty: l.quantity,
+      });
+      if (reserveError || ok !== true) {
+        for (const r of reserved) {
+          await supabaseAdmin.rpc("reserve_stock", { _product_id: r.product.id, _qty: -r.quantity });
+        }
+        await supabaseAdmin.from("order_items").delete().eq("order_id", order.id);
+        await supabaseAdmin.from("orders").delete().eq("id", order.id);
+        throw new Error(`Estoque insuficiente para ${l.product.name}.`);
+      }
+      reserved.push(l);
       await supabaseAdmin.from("inventory_movements").insert({
         product_id: l.product.id,
-        delta: -l.quantity,
-        reason: `pedido ${order.order_number}`,
+        delta: 0,
+        reason: `reserva do pedido ${order.order_number}`,
+        movement_type: "reserva",
+        order_id: order.id,
+        stock_after: l.product.stock,
+        note: `${l.quantity} un. reservadas até a confirmação do pagamento`,
       });
     }
+    await supabaseAdmin.from("orders").update({ stock_state: "reservado" }).eq("id", order.id);
+
 
     await supabaseAdmin.from("payments").insert({
       order_id: order.id,
@@ -203,18 +221,30 @@ export const createOrder = createServerFn({ method: "POST" })
     return { order_id: order.id, order_number: order.order_number, total_cents: order.total_cents };
   });
 
+const ORDER_SELECT =
+  "id, order_number, status, payment_status, tracking_code, subtotal_cents, promo_discount_cents, coupon_discount_cents, shipping_cents, total_cents, coupon_code, created_at, updated_at, customer_name, order_items(name, sku, quantity, unit_price_cents, total_cents)";
+
+async function loadEvents(admin: any, orderId: string) {
+  const { data } = await admin
+    .from("order_status_events")
+    .select("id, status, payment_status, tracking_code, note, created_at")
+    .eq("order_id", orderId)
+    .order("created_at", { ascending: true });
+  return data ?? [];
+}
+
 export const getOrderPublic = createServerFn({ method: "POST" })
   .inputValidator((d: unknown) => z.object({ order_id: z.string().uuid() }).parse(d))
   .handler(async ({ data }) => {
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const { data: order } = await supabaseAdmin
       .from("orders")
-      .select(
-        "id, order_number, status, payment_status, subtotal_cents, promo_discount_cents, coupon_discount_cents, shipping_cents, total_cents, coupon_code, created_at, customer_name, order_items(name, sku, quantity, unit_price_cents, total_cents)",
-      )
+      .select(ORDER_SELECT)
       .eq("id", data.order_id)
       .maybeSingle();
-    return order ?? null;
+    if (!order) return null;
+    return { ...order, events: await loadEvents(supabaseAdmin, order.id) };
+
   });
 
 export const subscribeNewsletter = createServerFn({ method: "POST" })
@@ -223,4 +253,28 @@ export const subscribeNewsletter = createServerFn({ method: "POST" })
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     await supabaseAdmin.from("newsletter_subscribers").upsert({ email: data.email }, { onConflict: "email" });
     return { ok: true };
+  });
+
+export const trackOrder = createServerFn({ method: "POST" })
+  .inputValidator((d: unknown) =>
+    z
+      .object({
+        order_number: z.string().trim().min(3).max(40),
+        email: z.string().trim().email().max(160),
+      })
+      .parse(d),
+  )
+  .handler(async ({ data }) => {
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { data: order } = await supabaseAdmin
+      .from("orders")
+      .select(ORDER_SELECT + ", customer_email")
+      .ilike("order_number", data.order_number.replace(/\s/g, ""))
+      .maybeSingle();
+
+    if (!order || (order as any).customer_email?.toLowerCase() !== data.email.toLowerCase()) {
+      return { found: false as const };
+    }
+    const { customer_email: _omit, ...safe } = order as any;
+    return { found: true as const, order: { ...safe, events: await loadEvents(supabaseAdmin, safe.id) } };
   });

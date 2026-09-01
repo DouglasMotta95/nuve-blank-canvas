@@ -2,6 +2,8 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { getOrderPublic } from "@/lib/orders.functions";
 import { brl } from "@/lib/format";
+import { OrderTimeline, STATUS_LABEL } from "@/components/site/OrderTimeline";
+
 
 export const Route = createFileRoute("/pedido/$id")({
   head: () => ({
@@ -30,7 +32,10 @@ function PedidoPage() {
   const { data: order, isLoading } = useQuery({
     queryKey: ["order", id],
     queryFn: () => getOrderPublic({ data: { order_id: id } }),
+    refetchInterval: 30_000,
+    refetchOnWindowFocus: true,
   });
+
 
   if (isLoading) return <div className="mx-auto h-[50vh] max-w-2xl animate-pulse bg-cream" />;
   if (!order)
@@ -48,9 +53,15 @@ function PedidoPage() {
       <p className="eyebrow">Pedido {order.order_number}</p>
       <h1 className="mt-2 font-display text-4xl text-ink">Obrigada, {order.customer_name.split(" ")[0]}!</h1>
       <p className="mt-3 text-sm text-ash">
-        Status: <strong className="text-ink">{LABEL[order.payment_status] ?? order.payment_status}</strong>. Você
-        receberá as atualizações por e-mail.
+        Status do pedido: <strong className="text-ink">{STATUS_LABEL[order.status] ?? order.status}</strong> ·
+        pagamento: <strong className="text-ink">{LABEL[order.payment_status] ?? order.payment_status}</strong>. Esta
+        página atualiza sozinha.
       </p>
+
+      <div className="mt-8 border border-border bg-white/60 p-5">
+        <OrderTimeline status={order.status} trackingCode={order.tracking_code} events={order.events as any} />
+      </div>
+
 
       <ul className="mt-8 divide-y divide-border border-y border-border">
         {(order.order_items ?? []).map((i: any) => (

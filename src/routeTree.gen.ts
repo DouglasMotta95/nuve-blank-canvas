@@ -19,8 +19,10 @@ import { Route as ContatoRouteImport } from './routes/contato'
 import { Route as FaqRouteImport } from './routes/faq'
 import { Route as KitsRouteImport } from './routes/kits'
 import { Route as LojaRouteImport } from './routes/loja'
+import { Route as RastreioRouteImport } from './routes/rastreio'
 import { Route as SobreRouteImport } from './routes/sobre'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
+import { Route as AdminAuditoriaRouteImport } from './routes/admin.auditoria'
 import { Route as AdminBannersRouteImport } from './routes/admin.banners'
 import { Route as AdminConfiguracoesRouteImport } from './routes/admin.configuracoes'
 import { Route as AdminCuponsRouteImport } from './routes/admin.cupons'
@@ -82,6 +84,11 @@ const LojaRoute = LojaRouteImport.update({
   path: '/loja',
   getParentRoute: () => rootRouteImport,
 } as any)
+const RastreioRoute = RastreioRouteImport.update({
+  id: '/rastreio',
+  path: '/rastreio',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SobreRoute = SobreRouteImport.update({
   id: '/sobre',
   path: '/sobre',
@@ -90,6 +97,11 @@ const SobreRoute = SobreRouteImport.update({
 const AdminIndexRoute = AdminIndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminAuditoriaRoute = AdminAuditoriaRouteImport.update({
+  id: '/auditoria',
+  path: '/auditoria',
   getParentRoute: () => AdminRoute,
 } as any)
 const AdminBannersRoute = AdminBannersRouteImport.update({
@@ -155,7 +167,9 @@ export interface FileRoutesByFullPath {
   '/faq': typeof FaqRoute
   '/kits': typeof KitsRoute
   '/loja': typeof LojaRoute
+  '/rastreio': typeof RastreioRoute
   '/sobre': typeof SobreRoute
+  '/admin/auditoria': typeof AdminAuditoriaRoute
   '/admin/banners': typeof AdminBannersRoute
   '/admin/configuracoes': typeof AdminConfiguracoesRoute
   '/admin/cupons': typeof AdminCuponsRoute
@@ -178,7 +192,9 @@ export interface FileRoutesByTo {
   '/faq': typeof FaqRoute
   '/kits': typeof KitsRoute
   '/loja': typeof LojaRoute
+  '/rastreio': typeof RastreioRoute
   '/sobre': typeof SobreRoute
+  '/admin/auditoria': typeof AdminAuditoriaRoute
   '/admin/banners': typeof AdminBannersRoute
   '/admin/configuracoes': typeof AdminConfiguracoesRoute
   '/admin/cupons': typeof AdminCuponsRoute
@@ -203,7 +219,9 @@ export interface FileRoutesById {
   '/faq': typeof FaqRoute
   '/kits': typeof KitsRoute
   '/loja': typeof LojaRoute
+  '/rastreio': typeof RastreioRoute
   '/sobre': typeof SobreRoute
+  '/admin/auditoria': typeof AdminAuditoriaRoute
   '/admin/banners': typeof AdminBannersRoute
   '/admin/configuracoes': typeof AdminConfiguracoesRoute
   '/admin/cupons': typeof AdminCuponsRoute
@@ -229,7 +247,9 @@ export interface FileRouteTypes {
     | '/faq'
     | '/kits'
     | '/loja'
+    | '/rastreio'
     | '/sobre'
+    | '/admin/auditoria'
     | '/admin/banners'
     | '/admin/configuracoes'
     | '/admin/cupons'
@@ -252,7 +272,9 @@ export interface FileRouteTypes {
     | '/faq'
     | '/kits'
     | '/loja'
+    | '/rastreio'
     | '/sobre'
+    | '/admin/auditoria'
     | '/admin/banners'
     | '/admin/configuracoes'
     | '/admin/cupons'
@@ -276,7 +298,9 @@ export interface FileRouteTypes {
     | '/faq'
     | '/kits'
     | '/loja'
+    | '/rastreio'
     | '/sobre'
+    | '/admin/auditoria'
     | '/admin/banners'
     | '/admin/configuracoes'
     | '/admin/cupons'
@@ -301,6 +325,7 @@ export interface RootRouteChildren {
   FaqRoute: typeof FaqRoute
   KitsRoute: typeof KitsRoute
   LojaRoute: typeof LojaRoute
+  RastreioRoute: typeof RastreioRoute
   SobreRoute: typeof SobreRoute
   PedidoIdRoute: typeof PedidoIdRoute
   PoliticasSlugRoute: typeof PoliticasSlugRoute
@@ -380,6 +405,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LojaRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/rastreio': {
+      id: '/rastreio'
+      path: '/rastreio'
+      fullPath: '/rastreio'
+      preLoaderRoute: typeof RastreioRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/sobre': {
       id: '/sobre'
       path: '/sobre'
@@ -392,6 +424,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/admin/'
       preLoaderRoute: typeof AdminIndexRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/auditoria': {
+      id: '/admin/auditoria'
+      path: '/auditoria'
+      fullPath: '/admin/auditoria'
+      preLoaderRoute: typeof AdminAuditoriaRouteImport
       parentRoute: typeof AdminRoute
     }
     '/admin/banners': {
@@ -468,6 +507,7 @@ declare module '@tanstack/react-router' {
 }
 
 interface AdminRouteChildren {
+  AdminAuditoriaRoute: typeof AdminAuditoriaRoute
   AdminBannersRoute: typeof AdminBannersRoute
   AdminConfiguracoesRoute: typeof AdminConfiguracoesRoute
   AdminCuponsRoute: typeof AdminCuponsRoute
@@ -478,6 +518,7 @@ interface AdminRouteChildren {
 }
 
 const AdminRouteChildren: AdminRouteChildren = {
+  AdminAuditoriaRoute: AdminAuditoriaRoute,
   AdminBannersRoute: AdminBannersRoute,
   AdminConfiguracoesRoute: AdminConfiguracoesRoute,
   AdminCuponsRoute: AdminCuponsRoute,
@@ -500,6 +541,7 @@ const rootRouteChildren: RootRouteChildren = {
   FaqRoute: FaqRoute,
   KitsRoute: KitsRoute,
   LojaRoute: LojaRoute,
+  RastreioRoute: RastreioRoute,
   SobreRoute: SobreRoute,
   PedidoIdRoute: PedidoIdRoute,
   PoliticasSlugRoute: PoliticasSlugRoute,

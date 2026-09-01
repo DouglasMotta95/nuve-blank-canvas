@@ -17,19 +17,27 @@ export const Route = createFileRoute("/admin/estoque")({
   component: AdminEstoque,
 });
 
-type Product = { id: string; name: string; sku: string; stock: number; active: boolean };
+type Product = {
+  id: string;
+  name: string;
+  sku: string;
+  stock: number;
+  reserved_stock: number;
+  active: boolean;
+};
 
 function AdminEstoque() {
   const qc = useQueryClient();
   const [busy, setBusy] = useState<string | null>(null);
   const [entry, setEntry] = useState<Record<string, string>>({});
+  const [note, setNote] = useState<Record<string, string>>({});
 
   const { data: products } = useQuery({
     queryKey: ["admin-stock"],
     queryFn: async () => {
       const { data } = await supabase
         .from("products")
-        .select("id, name, sku, stock, active")
+        .select("id, name, sku, stock, reserved_stock, active")
         .order("sort_order");
       return (data ?? []) as Product[];
     },
@@ -40,7 +48,7 @@ function AdminEstoque() {
     queryFn: async () => {
       const { data } = await supabase
         .from("inventory_movements")
-        .select("id, delta, reason, created_at, product_id")
+        .select("id, delta, reason, note, movement_type, created_by_email, stock_after, created_at, product_id")
         .order("created_at", { ascending: false })
         .limit(20);
       return data ?? [];
@@ -60,12 +68,24 @@ function AdminEstoque() {
       toast.error("Não foi possível atualizar o estoque.");
       return;
     }
-    await supabase.from("inventory_movements").insert({ product_id: p.id, delta, reason });
+    const { data: auth } = await supabase.auth.getUser();
+    await supabase.from("inventory_movements").insert({
+      product_id: p.id,
+      delta,
+      reason,
+      movement_type: "ajuste",
+      stock_after: next,
+      note: (note[p.id] ?? "").trim() || null,
+      created_by: auth.user?.id ?? null,
+      created_by_email: auth.user?.email ?? null,
+    });
     setBusy(null);
     toast.success(`${p.name}: ${next} un. em estoque.`);
     setEntry((e) => ({ ...e, [p.id]: "" }));
+    setNote((n) => ({ ...n, [p.id]: "" }));
     qc.invalidateQueries({ queryKey: ["admin-stock"] });
     qc.invalidateQueries({ queryKey: ["admin-stock-movements"] });
+    qc.invalidateQueries({ queryKey: ["admin-audit"] });
     qc.invalidateQueries({ queryKey: ["admin-overview"] });
   }
 
@@ -78,6 +98,7 @@ function AdminEstoque() {
     }
     await apply(p, value - p.stock, "ajuste manual");
   }
+
 
   const nameById = new Map((products ?? []).map((p) => [p.id, p.name]));
 
@@ -92,7 +113,9 @@ function AdminEstoque() {
 
       <div className="space-y-4">
         {(products ?? []).map((p) => {
-          const low = p.stock <= 10;
+          const reserved = p.reserved_stock ?? 0;
+          const available = p.stock - reserved;
+          const low = available <= 10;
           return (
             <div key={p.id} className="border border-border bg-card p-5">
               <div className="flex flex-wrap items-baseline justify-between gap-3">
@@ -100,9 +123,15 @@ function AdminEstoque() {
                   <p className="font-display text-xl text-ink">{p.name}</p>
                   <p className="text-[11px] uppercase tracking-[0.14em] text-ash">{p.sku}</p>
                 </div>
-                <p className={`text-lg ${low ? "text-destructive" : "text-ink"}`}>
-                  {p.stock} un. {low && <span className="text-[11px] uppercase tracking-[0.14em]">· estoque baixo</span>}
-                </p>
+                <div className="text-right">
+                  <p className={`text-lg ${low ? "text-destructive" : "text-ink"}`}>
+                    {available} un. disponíveis
+                    {low && <span className="ml-2 text-[11px] uppercase tracking-[0.14em]">· estoque baixo</span>}
+                  </p>
+                  <p className="text-[11px] uppercase tracking-[0.14em] text-ash">
+                    Total {p.stock} · reservado {reserved}
+                  </p>
+                </div>
               </div>
 
               <div className="mt-4 flex flex-wrap items-center gap-2">
@@ -125,6 +154,12 @@ function AdminEstoque() {
                   placeholder="Qtd. total"
                   className="w-28 border border-input bg-ivory px-3 py-2 text-sm"
                 />
+                <input
+                  value={note[p.id] ?? ""}
+                  onChange={(e) => setNote((s) => ({ ...s, [p.id]: e.target.value }))}
+                  placeholder="Motivo (ex.: recebimento NF 123)"
+                  className="min-w-[200px] flex-1 border border-input bg-ivory px-3 py-2 text-sm"
+                />
                 <button
                   type="button"
                   disabled={busy === p.id}
@@ -137,6 +172,7 @@ function AdminEstoque() {
             </div>
           );
         })}
+
       </div>
 
       <section>
@@ -149,6 +185,7 @@ function AdminEstoque() {
               <li key={m.id} className="flex flex-wrap justify-between gap-2 py-3 text-sm">
                 <span className="text-ash">
                   {nameById.get(m.product_id) ?? "Produto"} · {m.reason}
+                  {m.created_by_email ? ` · por ${m.created_by_email}` : " · automático"}
                 </span>
                 <span className={m.delta > 0 ? "text-ink" : "text-destructive"}>
                   {m.delta > 0 ? `+${m.delta}` : m.delta} ·{" "}
@@ -156,6 +193,7 @@ function AdminEstoque() {
                 </span>
               </li>
             ))}
+
           </ul>
         )}
       </section>

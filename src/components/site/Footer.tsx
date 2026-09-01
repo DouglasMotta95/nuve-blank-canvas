@@ -40,7 +40,9 @@ export function Footer() {
             <Link to="/sobre" className="hover:text-ink">A Marca</Link>
             <Link to="/ativos" className="hover:text-ink">Ativos & Tecnologia</Link>
             <Link to="/faq" className="hover:text-ink">Perguntas frequentes</Link>
+            <Link to="/rastreio" className="hover:text-ink">Rastrear pedido</Link>
             <Link to="/contato" className="hover:text-ink">Contato</Link>
+
           </nav>
 
           <nav className="flex flex-col gap-2 text-sm text-ash">
