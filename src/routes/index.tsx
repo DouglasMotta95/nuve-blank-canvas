@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useBanners, useProducts, useReviews } from "@/lib/catalog";
 import { ProductCard } from "@/components/site/ProductCard";
 import { AutoCarousel } from "@/components/site/AutoCarousel";
+import { HeroVisualSlider } from "@/components/site/HeroVisualSlider";
 import g1 from "@/assets/img-20260831-wa0026.jpg.asset.json";
 import g2 from "@/assets/img-20260831-wa0065.jpg.asset.json";
 import g3 from "@/assets/img-20260831-wa0066.jpg.asset.json";
@@ -71,10 +72,26 @@ function Home() {
   const hero = banners?.[0];
   const secondary = banners?.slice(1) ?? [];
   const japaneseVisual = secondary[0]?.image_desktop ?? g1.url;
+  const heroSlides =
+    banners && banners.length > 0
+      ? banners.map((banner) => ({
+          id: banner.id,
+          image_desktop: banner.image_desktop,
+          image_mobile: banner.image_mobile,
+          title: banner.title,
+        }))
+      : [
+          {
+            id: "fallback-hero",
+            image_desktop: g1.url,
+            image_mobile: null,
+            title: "NUVE Advanced Skin Care",
+          },
+        ];
 
   return (
     <div className="nuve-reveal">
-      {/* HERO — o primeiro banner cadastrado deve ser a foto oficial das três mulheres */}
+      {/* HERO — começa com as três mulheres e alterna suavemente para os visuais dos produtos */}
       <section className="overflow-hidden bg-blush/45">
         <div className="mx-auto grid max-w-6xl items-center gap-8 px-4 py-8 md:grid-cols-2 md:py-14">
           <div className="order-2 md:order-1">
@@ -103,17 +120,7 @@ function Home() {
           </div>
 
           <div className="order-1 md:order-2">
-            <picture>
-              {hero?.image_mobile && <source media="(max-width: 767px)" srcSet={hero.image_mobile} />}
-              <img
-                src={hero?.image_desktop ?? g1.url}
-                alt="Linha NUVE Advanced Skin Care"
-                className="mx-auto max-h-[680px] w-full object-contain"
-                width={1080}
-                height={1080}
-                fetchPriority="high"
-              />
-            </picture>
+            <HeroVisualSlider slides={heroSlides} />
           </div>
         </div>
       </section>
@@ -223,7 +230,7 @@ function Home() {
         </section>
       ))}
 
-      {/* Avaliações reais, somente quando aprovadas e existentes */}
+      {/* Avaliações */}
       {(reviews?.length ?? 0) > 0 && (
         <section className="mx-auto max-w-6xl px-4 py-16">
           <div className="text-center">
