@@ -90,44 +90,42 @@ function Home() {
         ];
 
   return (
-    <div className="nuve-reveal">
-      {/* HERO — começa com as três mulheres e alterna suavemente para os visuais dos produtos */}
+    <div className="nuve-reveal overflow-x-hidden">
       <section className="overflow-hidden bg-blush/45">
-        <div className="mx-auto grid max-w-6xl items-center gap-8 px-4 py-8 md:grid-cols-2 md:py-14">
-          <div className="order-2 md:order-1">
+        <div className="mx-auto grid max-w-6xl items-center gap-7 px-4 py-7 sm:px-6 sm:py-10 lg:grid-cols-2 lg:gap-10 lg:px-4 lg:py-14">
+          <div className="order-2 lg:order-1">
             <p className="eyebrow">NUVE Advanced Skin Care</p>
-            <h1 className="mt-3 max-w-[12ch] font-display text-[40px] leading-[0.98] text-ink sm:text-[48px] md:text-[60px]">
+            <h1 className="mt-3 max-w-[13ch] font-display text-[38px] leading-[1.01] text-ink sm:text-[46px] md:text-[52px] lg:text-[60px]">
               {hero?.title ?? "Tecnologia japonesa. Ativos selecionados. Skincare para a vida real."}
             </h1>
-            <p className="mt-5 max-w-[46ch] text-[15px] leading-relaxed text-ash">
+            <p className="mt-5 max-w-[52ch] text-[15px] leading-relaxed text-ash">
               {hero?.subtitle ??
                 "A Nuve une a sofisticação do skincare japonês a fórmulas cuidadosamente desenvolvidas com ativos selecionados para transformar o cuidado com a pele em uma experiência simples, prática e especial."}
             </p>
-            <div className="mt-7 flex flex-wrap gap-3">
-              <Link to="/loja" className="bg-ink px-8 py-4 text-[11px] uppercase tracking-[0.22em] text-ivory">
+            <div className="mt-7 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+              <Link to="/loja" className="inline-flex min-h-12 items-center justify-center bg-ink px-8 py-4 text-[11px] uppercase tracking-[0.22em] text-ivory">
                 Conheça os produtos
               </Link>
               <Link
                 to="/sobre"
-                className="border border-ink px-8 py-4 text-[11px] uppercase tracking-[0.22em] text-ink"
+                className="inline-flex min-h-12 items-center justify-center border border-ink px-8 py-4 text-[11px] uppercase tracking-[0.22em] text-ink"
               >
                 Conheça a NUVE
               </Link>
             </div>
-            <p className="mt-5 text-[11px] uppercase tracking-[0.18em] text-clay">
+            <p className="mt-5 text-[11px] uppercase tracking-[0.16em] text-clay sm:tracking-[0.18em]">
               R$ 149,90 cada · 10% OFF levando 2 ou mais
             </p>
           </div>
 
-          <div className="order-1 md:order-2">
+          <div className="order-1 w-full lg:order-2">
             <HeroVisualSlider slides={heroSlides} />
           </div>
         </div>
       </section>
 
-      {/* Pilares */}
       <section className="border-y border-border bg-cream">
-        <div className="mx-auto grid max-w-6xl gap-7 px-4 py-10 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="mx-auto grid max-w-6xl gap-7 px-4 py-10 sm:grid-cols-2 sm:px-6 lg:grid-cols-4 lg:px-4">
           {PILLARS.map((p) => (
             <div key={p.title} className="border-t border-clay/35 pt-4">
               <h2 className="font-display text-xl leading-tight text-ink">{p.title}</h2>
@@ -137,8 +135,7 @@ function Home() {
         </div>
       </section>
 
-      {/* Produtos */}
-      <section className="mx-auto max-w-6xl px-4 py-16 md:py-20">
+      <section className="mx-auto max-w-6xl px-4 py-14 sm:px-6 md:py-18 lg:px-4 lg:py-20">
         <div className="text-center">
           <p className="eyebrow">A linha</p>
           <h2 className="mt-2 font-display text-4xl text-ink md:text-5xl">Três séruns. Três formas de cuidar.</h2>
@@ -153,18 +150,17 @@ function Home() {
         </div>
       </section>
 
-      {/* Japão — seção fixa para não depender de copy de banner */}
       <section className="overflow-hidden bg-[#2b2528] text-ivory">
-        <div className="mx-auto grid max-w-6xl items-center md:grid-cols-2">
-          <div className="order-2 px-5 py-12 sm:px-8 md:order-1 md:px-10 md:py-16">
+        <div className="mx-auto grid max-w-6xl items-stretch lg:grid-cols-2">
+          <div className="order-2 px-5 py-11 sm:px-8 sm:py-12 lg:order-1 lg:px-10 lg:py-16">
             <p className="text-[10px] uppercase tracking-[0.28em] text-champagne">Inspiração japonesa</p>
-            <h2 className="mt-3 max-w-[13ch] font-display text-4xl leading-[1.02] md:text-5xl">
+            <h2 className="mt-3 max-w-[15ch] font-display text-4xl leading-[1.04] md:text-5xl">
               Formulações desenvolvidas no Japão
             </h2>
-            <p className="mt-5 max-w-[48ch] text-sm leading-relaxed text-ivory/75">
+            <p className="mt-5 max-w-[52ch] text-sm leading-relaxed text-ivory/75">
               A NUVE nasce inspirada na sofisticação do skincare japonês, unindo tecnologia, conhecimento em formulação e ativos selecionados a uma rotina moderna de cuidados com a pele.
             </p>
-            <p className="mt-3 max-w-[48ch] text-sm leading-relaxed text-ivory/75">
+            <p className="mt-3 max-w-[52ch] text-sm leading-relaxed text-ivory/75">
               A proposta valoriza textura, experiência e cuidado contínuo — traduzidos para uma rotina mais simples, prática e sofisticada para a vida real.
             </p>
             <Link
@@ -174,51 +170,49 @@ function Home() {
               Descubra a história da NUVE
             </Link>
           </div>
-          <div className="order-1 bg-cream md:order-2">
+          <div className="order-1 flex min-h-[260px] items-center justify-center bg-cream p-3 sm:min-h-[360px] sm:p-5 lg:order-2 lg:min-h-full lg:p-6">
             <img
               src={japaneseVisual}
               alt="NUVE — tecnologia, formulação e inspiração japonesa"
               loading="lazy"
-              className="h-full max-h-[660px] w-full object-contain"
+              className="block max-h-[620px] w-full object-contain object-center"
             />
           </div>
         </div>
       </section>
 
-      {/* Galeria da linha */}
-      <section className="border-y border-border bg-cream/60 py-14 md:py-16">
-        <div className="mx-auto max-w-5xl px-4">
+      <section className="border-y border-border bg-cream/60 py-12 sm:py-14 md:py-16">
+        <div className="mx-auto max-w-5xl px-4 sm:px-6">
           <div className="text-center">
             <p className="eyebrow">Universo NUVE</p>
             <h2 className="mt-2 font-display text-4xl text-ink">A linha em detalhes</h2>
           </div>
-          <div className="mt-8 overflow-hidden border border-border bg-card">
+          <div className="mt-8 overflow-hidden border border-border bg-card p-2 sm:p-3">
             <AutoCarousel slides={GALLERY} />
           </div>
         </div>
       </section>
 
-      {/* Banners editoriais restantes */}
       {secondary.slice(1).map((b, i) => (
         <section key={b.id} className={i % 2 === 0 ? "bg-ivory" : "bg-blush/35"}>
           <div
-            className={`mx-auto grid max-w-6xl items-center gap-8 px-4 py-14 md:grid-cols-2 md:py-16 ${
-              i % 2 === 0 ? "" : "md:[&>*:first-child]:order-2"
+            className={`mx-auto grid max-w-6xl items-center gap-7 px-4 py-12 sm:px-6 sm:py-14 lg:grid-cols-2 lg:gap-10 lg:px-4 lg:py-16 ${
+              i % 2 === 0 ? "" : "lg:[&>*:first-child]:order-2"
             }`}
           >
-            <picture>
-              {b.image_mobile && <source media="(max-width: 767px)" srcSet={b.image_mobile} />}
+            <picture className="flex w-full items-center justify-center overflow-hidden bg-cream/50 p-2 sm:p-4">
+              {b.image_mobile && <source media="(max-width: 639px)" srcSet={b.image_mobile} />}
               <img
                 src={b.image_desktop}
                 alt={b.title ?? "NUVE Advanced Skin Care"}
                 loading="lazy"
-                className="max-h-[620px] w-full object-contain"
+                className="block max-h-[560px] w-full object-contain object-center"
               />
             </picture>
             <div>
               <p className="eyebrow">NUVE</p>
               <h2 className="mt-3 font-display text-3xl leading-tight text-ink md:text-4xl">{b.title}</h2>
-              <p className="mt-3 max-w-[46ch] text-sm leading-relaxed text-ash">{b.subtitle}</p>
+              <p className="mt-3 max-w-[52ch] text-sm leading-relaxed text-ash">{b.subtitle}</p>
               <Link
                 to="/loja"
                 className="mt-6 inline-block border-b border-clay pb-1 text-[11px] uppercase tracking-[0.2em] text-clay"
@@ -230,14 +224,13 @@ function Home() {
         </section>
       ))}
 
-      {/* Avaliações */}
       {(reviews?.length ?? 0) > 0 && (
-        <section className="mx-auto max-w-6xl px-4 py-16">
+        <section className="mx-auto max-w-6xl px-4 py-14 sm:px-6 md:py-16 lg:px-4">
           <div className="text-center">
             <p className="eyebrow">Experiências NUVE</p>
             <h2 className="mt-2 font-display text-4xl text-ink">O que nossas clientes contam</h2>
           </div>
-          <div className="mt-10 grid gap-6 md:grid-cols-3">
+          <div className="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {(reviews ?? []).slice(0, 3).map((r: any) => (
               <figure key={r.id} className="border border-border bg-card p-6">
                 <div className="text-clay">{"★".repeat(r.rating)}</div>
