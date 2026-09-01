@@ -2,12 +2,6 @@ import { useCallback, useEffect, useRef, useState } from "react";
 
 export type Slide = { url: string; alt: string };
 
-/**
- * Carrossel automático leve:
- * - autoplay pausa fora da tela, com a aba oculta, no hover/toque e com "reduzir movimento"
- * - imagens carregam sob demanda (lazy) — só a atual e as vizinhas entram no DOM
- * - navegação por arraste no celular e por teclado no desktop
- */
 export function AutoCarousel({ slides, interval = 4500 }: { slides: Slide[]; interval?: number }) {
   const [index, setIndex] = useState(0);
   const [paused, setPaused] = useState(false);
@@ -21,7 +15,6 @@ export function AutoCarousel({ slides, interval = 4500 }: { slides: Slide[]; int
     [slides.length],
   );
 
-  // respeita a preferência do sistema por menos animação
   useEffect(() => {
     const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
     const update = () => setReduced(mq.matches);
@@ -30,7 +23,6 @@ export function AutoCarousel({ slides, interval = 4500 }: { slides: Slide[]; int
     return () => mq.removeEventListener("change", update);
   }, []);
 
-  // só anima quando o carrossel está visível na tela
   useEffect(() => {
     const el = containerRef.current;
     if (!el) return;
@@ -39,7 +31,6 @@ export function AutoCarousel({ slides, interval = 4500 }: { slides: Slide[]; int
     return () => obs.disconnect();
   }, []);
 
-  // pausa quando a aba não está ativa (economiza bateria no celular)
   useEffect(() => {
     const onVis = () => setPaused(document.hidden);
     document.addEventListener("visibilitychange", onVis);
@@ -91,21 +82,21 @@ export function AutoCarousel({ slides, interval = 4500 }: { slides: Slide[]; int
           const near = Math.abs(i - index) <= 1 || (index === 0 && i === slides.length - 1);
           return (
             <div key={s.url} className="w-full shrink-0" aria-hidden={i !== index}>
-              {near ? (
-                <img
-                  src={s.url}
-                  alt={s.alt}
-                  width={1280}
-                  height={960}
-                  loading={i === 0 ? "eager" : "lazy"}
-                  fetchPriority={i === 0 ? "high" : "low"}
-                  decoding="async"
-                  sizes="(max-width: 640px) 100vw, 1024px"
-                  className="aspect-[4/5] w-full bg-cream object-cover sm:aspect-[16/9]"
-                />
-              ) : (
-                <div className="aspect-[4/5] w-full bg-cream sm:aspect-[16/9]" />
-              )}
+              <div className="flex min-h-[300px] w-full items-center justify-center bg-cream p-2 sm:min-h-[420px] sm:p-4 lg:min-h-[540px]">
+                {near ? (
+                  <img
+                    src={s.url}
+                    alt={s.alt}
+                    loading={i === 0 ? "eager" : "lazy"}
+                    fetchPriority={i === 0 ? "high" : "low"}
+                    decoding="async"
+                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 92vw, 1024px"
+                    className="block max-h-[72vh] max-w-full object-contain object-center"
+                  />
+                ) : (
+                  <div className="min-h-[300px] w-full sm:min-h-[420px] lg:min-h-[540px]" />
+                )}
+              </div>
             </div>
           );
         })}
