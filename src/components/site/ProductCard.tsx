@@ -15,9 +15,11 @@ export function ProductCard({ product }: { product: Product }) {
       <div className="aspect-[4/5] overflow-hidden bg-cream">
         {cover && (
           <img
+            key={cover.url}
             src={cover.url}
             alt={cover.alt ?? product.name}
             loading="lazy"
+            decoding="async"
             className="size-full object-contain p-4 transition-transform duration-700 group-hover:scale-[1.03]"
           />
         )}
