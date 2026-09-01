@@ -19,6 +19,7 @@ import { Route as ContatoRouteImport } from './routes/contato'
 import { Route as FaqRouteImport } from './routes/faq'
 import { Route as KitsRouteImport } from './routes/kits'
 import { Route as LojaRouteImport } from './routes/loja'
+import { Route as RastreioRouteImport } from './routes/rastreio'
 import { Route as SobreRouteImport } from './routes/sobre'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as AdminBannersRouteImport } from './routes/admin.banners'
@@ -80,6 +81,11 @@ const KitsRoute = KitsRouteImport.update({
 const LojaRoute = LojaRouteImport.update({
   id: '/loja',
   path: '/loja',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RastreioRoute = RastreioRouteImport.update({
+  id: '/rastreio',
+  path: '/rastreio',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SobreRoute = SobreRouteImport.update({
@@ -155,6 +161,7 @@ export interface FileRoutesByFullPath {
   '/faq': typeof FaqRoute
   '/kits': typeof KitsRoute
   '/loja': typeof LojaRoute
+  '/rastreio': typeof RastreioRoute
   '/sobre': typeof SobreRoute
   '/admin/banners': typeof AdminBannersRoute
   '/admin/configuracoes': typeof AdminConfiguracoesRoute
@@ -178,6 +185,7 @@ export interface FileRoutesByTo {
   '/faq': typeof FaqRoute
   '/kits': typeof KitsRoute
   '/loja': typeof LojaRoute
+  '/rastreio': typeof RastreioRoute
   '/sobre': typeof SobreRoute
   '/admin/banners': typeof AdminBannersRoute
   '/admin/configuracoes': typeof AdminConfiguracoesRoute
@@ -203,6 +211,7 @@ export interface FileRoutesById {
   '/faq': typeof FaqRoute
   '/kits': typeof KitsRoute
   '/loja': typeof LojaRoute
+  '/rastreio': typeof RastreioRoute
   '/sobre': typeof SobreRoute
   '/admin/banners': typeof AdminBannersRoute
   '/admin/configuracoes': typeof AdminConfiguracoesRoute
@@ -229,6 +238,7 @@ export interface FileRouteTypes {
     | '/faq'
     | '/kits'
     | '/loja'
+    | '/rastreio'
     | '/sobre'
     | '/admin/banners'
     | '/admin/configuracoes'
@@ -252,6 +262,7 @@ export interface FileRouteTypes {
     | '/faq'
     | '/kits'
     | '/loja'
+    | '/rastreio'
     | '/sobre'
     | '/admin/banners'
     | '/admin/configuracoes'
@@ -276,6 +287,7 @@ export interface FileRouteTypes {
     | '/faq'
     | '/kits'
     | '/loja'
+    | '/rastreio'
     | '/sobre'
     | '/admin/banners'
     | '/admin/configuracoes'
@@ -301,6 +313,7 @@ export interface RootRouteChildren {
   FaqRoute: typeof FaqRoute
   KitsRoute: typeof KitsRoute
   LojaRoute: typeof LojaRoute
+  RastreioRoute: typeof RastreioRoute
   SobreRoute: typeof SobreRoute
   PedidoIdRoute: typeof PedidoIdRoute
   PoliticasSlugRoute: typeof PoliticasSlugRoute
@@ -378,6 +391,13 @@ declare module '@tanstack/react-router' {
       path: '/loja'
       fullPath: '/loja'
       preLoaderRoute: typeof LojaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/rastreio': {
+      id: '/rastreio'
+      path: '/rastreio'
+      fullPath: '/rastreio'
+      preLoaderRoute: typeof RastreioRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/sobre': {
@@ -500,6 +520,7 @@ const rootRouteChildren: RootRouteChildren = {
   FaqRoute: FaqRoute,
   KitsRoute: KitsRoute,
   LojaRoute: LojaRoute,
+  RastreioRoute: RastreioRoute,
   SobreRoute: SobreRoute,
   PedidoIdRoute: PedidoIdRoute,
   PoliticasSlugRoute: PoliticasSlugRoute,
