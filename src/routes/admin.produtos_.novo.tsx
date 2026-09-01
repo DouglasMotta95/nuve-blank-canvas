@@ -15,11 +15,9 @@ function toCents(value: string) {
   const number = Number.parseFloat(normalized);
   return Number.isFinite(number) ? Math.round(number * 100) : null;
 }
-
 function lines(value: string) {
   return value.split("\n").map((line) => line.trim()).filter(Boolean);
 }
-
 async function fileToBase64(file: File) {
   return new Promise<string>((resolve, reject) => {
     const reader = new FileReader();
@@ -34,30 +32,30 @@ function NovoProduto() {
   const upload = useServerFn(uploadMedia);
   const [saving, setSaving] = useState(false);
   const [cover, setCover] = useState<File | null>(null);
+  const [gallery, setGallery] = useState<File[]>([]);
   const [form, setForm] = useState({
-    name: "",
-    slug: "",
-    sku: "",
-    tagline: "",
-    short_description: "",
-    description: "",
-    price: "149,90",
-    sale_price: "",
-    stock: "0",
-    sort_order: "0",
-    benefits: "",
-    actives: "",
-    how_to_use: "",
-    best_for: "",
-    routine: "",
-    seo_title: "",
-    seo_description: "",
-    active: true,
-    featured: true,
+    name: "", slug: "", sku: "", tagline: "", short_description: "", description: "", price: "149,90",
+    sale_price: "", stock: "0", sort_order: "0", benefits: "", actives: "", how_to_use: "", best_for: "",
+    routine: "", seo_title: "", seo_description: "", active: true, featured: true,
   });
 
   function set<K extends keyof typeof form>(key: K, value: (typeof form)[K]) {
     setForm((current) => ({ ...current, [key]: value }));
+  }
+
+  async function uploadProductImage(productId: string, file: File, sortOrder: number, isCover: boolean, alt: string) {
+    const dataBase64 = await fileToBase64(file);
+    const uploaded = await upload({ data: { name: file.name, type: file.type, dataBase64 } });
+    const { error } = await supabase.from("product_images").insert({
+      product_id: productId,
+      url: uploaded.url,
+      alt,
+      sort_order: sortOrder,
+      is_cover: isCover,
+      fit: "contain",
+      active: true,
+    } as never);
+    if (error) throw error;
   }
 
   async function create() {
@@ -71,56 +69,49 @@ function NovoProduto() {
     if (!Number.isInteger(stock) || stock < 0) return toast.error("Informe um estoque válido.");
 
     setSaving(true);
+    let createdProductId: string | null = null;
     try {
       const actives = lines(form.actives).slice(0, 20).map((line) => {
         const [activeName, ...rest] = line.split("|");
         return { name: (activeName ?? "").trim(), text: rest.join("|").trim() };
       });
-      const { data: product, error } = await supabase
-        .from("products")
-        .insert({
-          name,
-          slug,
-          sku,
-          tagline: form.tagline.trim() || null,
-          short_description: form.short_description.trim() || null,
-          description: form.description.trim() || null,
-          price_cents: price,
-          sale_price_cents: toCents(form.sale_price),
-          stock,
-          sort_order: Number.parseInt(form.sort_order, 10) || 0,
-          active: form.active,
-          featured: form.featured,
-          benefits: lines(form.benefits).slice(0, 20) as never,
-          actives: actives as never,
-          how_to_use: lines(form.how_to_use).slice(0, 20) as never,
-          best_for: form.best_for.trim() || null,
-          routine: form.routine.trim() || null,
-          seo_title: form.seo_title.trim() || null,
-          seo_description: form.seo_description.trim() || null,
-        })
-        .select("id")
-        .single();
+      const { data: product, error } = await supabase.from("products").insert({
+        name, slug, sku,
+        tagline: form.tagline.trim() || null,
+        short_description: form.short_description.trim() || null,
+        description: form.description.trim() || null,
+        price_cents: price,
+        sale_price_cents: toCents(form.sale_price),
+        stock,
+        sort_order: Number.parseInt(form.sort_order, 10) || 0,
+        active: form.active,
+        featured: form.featured,
+        benefits: lines(form.benefits).slice(0, 20) as never,
+        actives: actives as never,
+        how_to_use: lines(form.how_to_use).slice(0, 20) as never,
+        best_for: form.best_for.trim() || null,
+        routine: form.routine.trim() || null,
+        seo_title: form.seo_title.trim() || null,
+        seo_description: form.seo_description.trim() || null,
+      }).select("id").single();
       if (error || !product) throw error ?? new Error("product");
+      createdProductId = product.id;
 
+      let nextOrder = 0;
       if (cover) {
-        const dataBase64 = await fileToBase64(cover);
-        const uploaded = await upload({ data: { name: cover.name, type: cover.type, dataBase64 } });
-        const { error: imageError } = await supabase.from("product_images").insert({
-          product_id: product.id,
-          url: uploaded.url,
-          alt: name,
-          sort_order: 0,
-          is_cover: true,
-          fit: "contain",
-        });
-        if (imageError) throw imageError;
+        await uploadProductImage(product.id, cover, nextOrder++, true, name);
+      }
+      for (const file of gallery.slice(0, 8)) {
+        await uploadProductImage(product.id, file, nextOrder++, !cover && nextOrder === 1, `${name} — foto ${nextOrder}`);
       }
 
-      toast.success("Produto criado. Agora você pode completar a galeria e os detalhes.");
+      toast.success("Produto criado com sucesso.");
       await navigate({ to: "/admin/produtos" });
     } catch {
-      toast.error("Não foi possível criar. Confira se SKU e link do produto são únicos e tente novamente.");
+      if (createdProductId) {
+        await supabase.from("products").update({ active: false }).eq("id", createdProductId);
+      }
+      toast.error("Não foi possível concluir o cadastro. Se o produto foi criado parcialmente, ele ficou inativo para revisão.");
     } finally {
       setSaving(false);
     }
@@ -131,7 +122,7 @@ function NovoProduto() {
     <div className="space-y-6">
       <header>
         <h1 className="font-display text-3xl text-ink">Adicionar produto</h1>
-        <p className="mt-1 text-sm text-ash">Cadastre um produto completo. Depois de salvar, ele entra automaticamente no catálogo conforme a visibilidade escolhida.</p>
+        <p className="mt-1 text-sm text-ash">Cadastre o produto completo, com capa e galeria inicial. Depois ele continua editável no catálogo.</p>
       </header>
       <section className="grid gap-4 border border-border bg-card p-5 sm:grid-cols-2">
         <label><span className="text-[11px] uppercase tracking-[0.14em] text-ash">Nome</span><input value={form.name} onChange={(e) => set("name", e.target.value)} className={input} /></label>
@@ -151,12 +142,13 @@ function NovoProduto() {
         <label><span className="text-[11px] uppercase tracking-[0.14em] text-ash">Rotina sugerida</span><input value={form.routine} onChange={(e) => set("routine", e.target.value)} className={input} /></label>
         <label><span className="text-[11px] uppercase tracking-[0.14em] text-ash">Título SEO</span><input value={form.seo_title} onChange={(e) => set("seo_title", e.target.value)} className={input} /></label>
         <label><span className="text-[11px] uppercase tracking-[0.14em] text-ash">Descrição SEO</span><input value={form.seo_description} onChange={(e) => set("seo_description", e.target.value)} className={input} /></label>
-        <label className="sm:col-span-2"><span className="text-[11px] uppercase tracking-[0.14em] text-ash">Foto de capa inicial</span><input type="file" accept="image/jpeg,image/png,image/webp" onChange={(e) => setCover(e.target.files?.[0] ?? null)} className="mt-2 block w-full text-sm" /></label>
+        <label><span className="text-[11px] uppercase tracking-[0.14em] text-ash">Foto de capa</span><input type="file" accept="image/jpeg,image/png,image/webp" onChange={(e) => setCover(e.target.files?.[0] ?? null)} className="mt-2 block w-full text-sm" /></label>
+        <label><span className="text-[11px] uppercase tracking-[0.14em] text-ash">Galeria inicial — até 8 fotos</span><input type="file" accept="image/jpeg,image/png,image/webp" multiple onChange={(e) => setGallery(Array.from(e.target.files ?? []).slice(0, 8))} className="mt-2 block w-full text-sm" /></label>
         <div className="flex flex-wrap gap-5 sm:col-span-2">
           <label className="flex items-center gap-2 text-sm text-ink"><input type="checkbox" checked={form.active} onChange={(e) => set("active", e.target.checked)} /> Visível na loja</label>
           <label className="flex items-center gap-2 text-sm text-ink"><input type="checkbox" checked={form.featured} onChange={(e) => set("featured", e.target.checked)} /> Destaque na home</label>
         </div>
-        <div className="sm:col-span-2"><button type="button" disabled={saving} onClick={create} className="bg-ink px-6 py-3 text-[11px] uppercase tracking-[0.18em] text-ivory disabled:opacity-60">{saving ? "Criando…" : "Criar produto"}</button></div>
+        <div className="sm:col-span-2"><button type="button" disabled={saving} onClick={create} className="bg-ink px-6 py-3 text-[11px] uppercase tracking-[0.18em] text-ivory disabled:opacity-60">{saving ? "Criando e enviando fotos…" : "Criar produto"}</button></div>
       </section>
     </div>
   );
