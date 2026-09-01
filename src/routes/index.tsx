@@ -91,18 +91,22 @@ function Home() {
 
   return (
     <div className="nuve-reveal overflow-x-hidden">
-      <section className="overflow-hidden bg-blush/45">
-        <div className="mx-auto grid max-w-6xl items-center gap-7 px-4 py-7 sm:px-6 sm:py-10 lg:grid-cols-2 lg:gap-10 lg:px-4 lg:py-14">
-          <div className="order-2 lg:order-1">
+      <section className="bg-blush/45">
+        <div className="w-full border-b border-border/60 bg-cream">
+          <HeroVisualSlider slides={heroSlides} />
+        </div>
+
+        <div className="mx-auto max-w-6xl px-4 py-9 sm:px-6 sm:py-11 lg:px-4 lg:py-14">
+          <div className="mx-auto max-w-4xl text-center">
             <p className="eyebrow">NUVE Advanced Skin Care</p>
-            <h1 className="mt-3 max-w-[13ch] font-display text-[38px] leading-[1.01] text-ink sm:text-[46px] md:text-[52px] lg:text-[60px]">
+            <h1 className="mx-auto mt-3 max-w-[17ch] font-display text-[38px] leading-[1.02] text-ink sm:text-[46px] md:text-[54px] lg:text-[62px]">
               {hero?.title ?? "Tecnologia japonesa. Ativos selecionados. Skincare para a vida real."}
             </h1>
-            <p className="mt-5 max-w-[52ch] text-[15px] leading-relaxed text-ash">
+            <p className="mx-auto mt-5 max-w-[58ch] text-[15px] leading-relaxed text-ash">
               {hero?.subtitle ??
                 "A Nuve une a sofisticação do skincare japonês a fórmulas cuidadosamente desenvolvidas com ativos selecionados para transformar o cuidado com a pele em uma experiência simples, prática e especial."}
             </p>
-            <div className="mt-7 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+            <div className="mt-7 flex flex-col items-stretch justify-center gap-3 sm:flex-row sm:items-center sm:flex-wrap">
               <Link to="/loja" className="inline-flex min-h-12 items-center justify-center bg-ink px-8 py-4 text-[11px] uppercase tracking-[0.22em] text-ivory">
                 Conheça os produtos
               </Link>
@@ -116,10 +120,6 @@ function Home() {
             <p className="mt-5 text-[11px] uppercase tracking-[0.16em] text-clay sm:tracking-[0.18em]">
               R$ 149,90 cada · 10% OFF levando 2 ou mais
             </p>
-          </div>
-
-          <div className="order-1 w-full lg:order-2">
-            <HeroVisualSlider slides={heroSlides} />
           </div>
         </div>
       </section>
