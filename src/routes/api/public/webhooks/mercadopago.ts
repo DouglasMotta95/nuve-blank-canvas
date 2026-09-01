@@ -33,18 +33,53 @@ export const Route = createFileRoute("/api/public/webhooks/mercadopago")({
           headers: { Authorization: `Bearer ${token}` },
         });
         if (!res.ok) return new Response("could not verify payment", { status: 202 });
+
         const payment = (await res.json()) as {
           id: number;
           status: string;
           external_reference?: string;
           transaction_amount?: number;
+          currency_id?: string;
         };
 
         const orderId = payment.external_reference;
         if (!orderId) return new Response("ok");
 
-        const mapped = STATUS_MAP[payment.status] ?? { payment: "processando", order: "aguardando_pagamento" };
         const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+        const { data: order } = await supabaseAdmin
+          .from("orders")
+          .select("id, total_cents")
+          .eq("id", orderId)
+          .maybeSingle();
+        if (!order) return new Response("order not found", { status: 202 });
+
+        const paidCents = Math.round(Number(payment.transaction_amount ?? 0) * 100);
+        const currencyOk = !payment.currency_id || payment.currency_id === "BRL";
+        const amountOk = paidCents === order.total_cents;
+
+        // Pagamento aprovado só pode aprovar o pedido quando moeda e valor
+        // correspondem exatamente ao total autoritativo salvo no banco.
+        if (payment.status === "approved" && (!amountOk || !currencyOk)) {
+          await supabaseAdmin
+            .from("payments")
+            .update({
+              provider_payment_id: String(payment.id),
+              status: "processando",
+              raw: payment as any,
+              updated_at: new Date().toISOString(),
+            })
+            .eq("order_id", orderId);
+
+          console.error("Mercado Pago amount mismatch", {
+            orderId,
+            expectedCents: order.total_cents,
+            paidCents,
+            currency: payment.currency_id,
+          });
+          return new Response("payment amount mismatch", { status: 202 });
+        }
+
+        const mapped = STATUS_MAP[payment.status] ?? { payment: "processando", order: "aguardando_pagamento" };
 
         await supabaseAdmin
           .from("payments")
