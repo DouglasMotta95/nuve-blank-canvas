@@ -165,3 +165,109 @@ function Toggle({
     </label>
   );
 }
+
+const inputCls = "mt-1 w-full border border-input bg-ivory px-3 py-2 text-sm";
+const PREVIEW_ITEM = { name: "Ana", city: "Campinas/SP", product: "NUVE 5 EM 1", minutesAgo: 12 };
+
+function SocialProofSection({
+  value,
+  onSave,
+}: {
+  value: SocialProofSetting;
+  onSave: (v: SocialProofSetting) => void;
+}) {
+  const [cfg, setCfg] = useState<SocialProofSetting>(value);
+  function set<K extends keyof SocialProofSetting>(k: K, v: SocialProofSetting[K]) {
+    setCfg((c) => ({ ...c, [k]: v }));
+  }
+  const st = SOCIAL_PROOF_STYLES[cfg.style] ?? SOCIAL_PROOF_STYLES.claro;
+
+  return (
+    <section className="border border-border bg-card p-5">
+      <h2 className="font-display text-2xl text-ink">Prova social</h2>
+      <p className="mt-1 text-sm text-ash">
+        Avisos discretos de compras reais dos últimos 14 dias (apenas primeiro nome e cidade). Use as etiquetas{" "}
+        <code>{"{nome}"}</code>, <code>{"{cidade}"}</code>, <code>{"{produto}"}</code> e <code>{"{tempo}"}</code> para
+        montar o texto do jeito que preferir.
+      </p>
+
+      <Toggle
+        label="Exibir avisos de compra recente"
+        checked={cfg.enabled}
+        onChange={(v) => set("enabled", v)}
+      />
+
+      <div className="mt-4 grid gap-4 sm:grid-cols-2">
+        <label className="block sm:col-span-2">
+          <span className="text-[11px] uppercase tracking-[0.14em] text-ash">Texto principal</span>
+          <input value={cfg.template} maxLength={140} onChange={(e) => set("template", e.target.value)} className={inputCls} />
+        </label>
+        <label className="block sm:col-span-2">
+          <span className="text-[11px] uppercase tracking-[0.14em] text-ash">Linha de apoio (deixe vazio para ocultar)</span>
+          <input value={cfg.subtitle} maxLength={140} onChange={(e) => set("subtitle", e.target.value)} className={inputCls} />
+        </label>
+        <label className="block">
+          <span className="text-[11px] uppercase tracking-[0.14em] text-ash">Estilo do aviso</span>
+          <select value={cfg.style} onChange={(e) => set("style", e.target.value as SocialProofSetting["style"])} className={inputCls}>
+            <option value="claro">Claro (padrão)</option>
+            <option value="escuro">Escuro</option>
+            <option value="blush">Blush</option>
+            <option value="minimal">Minimalista</option>
+          </select>
+        </label>
+        <label className="block">
+          <span className="text-[11px] uppercase tracking-[0.14em] text-ash">Posição na tela</span>
+          <select
+            value={cfg.position}
+            onChange={(e) => set("position", e.target.value as SocialProofSetting["position"])}
+            className={inputCls}
+          >
+            <option value="bottom-left">Canto inferior esquerdo</option>
+            <option value="bottom-right">Canto inferior direito</option>
+          </select>
+        </label>
+        <label className="block">
+          <span className="text-[11px] uppercase tracking-[0.14em] text-ash">Tempo visível (segundos)</span>
+          <input
+            type="number"
+            min={2}
+            max={30}
+            value={cfg.duration}
+            onChange={(e) => set("duration", Number(e.target.value))}
+            className={inputCls}
+          />
+        </label>
+        <label className="block">
+          <span className="text-[11px] uppercase tracking-[0.14em] text-ash">Intervalo entre avisos (segundos)</span>
+          <input
+            type="number"
+            min={4}
+            max={120}
+            value={cfg.interval}
+            onChange={(e) => set("interval", Number(e.target.value))}
+            className={inputCls}
+          />
+        </label>
+      </div>
+
+      <div className="mt-5">
+        <p className="text-[11px] uppercase tracking-[0.14em] text-ash">Prévia</p>
+        <div className={`mt-2 inline-flex max-w-[19rem] items-start gap-3 px-4 py-3 ${st.card}`}>
+          <span className={`mt-1 inline-block h-2 w-2 shrink-0 rounded-full ${st.dot}`} />
+          <div className="text-left">
+            <p className={st.title}>{renderTemplate(cfg.template, PREVIEW_ITEM)}</p>
+            {cfg.subtitle?.trim() && <p className={`mt-0.5 ${st.meta}`}>{renderTemplate(cfg.subtitle, PREVIEW_ITEM)}</p>}
+          </div>
+        </div>
+      </div>
+
+      <button
+        type="button"
+        onClick={() => onSave(cfg)}
+        className="mt-5 bg-ink px-6 py-3 text-[11px] uppercase tracking-[0.18em] text-ivory"
+      >
+        Salvar prova social
+      </button>
+    </section>
+  );
+}
