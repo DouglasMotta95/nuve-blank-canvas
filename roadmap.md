@@ -5,3 +5,4 @@
 - [ ] Estoque reservado x disponível para evitar venda acima do limite
 - [ ] Status do pedido visível ao cliente com atualização automática
 - [ ] E-mails automáticos de status (adiado a pedido do cliente — depende de domínio)
+- [ ] Carrossel automático com as novas fotos dos produtos (home)
