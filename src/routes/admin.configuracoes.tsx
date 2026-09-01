@@ -1,7 +1,14 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useState } from "react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
+import {
+  SOCIAL_PROOF_DEFAULT,
+  SOCIAL_PROOF_STYLES,
+  renderTemplate,
+  type SocialProofSetting,
+} from "@/components/site/SocialProof";
 
 export const Route = createFileRoute("/admin/configuracoes")({
   head: () => ({
@@ -17,20 +24,21 @@ export const Route = createFileRoute("/admin/configuracoes")({
 });
 
 type Settings = {
-  social_proof: { enabled: boolean };
+  social_proof: SocialProofSetting;
   whatsapp: { enabled: boolean; phone: string; message: string };
   order_emails: { customer: boolean; admin: boolean; admin_email: string };
 };
 
 const DEFAULTS: Settings = {
-  social_proof: { enabled: true },
+  social_proof: SOCIAL_PROOF_DEFAULT,
   whatsapp: {
     enabled: true,
-    phone: "",
+    phone: "19991227755",
     message: "Olá! Gostaria de saber mais sobre os séruns NUVE Advanced.",
   },
   order_emails: { customer: true, admin: true, admin_email: "nuveadvanced@gmail.com" },
 };
+
 
 function AdminConfig() {
   const qc = useQueryClient();
