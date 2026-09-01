@@ -13,7 +13,7 @@ export const createMercadoPagoCheckout = createServerFn({ method: "POST" })
 
     const { data: order } = await supabaseAdmin
       .from("orders")
-      .select("id, order_number, total_cents, customer_email, customer_name, order_items(name, quantity, unit_price_cents)")
+      .select("id, order_number, total_cents, customer_email, customer_name")
       .eq("id", data.order_id)
       .maybeSingle();
     if (!order) throw new Error("Pedido não encontrado.");
@@ -26,15 +26,25 @@ export const createMercadoPagoCheckout = createServerFn({ method: "POST" })
       };
     }
 
+    if (!Number.isInteger(order.total_cents) || order.total_cents <= 0) {
+      throw new Error("Total do pedido inválido.");
+    }
+
     const siteUrl = process.env["SITE_URL"] ?? "";
     const body = {
       external_reference: order.id,
-      items: (order.order_items ?? []).map((i: any) => ({
-        title: i.name,
-        quantity: i.quantity,
-        unit_price: i.unit_price_cents / 100,
-        currency_id: "BRL",
-      })),
+      // O Mercado Pago recebe o total já calculado e validado no servidor,
+      // incluindo desconto, cupom e frete. Assim o valor cobrado nunca diverge
+      // do total gravado no pedido.
+      items: [
+        {
+          id: order.order_number,
+          title: `Pedido ${order.order_number} — NUVE Advanced Skin Care`,
+          quantity: 1,
+          unit_price: order.total_cents / 100,
+          currency_id: "BRL",
+        },
+      ],
       payer: { email: order.customer_email, name: order.customer_name },
       back_urls: siteUrl
         ? {
