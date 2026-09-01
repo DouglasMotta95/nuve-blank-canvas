@@ -170,18 +170,34 @@ export const createOrder = createServerFn({ method: "POST" })
       })),
     );
 
-    // 5. baixa de estoque + movimentações (evita overselling)
+    // 5. reserva atômica de estoque (evita vender acima do limite com pedidos simultâneos)
+    const reserved: typeof lines = [];
     for (const l of lines) {
-      await supabaseAdmin
-        .from("products")
-        .update({ stock: l.product.stock - l.quantity })
-        .eq("id", l.product.id);
+      const { data: ok, error: reserveError } = await supabaseAdmin.rpc("reserve_stock", {
+        _product_id: l.product.id,
+        _qty: l.quantity,
+      });
+      if (reserveError || ok !== true) {
+        for (const r of reserved) {
+          await supabaseAdmin.rpc("reserve_stock", { _product_id: r.product.id, _qty: -r.quantity });
+        }
+        await supabaseAdmin.from("order_items").delete().eq("order_id", order.id);
+        await supabaseAdmin.from("orders").delete().eq("id", order.id);
+        throw new Error(`Estoque insuficiente para ${l.product.name}.`);
+      }
+      reserved.push(l);
       await supabaseAdmin.from("inventory_movements").insert({
         product_id: l.product.id,
-        delta: -l.quantity,
-        reason: `pedido ${order.order_number}`,
+        delta: 0,
+        reason: `reserva do pedido ${order.order_number}`,
+        movement_type: "reserva",
+        order_id: order.id,
+        stock_after: l.product.stock,
+        note: `${l.quantity} un. reservadas até a confirmação do pagamento`,
       });
     }
+    await supabaseAdmin.from("orders").update({ stock_state: "reservado" }).eq("id", order.id);
+
 
     await supabaseAdmin.from("payments").insert({
       order_id: order.id,
