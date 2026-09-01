@@ -17,6 +17,8 @@ import { CartProvider } from "@/lib/cart";
 import { Header } from "@/components/site/Header";
 import { Footer } from "@/components/site/Footer";
 import { SocialProof } from "@/components/site/SocialProof";
+import { WhatsAppButton } from "@/components/site/WhatsAppButton";
+
 
 
 function NotFoundComponent() {
