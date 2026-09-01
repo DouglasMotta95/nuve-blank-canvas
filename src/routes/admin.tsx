@@ -20,6 +20,8 @@ const LINKS = [
   { to: "/admin/pedidos", label: "Pedidos" },
   { to: "/admin/produtos", label: "Produtos" },
   { to: "/admin/estoque", label: "Estoque" },
+  { to: "/admin/auditoria", label: "Auditoria" },
+
   { to: "/admin/cupons", label: "Cupons" },
   { to: "/admin/banners", label: "Banners" },
   { to: "/admin/configuracoes", label: "Configurações" },
