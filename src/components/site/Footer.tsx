@@ -38,10 +38,10 @@ export function Footer() {
 
           <nav className="flex flex-col gap-2 text-sm text-ash">
             <span className="eyebrow mb-2">Políticas</span>
-            <Link to="/politicas/privacidade" className="hover:text-ink">Privacidade</Link>
-            <Link to="/politicas/trocas" className="hover:text-ink">Trocas e devoluções</Link>
-            <Link to="/politicas/envio" className="hover:text-ink">Envio e prazos</Link>
-            <Link to="/politicas/termos" className="hover:text-ink">Termos de uso</Link>
+            <Link to="/politicas/$slug" params={{ slug: "privacidade" }} className="hover:text-ink">Privacidade</Link>
+            <Link to="/politicas/$slug" params={{ slug: "trocas" }} className="hover:text-ink">Trocas e devoluções</Link>
+            <Link to="/politicas/$slug" params={{ slug: "envio" }} className="hover:text-ink">Envio e prazos</Link>
+            <Link to="/politicas/$slug" params={{ slug: "termos" }} className="hover:text-ink">Termos de uso</Link>
           </nav>
 
           <div>
