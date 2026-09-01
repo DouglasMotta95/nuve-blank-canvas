@@ -197,24 +197,42 @@ export type Database = {
       inventory_movements: {
         Row: {
           created_at: string
+          created_by: string | null
+          created_by_email: string | null
           delta: number
           id: string
+          movement_type: string
+          note: string | null
+          order_id: string | null
           product_id: string
           reason: string
+          stock_after: number | null
         }
         Insert: {
           created_at?: string
+          created_by?: string | null
+          created_by_email?: string | null
           delta: number
           id?: string
+          movement_type?: string
+          note?: string | null
+          order_id?: string | null
           product_id: string
           reason: string
+          stock_after?: number | null
         }
         Update: {
           created_at?: string
+          created_by?: string | null
+          created_by_email?: string | null
           delta?: number
           id?: string
+          movement_type?: string
+          note?: string | null
+          order_id?: string | null
           product_id?: string
           reason?: string
+          stock_after?: number | null
         }
         Relationships: [
           {
@@ -328,6 +346,44 @@ export type Database = {
           },
         ]
       }
+      order_status_events: {
+        Row: {
+          created_at: string
+          id: string
+          note: string | null
+          order_id: string
+          payment_status: string | null
+          status: string
+          tracking_code: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          note?: string | null
+          order_id: string
+          payment_status?: string | null
+          status: string
+          tracking_code?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          note?: string | null
+          order_id?: string
+          payment_status?: string | null
+          status?: string
+          tracking_code?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "order_status_events_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "orders"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       orders: {
         Row: {
           admin_notes: string | null
@@ -345,6 +401,7 @@ export type Database = {
           shipping: Json
           shipping_cents: number
           status: string
+          stock_state: string
           subtotal_cents: number
           total_cents: number
           tracking_code: string | null
@@ -367,6 +424,7 @@ export type Database = {
           shipping?: Json
           shipping_cents?: number
           status?: string
+          stock_state?: string
           subtotal_cents?: number
           total_cents?: number
           tracking_code?: string | null
@@ -389,6 +447,7 @@ export type Database = {
           shipping?: Json
           shipping_cents?: number
           status?: string
+          stock_state?: string
           subtotal_cents?: number
           total_cents?: number
           tracking_code?: string | null
@@ -500,6 +559,7 @@ export type Database = {
           kind: string
           name: string
           price_cents: number
+          reserved_stock: number
           routine: string | null
           sale_price_cents: number | null
           seo_description: string | null
@@ -526,6 +586,7 @@ export type Database = {
           kind?: string
           name: string
           price_cents?: number
+          reserved_stock?: number
           routine?: string | null
           sale_price_cents?: number | null
           seo_description?: string | null
@@ -552,6 +613,7 @@ export type Database = {
           kind?: string
           name?: string
           price_cents?: number
+          reserved_stock?: number
           routine?: string | null
           sale_price_cents?: number | null
           seo_description?: string | null
@@ -713,6 +775,14 @@ export type Database = {
         Returns: boolean
       }
       next_order_number: { Args: never; Returns: string }
+      reserve_stock: {
+        Args: { _product_id: string; _qty: number }
+        Returns: boolean
+      }
+      settle_order_stock: {
+        Args: { _mode: string; _order_id: string }
+        Returns: string
+      }
     }
     Enums: {
       app_role: "admin" | "customer"
