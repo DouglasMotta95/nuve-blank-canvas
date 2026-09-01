@@ -18,17 +18,26 @@ export function computeTotals(
     promoPercent?: number | undefined;
     couponPercent?: number | null | undefined;
     couponAmountCents?: number | null | undefined;
+    allowCouponStacking?: boolean | undefined;
   } = {},
 ) {
   const promoMinQty = opts.promoMinQty ?? PROMO_MIN_QTY;
   const promoPercent = opts.promoPercent ?? PROMO_PERCENT;
   const quantity = lines.reduce((s, l) => s + l.quantity, 0);
   const subtotal = lines.reduce((s, l) => s + l.quantity * l.unit_price_cents, 0);
-  const promoDiscount = quantity >= promoMinQty ? Math.round((subtotal * promoPercent) / 100) : 0;
-  const afterPromo = subtotal - promoDiscount;
+  const hasCoupon = Boolean(opts.couponPercent || opts.couponAmountCents);
+  const allowCouponStacking = opts.allowCouponStacking ?? false;
+
+  // Por padrão, cupom e promoção automática não acumulam. Se houver cupom,
+  // ele substitui o desconto automático de quantidade, evitando desconto duplo.
+  const promoEligible = quantity >= promoMinQty && (!hasCoupon || allowCouponStacking);
+  const promoDiscount = promoEligible ? Math.round((subtotal * promoPercent) / 100) : 0;
+  const couponBase = subtotal - promoDiscount;
+
   let couponDiscount = 0;
-  if (opts.couponPercent) couponDiscount = Math.round((afterPromo * opts.couponPercent) / 100);
-  else if (opts.couponAmountCents) couponDiscount = Math.min(opts.couponAmountCents, afterPromo);
-  const total = Math.max(0, afterPromo - couponDiscount);
+  if (opts.couponPercent) couponDiscount = Math.round((couponBase * opts.couponPercent) / 100);
+  else if (opts.couponAmountCents) couponDiscount = Math.min(opts.couponAmountCents, couponBase);
+
+  const total = Math.max(0, couponBase - couponDiscount);
   return { quantity, subtotal, promoDiscount, couponDiscount, total };
 }
