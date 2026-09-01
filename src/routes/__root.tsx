@@ -126,6 +126,8 @@ function RootComponent() {
         </main>
         {!isAdmin && <Footer />}
         {!isAdmin && <SocialProof />}
+        {!isAdmin && <WhatsAppButton />}
+
         <Toaster position="top-center" richColors />
 
       </CartProvider>
