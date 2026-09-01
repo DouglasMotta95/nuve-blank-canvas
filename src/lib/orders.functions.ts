@@ -80,17 +80,19 @@ export const createOrder = createServerFn({ method: "POST" })
     const ids = data.items.map((i) => i.product_id);
     const { data: products, error: prodError } = await supabaseAdmin
       .from("products")
-      .select("id, sku, name, price_cents, sale_price_cents, stock, active")
+      .select("id, sku, name, price_cents, sale_price_cents, stock, reserved_stock, active")
       .in("id", ids);
     if (prodError) throw new Error("Não foi possível carregar os produtos.");
 
     const lines = data.items.map((item) => {
       const p = products?.find((x) => x.id === item.product_id);
       if (!p || !p.active) throw new Error("Produto indisponível no carrinho.");
-      if (p.stock < item.quantity) throw new Error(`Estoque insuficiente para ${p.name}.`);
+      const available = p.stock - (p.reserved_stock ?? 0);
+      if (available < item.quantity) throw new Error(`Estoque insuficiente para ${p.name}.`);
       const unit = p.sale_price_cents && p.sale_price_cents > 0 ? p.sale_price_cents : p.price_cents;
       return { product: p, quantity: item.quantity, unit_price_cents: unit };
     });
+
 
     // 2. promoção por quantidade (regra administrável)
     const { data: promo } = await supabaseAdmin
