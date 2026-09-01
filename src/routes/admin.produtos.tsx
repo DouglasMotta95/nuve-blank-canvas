@@ -144,11 +144,11 @@ function ProductEditor({ product, onSaved }: { product: any; onSaved: () => void
 
   async function save() {
     const price = toCents(form.price);
-    if (!price || price <= 0) return toast.error("Preço inválido.");
+    if (!price || price <= 0) { toast.error("Preço inválido."); return; }
     const stock = parseInt(form.stock, 10);
-    if (!Number.isInteger(stock) || stock < 0) return toast.error("Estoque inválido.");
+    if (!Number.isInteger(stock) || stock < 0) { toast.error("Estoque inválido."); return; }
     if (!form.name.trim() || !form.slug.trim() || !form.sku.trim())
-      return toast.error("Nome, link (slug) e SKU são obrigatórios.");
+      { toast.error("Nome, link (slug) e SKU são obrigatórios."); return; }
 
     setSaving(true);
     const { error } = await supabase
@@ -301,7 +301,7 @@ function ImageManager({
 
   async function patch(id: string, p: Record<string, unknown>) {
     const { error } = await supabase.from("product_images").update(p as never).eq("id", id);
-    if (error) return toast.error("Não foi possível atualizar a foto.");
+    if (error) { toast.error("Não foi possível atualizar a foto."); return; }
     onChanged();
   }
 
@@ -313,13 +313,13 @@ function ImageManager({
 
   async function remove(id: string) {
     const { error } = await supabase.from("product_images").delete().eq("id", id);
-    if (error) return toast.error("Não foi possível remover.");
+    if (error) { toast.error("Não foi possível remover."); return; }
     toast.success("Foto removida.");
     onChanged();
   }
 
   async function addUrl(url: string, isBeforeAfter = false) {
-    if (!/^(https?:\/\/|\/)/.test(url)) return toast.error("Informe um endereço de imagem válido.");
+    if (!/^(https?:\/\/|\/)/.test(url)) { toast.error("Informe um endereço de imagem válido."); return; }
     const { error } = await supabase.from("product_images").insert({
       product_id: productId,
       url,
@@ -327,7 +327,7 @@ function ImageManager({
       is_cover: sorted.length === 0,
       is_before_after: isBeforeAfter,
     });
-    if (error) return toast.error("Não foi possível adicionar a foto.");
+    if (error) { toast.error("Não foi possível adicionar a foto."); return; }
     toast.success("Foto adicionada.");
     onChanged();
   }
