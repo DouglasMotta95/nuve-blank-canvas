@@ -185,6 +185,7 @@ function AdminEstoque() {
               <li key={m.id} className="flex flex-wrap justify-between gap-2 py-3 text-sm">
                 <span className="text-ash">
                   {nameById.get(m.product_id) ?? "Produto"} · {m.reason}
+                  {m.created_by_email ? ` · por ${m.created_by_email}` : " · automático"}
                 </span>
                 <span className={m.delta > 0 ? "text-ink" : "text-destructive"}>
                   {m.delta > 0 ? `+${m.delta}` : m.delta} ·{" "}
@@ -192,6 +193,7 @@ function AdminEstoque() {
                 </span>
               </li>
             ))}
+
           </ul>
         )}
       </section>
