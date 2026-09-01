@@ -34,6 +34,7 @@ type CouponRow = {
   starts_at: string | null;
   ends_at: string | null;
   max_uses: number | null;
+  max_uses_per_customer: number | null;
   uses: number;
   active: boolean;
 };
@@ -93,7 +94,6 @@ export const createOrder = createServerFn({ method: "POST" })
       return { product: p, quantity: item.quantity, unit_price_cents: unit };
     });
 
-
     // 2. promoção por quantidade (regra administrável)
     const { data: promo } = await supabaseAdmin
       .from("promotions")
@@ -103,7 +103,7 @@ export const createOrder = createServerFn({ method: "POST" })
       .limit(1)
       .maybeSingle();
 
-    // 3. cupom
+    // 3. cupom: validado novamente no servidor e sem acúmulo com promoção automática por padrão
     let couponRow: CouponRow | null = null;
     const subtotalRaw = lines.reduce((s, l) => s + l.quantity * l.unit_price_cents, 0);
     if (data.coupon_code) {
@@ -115,6 +115,17 @@ export const createOrder = createServerFn({ method: "POST" })
       const err = couponError(c as CouponRow | null, subtotalRaw);
       if (err) throw new Error(err);
       couponRow = c as CouponRow;
+
+      if (couponRow.max_uses_per_customer !== null) {
+        const { count } = await supabaseAdmin
+          .from("coupon_usage")
+          .select("id", { count: "exact", head: true })
+          .eq("coupon_id", couponRow.id)
+          .ilike("customer_email", data.customer.email);
+        if ((count ?? 0) >= couponRow.max_uses_per_customer) {
+          throw new Error("Este cupom já atingiu o limite de uso para este cliente.");
+        }
+      }
     }
 
     const totals = computeTotals(lines, {
@@ -122,6 +133,7 @@ export const createOrder = createServerFn({ method: "POST" })
       promoPercent: promo ? Number(promo.percent_off) : 10,
       couponPercent: couponRow?.percent_off ? Number(couponRow.percent_off) : undefined,
       couponAmountCents: couponRow?.amount_off_cents ?? undefined,
+      allowCouponStacking: false,
     });
 
     // 4. frete: configurável, sem valor inventado
@@ -132,8 +144,10 @@ export const createOrder = createServerFn({ method: "POST" })
       .maybeSingle();
     const shippingCents = Number((shippingSetting?.value as any)?.flat_cents ?? 0);
 
-    const { data: numberRow } = await supabaseAdmin.rpc("next_order_number");
-    const orderNumber = (numberRow as string | null) ?? `NUVE-${Date.now()}`;
+    // Número legível e com entropia própria, evitando colisões do antigo count(*) + 1.
+    const year = new Date().getFullYear();
+    const suffix = crypto.randomUUID().replace(/-/g, "").slice(0, 8).toUpperCase();
+    const orderNumber = `NUVE-${year}-${suffix}`;
 
     const { data: order, error: orderError } = await supabaseAdmin
       .from("orders")
@@ -198,7 +212,6 @@ export const createOrder = createServerFn({ method: "POST" })
     }
     await supabaseAdmin.from("orders").update({ stock_state: "reservado" }).eq("id", order.id);
 
-
     await supabaseAdmin.from("payments").insert({
       order_id: order.id,
       provider: "mercadopago",
@@ -244,7 +257,6 @@ export const getOrderPublic = createServerFn({ method: "POST" })
       .maybeSingle();
     if (!order) return null;
     return { ...order, events: await loadEvents(supabaseAdmin, order.id) };
-
   });
 
 export const subscribeNewsletter = createServerFn({ method: "POST" })
