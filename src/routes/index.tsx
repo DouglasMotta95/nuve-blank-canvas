@@ -1,178 +1,162 @@
-import { createFileRoute } from "@tanstack/react-router";
-
-import heroImage from "@/assets/nuve-hero.jpg";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { useBanners, useProducts, useReviews } from "@/lib/catalog";
+import { ProductCard } from "@/components/site/ProductCard";
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Nuve Advanced — Calmbuilt Systems" },
+      { title: "NUVE Advanced Skin Care — Séruns de alta performance" },
       {
         name: "description",
         content:
-          "Precision infrastructure for teams who move slowly on purpose. Quiet at the horizon, exact underneath.",
+          "Séruns com tecnologia japonesa: NUVE 5 EM 1, GHK-Cu e PDRN. R$ 149,90 cada e 10% OFF levando 2 ou mais.",
       },
-      { property: "og:title", content: "Nuve Advanced — Calmbuilt Systems" },
+      { property: "og:title", content: "NUVE Advanced Skin Care" },
       {
         property: "og:description",
-        content: "Precision infrastructure for teams who move slowly on purpose.",
+        content: "Skincare premium com ativos de última geração. 10% OFF levando 2 ou mais unidades.",
       },
-      { property: "og:type", content: "website" },
-      { property: "og:url", content: "/" },
-      { name: "twitter:card", content: "summary_large_image" },
     ],
-    links: [{ rel: "canonical", href: "/" }],
   }),
-  component: Index,
+  component: Home,
 });
 
-function Index() {
+const PILLARS = [
+  { title: "Tecnologia japonesa", text: "Formulações desenvolvidas com padrão asiático de pesquisa e pureza." },
+  { title: "Ativos de última geração", text: "PDRN, GHK-Cu, niacinamida e peptídeos em concentrações eficazes." },
+  { title: "Rotina simples", text: "Poucas etapas, resultado consistente. Skincare para a vida real." },
+  { title: "Fórmula vegana", text: "Livre de crueldade animal, parabenos e fragrâncias sintéticas pesadas." },
+];
+
+function Home() {
+  const { data: banners } = useBanners();
+  const { data: products } = useProducts();
+  const { data: reviews } = useReviews();
+  const hero = banners?.[0];
+  const secondary = banners?.slice(1) ?? [];
+
   return (
-    <div className="relative min-h-screen overflow-hidden bg-ink font-sans text-foam antialiased selection:bg-aqua/25 selection:text-foam">
-      {/* Atmospheric background */}
-      <div aria-hidden="true" className="pointer-events-none absolute inset-0">
-        <div
-          className="absolute inset-0"
-          style={{
-            background:
-              "radial-gradient(120% 90% at 50% -15%, var(--shale) 0%, transparent 55%)",
-          }}
-        />
-        <div
-          className="absolute inset-0"
-          style={{
-            background:
-              "radial-gradient(120% 100% at 50% 125%, oklch(0.13 0.04 240) 0%, transparent 48%)",
-          }}
-        />
-        <div className="absolute -left-[20%] top-[4%] size-[320px] animate-[nuve-drift_16s_var(--ease-out-expo)_infinite] rounded-full bg-cyan/25 blur-[120px] md:size-[420px]" />
-        <div className="absolute -right-[24%] top-[46%] size-[300px] animate-[nuve-drift_20s_var(--ease-out-expo)_infinite_reverse] rounded-full bg-aqua/20 blur-[130px] md:size-[400px]" />
-        <div className="absolute inset-x-0 top-0 h-px animate-[nuve-pulse_5s_ease-in-out_infinite] bg-gradient-to-r from-transparent via-aqua/60 to-transparent" />
-      </div>
-
-      <header className="relative z-10 flex animate-[nuve-in_700ms_var(--ease-out-expo)_both] items-center justify-between px-6 pt-5">
-        <div className="flex items-baseline gap-2">
-          <span className="size-2 translate-y-[-1px] rounded-full bg-aqua shadow-[0_0_8px_2px_rgba(90,211,230,0.6)]" />
-          <span className="text-[13px] font-semibold tracking-[0.14em]">NUVE</span>
-        </div>
-        <span className="text-[11px] tracking-[0.22em] text-mist">ADVANCED</span>
-      </header>
-
-      <main>
-        <section className="relative z-10 mx-auto max-w-[24ch] px-6 pt-[72px] text-center md:max-w-[30ch] md:pt-28">
-          <p
-            className="animate-[nuve-in_700ms_var(--ease-out-expo)_both] text-[11px] font-medium uppercase tracking-[0.34em] text-aqua"
-            style={{ animationDelay: "80ms" }}
-          >
-            Calmbuilt systems
-          </p>
-          <h1
-            className="animate-[nuve-in_780ms_var(--ease-out-expo)_both] mt-4 text-[52px] font-bold leading-[0.92] tracking-tight text-balance md:text-[72px]"
-            style={{ animationDelay: "160ms" }}
-          >
-            Nuve
-            <br />
-            Advanced
-          </h1>
-          <p
-            className="animate-[nuve-in_780ms_var(--ease-out-expo)_both] mx-auto mt-5 max-w-[30ch] text-[15px] leading-relaxed text-mist text-pretty md:max-w-[36ch] md:text-[17px]"
-            style={{ animationDelay: "280ms" }}
-          >
-            Precision infrastructure for teams who move slowly on purpose. Quiet at the horizon,
-            exact underneath.
-          </p>
-        </section>
-
-        <div
-          className="animate-[nuve-in_820ms_var(--ease-out-expo)_both] relative z-10 mx-auto mt-9 max-w-[300px] px-6 md:max-w-[640px]"
-          style={{ animationDelay: "400ms" }}
-        >
-          <div className="mx-auto w-full overflow-hidden rounded-[20px] outline outline-1 -outline-offset-1 outline-foam/10">
-            <img
-              src={heroImage}
-              alt="Calm ocean horizon at deep blue dawn with a soft bioluminescent light line on the water"
-              width={1024}
-              height={640}
-              className="w-full"
-            />
+    <div className="nuve-reveal">
+      {/* HERO — foto oficial das três mulheres */}
+      <section className="bg-blush/50">
+        <div className="mx-auto grid max-w-6xl items-center gap-8 px-4 py-10 md:grid-cols-2 md:py-16">
+          <div className="order-2 md:order-1">
+            <p className="eyebrow">Advanced skin care</p>
+            <h1 className="mt-3 font-display text-[38px] leading-[1.05] text-ink md:text-[56px]">
+              {hero?.title ?? "Tecnologia japonesa. Ativos selecionados. Skincare para a vida real."}
+            </h1>
+            <p className="mt-4 max-w-[42ch] text-[15px] leading-relaxed text-ash">
+              {hero?.subtitle ?? "Três séruns. Uma mesma proposta: realçar sua melhor versão todos os dias."}
+            </p>
+            <div className="mt-7 flex flex-wrap gap-3">
+              <Link
+                to="/loja"
+                className="bg-ink px-8 py-4 text-[11px] uppercase tracking-[0.22em] text-ivory"
+              >
+                Conheça os produtos
+              </Link>
+              <Link
+                to="/ativos"
+                className="border border-ink px-8 py-4 text-[11px] uppercase tracking-[0.22em] text-ink"
+              >
+                Ativos & tecnologia
+              </Link>
+            </div>
+            <p className="mt-5 text-[11px] uppercase tracking-[0.18em] text-clay">
+              R$ 149,90 cada · 10% OFF levando 2 ou mais
+            </p>
+          </div>
+          <div className="order-1 md:order-2">
+            {hero && (
+              <img
+                src={hero.image_desktop}
+                alt="Três mulheres sorrindo segurando os séruns NUVE Advanced Skin Care"
+                className="mx-auto w-full max-w-[560px] object-contain"
+                width={1080}
+                height={1080}
+              />
+            )}
           </div>
         </div>
+      </section>
 
-        <section className="relative z-10 mx-auto max-w-[300px] px-6 pt-11 md:max-w-[640px]">
+      {/* Pilares */}
+      <section className="border-y border-border bg-cream">
+        <div className="mx-auto grid max-w-6xl gap-6 px-4 py-10 sm:grid-cols-2 lg:grid-cols-4">
+          {PILLARS.map((p) => (
+            <div key={p.title}>
+              <h2 className="font-display text-xl text-ink">{p.title}</h2>
+              <p className="mt-1 text-sm leading-relaxed text-ash">{p.text}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Produtos */}
+      <section className="mx-auto max-w-6xl px-4 py-16">
+        <div className="text-center">
+          <p className="eyebrow">A linha</p>
+          <h2 className="mt-2 font-display text-4xl text-ink">Três séruns, um ritual</h2>
+          <p className="mx-auto mt-3 max-w-[52ch] text-sm leading-relaxed text-ash">
+            Cada fórmula responde a uma necessidade específica da pele. Combine dois e receba 10% OFF automático.
+          </p>
+        </div>
+        <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {(products ?? []).map((p) => (
+            <ProductCard key={p.id} product={p} />
+          ))}
+        </div>
+      </section>
+
+      {/* Banners editoriais */}
+      {secondary.map((b, i) => (
+        <section key={b.id} className={i % 2 === 0 ? "bg-cream" : "bg-blush/40"}>
           <div
-            className="animate-[nuve-in_720ms_var(--ease-out-expo)_both] mb-5 flex items-center gap-3"
-            style={{ animationDelay: "520ms" }}
+            className={`mx-auto grid max-w-6xl items-center gap-8 px-4 py-14 md:grid-cols-2 ${
+              i % 2 === 0 ? "" : "md:[&>*:first-child]:order-2"
+            }`}
           >
-            <span className="text-[10px] tracking-[0.22em] text-mist">CAPABILITIES</span>
-            <span className="h-px flex-1 bg-foam/10" />
+            <img
+              src={b.image_desktop}
+              alt={b.title ?? "NUVE Advanced Skin Care"}
+              loading="lazy"
+              className="w-full object-contain"
+            />
+            <div>
+              <p className="eyebrow">NUVE</p>
+              <h2 className="mt-3 font-display text-3xl leading-tight text-ink md:text-4xl">{b.title}</h2>
+              <p className="mt-3 max-w-[44ch] text-sm leading-relaxed text-ash">{b.subtitle}</p>
+              <Link
+                to="/loja"
+                className="mt-6 inline-block border-b border-clay pb-1 text-[11px] uppercase tracking-[0.2em] text-clay"
+              >
+                {b.cta_label ?? "Ver a linha"}
+              </Link>
+            </div>
           </div>
-          <ul className="divide-y divide-foam/8">
-            <li
-              className="animate-[nuve-in_720ms_var(--ease-out-expo)_both] group flex gap-4 py-4"
-              style={{ animationDelay: "600ms" }}
-            >
-              <span className="w-6 shrink-0 pt-0.5 text-[11px] tracking-[0.1em] text-aqua">01</span>
-              <div>
-                <h3 className="text-[15px] font-semibold text-foam">Depth by design</h3>
-                <p className="mt-1 text-[13px] leading-relaxed text-mist">
-                  Every layer surfaces only when it matters. No noise above the horizon.
-                </p>
-              </div>
-            </li>
-            <li
-              className="animate-[nuve-in_720ms_var(--ease-out-expo)_both] group flex gap-4 py-4"
-              style={{ animationDelay: "680ms" }}
-            >
-              <span className="w-6 shrink-0 pt-0.5 text-[11px] tracking-[0.1em] text-aqua">02</span>
-              <div>
-                <h3 className="text-[15px] font-semibold text-foam">Weightless control</h3>
-                <p className="mt-1 text-[13px] leading-relaxed text-mist">
-                  Deploy, scale, and observe from one calm surface. Nothing to fight.
-                </p>
-              </div>
-            </li>
-            <li
-              className="animate-[nuve-in_720ms_var(--ease-out-expo)_both] group flex gap-4 py-4"
-              style={{ animationDelay: "760ms" }}
-            >
-              <span className="w-6 shrink-0 pt-0.5 text-[11px] tracking-[0.1em] text-aqua">03</span>
-              <div>
-                <h3 className="text-[15px] font-semibold text-foam">Lift when it counts</h3>
-                <p className="mt-1 text-[13px] leading-relaxed text-mist">
-                  Quiet defaults, exact signals, and room to breathe under load.
-                </p>
-              </div>
-            </li>
-          </ul>
         </section>
+      ))}
 
-        <p
-          className="animate-[nuve-in_720ms_var(--ease-out-expo)_both] relative z-10 mx-auto mt-10 max-w-[300px] px-6 text-center text-[12px] leading-relaxed text-mist/80 md:max-w-[640px]"
-          style={{ animationDelay: "880ms" }}
-        >
-          Trusted by calm teams at Halcyon, Meridian, and Tidewell.
-        </p>
-
-        <section
-          className="animate-[nuve-in_780ms_var(--ease-out-expo)_both] relative z-10 mx-auto max-w-[300px] px-6 pt-9 md:max-w-[420px]"
-          style={{ animationDelay: "980ms" }}
-        >
-          <a
-            href="#"
-            className="group flex w-full items-center justify-center gap-2 rounded-full bg-aqua px-6 py-3.5 text-[15px] font-semibold text-ink ring-1 ring-aqua/40 ring-offset-2 ring-offset-ink transition-all duration-300 hover:bg-foam"
-          >
-            Request access
-            <span className="transition-transform duration-300 group-hover:translate-x-0.5">→</span>
-          </a>
+      {/* Avaliações */}
+      {(reviews?.length ?? 0) > 0 && (
+        <section className="mx-auto max-w-6xl px-4 py-16">
+          <div className="text-center">
+            <p className="eyebrow">Quem usa</p>
+            <h2 className="mt-2 font-display text-4xl text-ink">Resultados que ficam na pele</h2>
+          </div>
+          <div className="mt-10 grid gap-6 md:grid-cols-3">
+            {(reviews ?? []).slice(0, 3).map((r: any) => (
+              <figure key={r.id} className="border border-border bg-card p-6">
+                <div className="text-clay">{"★".repeat(r.rating)}</div>
+                <blockquote className="mt-3 text-sm leading-relaxed text-ash">"{r.comment}"</blockquote>
+                <figcaption className="mt-4 text-[11px] uppercase tracking-[0.18em] text-ink">
+                  {r.author_name}
+                </figcaption>
+              </figure>
+            ))}
+          </div>
         </section>
-      </main>
-
-      <footer
-        className="animate-[nuve-in_720ms_var(--ease-out-expo)_both] relative z-10 mt-12 flex items-center justify-between border-t border-foam/8 px-6 py-6 text-[11px] tracking-[0.1em] text-mist/70"
-        style={{ animationDelay: "1100ms" }}
-      >
-        <span>NUVE ADVANCED</span>
-        <span>© 2025</span>
-      </footer>
+      )}
     </div>
   );
 }

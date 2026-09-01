@@ -5,10 +5,9 @@
 @custom-variant dark (&:is(.dark *));
 
 /*
- * Design system definition for Nuve Advanced.
- *
- * Deep aquatic immersion: dark inky backgrounds with aqua/cyan glows
- * and restrained, weightless motion.
+ * NUVE ADVANCED SKIN CARE — design system
+ * Base ivory/branco quente, acentos blush, rose gold e cobre.
+ * Azul reservado para GHK-Cu, rosa intenso para PDRN, nude/rosé para 5 EM 1.
  */
 
 @theme inline {
@@ -18,7 +17,7 @@
   --radius-xl: calc(var(--radius) + 4px);
   --radius-2xl: calc(var(--radius) + 8px);
   --radius-3xl: calc(var(--radius) + 12px);
-  --radius-4xl: calc(var(--radius) + 16px);
+
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -38,105 +37,66 @@
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
-  --color-sidebar: var(--sidebar);
-  --color-sidebar-foreground: var(--sidebar-foreground);
-  --color-sidebar-primary: var(--sidebar-primary);
-  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-  --color-sidebar-accent: var(--sidebar-accent);
-  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-  --color-sidebar-border: var(--sidebar-border);
-  --color-sidebar-ring: var(--sidebar-ring);
 
-  /* Nuve Advanced aquatic tokens */
+  /* Tokens NUVE */
+  --color-ivory: var(--ivory);
+  --color-cream: var(--cream);
+  --color-blush: var(--blush);
+  --color-rose: var(--rose);
+  --color-clay: var(--clay);
+  --color-copper: var(--copper);
+  --color-champagne: var(--champagne);
   --color-ink: var(--ink);
-  --color-shale: var(--shale);
-  --color-abyss: var(--abyss);
-  --color-foam: var(--foam);
-  --color-mist: var(--mist);
+  --color-ash: var(--ash);
   --color-aqua: var(--aqua);
-  --color-cyan: var(--cyan);
+  --color-deep: var(--deep);
+
+  --font-display: "Cormorant Garamond", Georgia, serif;
+  --font-sans: "Jost", ui-sans-serif, system-ui, sans-serif;
 }
 
 :root {
-  --radius: 0.625rem;
+  --radius: 0.5rem;
 
-  /* Nuve Advanced dark aquatic palette */
-  --ink: oklch(0.05 0.02 255);
-  --shale: oklch(0.15 0.04 255);
-  --abyss: oklch(0.10 0.03 255);
-  --foam: oklch(0.96 0.01 250);
-  --mist: oklch(0.67 0.05 230);
-  --aqua: oklch(0.78 0.15 210);
-  --cyan: oklch(0.68 0.13 210);
+  --ivory: oklch(0.985 0.008 80);
+  --cream: oklch(0.965 0.014 60);
+  --blush: oklch(0.925 0.032 25);
+  --rose: oklch(0.78 0.075 20);
+  --clay: oklch(0.64 0.085 25);
+  --copper: oklch(0.6 0.1 45);
+  --champagne: oklch(0.9 0.035 75);
+  --ink: oklch(0.28 0.02 30);
+  --ash: oklch(0.52 0.015 30);
+  --aqua: oklch(0.68 0.09 235);
+  --deep: oklch(0.24 0.03 265);
 
-  /* Semantic mapping */
-  --background: var(--ink);
-  --foreground: var(--foam);
-  --card: var(--shale);
-  --card-foreground: var(--foam);
-  --popover: var(--shale);
-  --popover-foreground: var(--foam);
-  --primary: var(--aqua);
-  --primary-foreground: var(--ink);
-  --secondary: var(--abyss);
-  --secondary-foreground: var(--foam);
-  --muted: var(--shale);
-  --muted-foreground: var(--mist);
-  --accent: var(--cyan);
+  --background: var(--ivory);
+  --foreground: var(--ink);
+  --card: oklch(1 0 0);
+  --card-foreground: var(--ink);
+  --popover: oklch(1 0 0);
+  --popover-foreground: var(--ink);
+  --primary: var(--clay);
+  --primary-foreground: oklch(0.99 0.005 80);
+  --secondary: var(--cream);
+  --secondary-foreground: var(--ink);
+  --muted: var(--cream);
+  --muted-foreground: var(--ash);
+  --accent: var(--blush);
   --accent-foreground: var(--ink);
-  --destructive: oklch(0.577 0.245 27.325);
-  --destructive-foreground: oklch(0.984 0.003 247.858);
-  --border: color-mix(in oklch, var(--foam) 10%, transparent);
-  --input: color-mix(in oklch, var(--foam) 15%, transparent);
-  --ring: var(--cyan);
-  --sidebar: var(--abyss);
-  --sidebar-foreground: var(--foam);
-  --sidebar-primary: var(--aqua);
-  --sidebar-primary-foreground: var(--ink);
-  --sidebar-accent: var(--shale);
-  --sidebar-accent-foreground: var(--foam);
-  --sidebar-border: color-mix(in oklch, var(--foam) 10%, transparent);
-  --sidebar-ring: var(--cyan);
+  --destructive: oklch(0.55 0.2 27);
+  --destructive-foreground: oklch(0.99 0.005 80);
+  --border: color-mix(in oklch, var(--ink) 12%, transparent);
+  --input: color-mix(in oklch, var(--ink) 18%, transparent);
+  --ring: var(--clay);
 
-  /* Motion easing */
   --ease-out-expo: cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-.dark {
-  /* Same dark aquatic theme in dark mode */
-  --background: var(--ink);
-  --foreground: var(--foam);
-  --card: var(--shale);
-  --card-foreground: var(--foam);
-  --popover: var(--shale);
-  --popover-foreground: var(--foam);
-  --primary: var(--aqua);
-  --primary-foreground: var(--ink);
-  --secondary: var(--abyss);
-  --secondary-foreground: var(--foam);
-  --muted: var(--shale);
-  --muted-foreground: var(--mist);
-  --accent: var(--cyan);
-  --accent-foreground: var(--ink);
-  --destructive: oklch(0.704 0.191 22.216);
-  --destructive-foreground: oklch(0.984 0.003 247.858);
-  --border: color-mix(in oklch, var(--foam) 10%, transparent);
-  --input: color-mix(in oklch, var(--foam) 15%, transparent);
-  --ring: var(--cyan);
-  --sidebar: var(--abyss);
-  --sidebar-foreground: var(--foam);
-  --sidebar-primary: var(--aqua);
-  --sidebar-primary-foreground: var(--ink);
-  --sidebar-accent: var(--shale);
-  --sidebar-accent-foreground: var(--foam);
-  --sidebar-border: color-mix(in oklch, var(--foam) 10%, transparent);
-  --sidebar-ring: var(--cyan);
 }
 
 @keyframes nuve-in {
   from {
     opacity: 0;
-    transform: translateY(22px);
+    transform: translateY(16px);
   }
   to {
     opacity: 1;
@@ -144,24 +104,15 @@
   }
 }
 
-@keyframes nuve-drift {
-  0%,
-  100% {
-    transform: translate(0, 0) scale(1);
-  }
-  50% {
-    transform: translate(18px, -26px) scale(1.08);
-  }
+@utility nuve-reveal {
+  animation: nuve-in 700ms var(--ease-out-expo) both;
 }
 
-@keyframes nuve-pulse {
-  0%,
-  100% {
-    opacity: 0.45;
-  }
-  50% {
-    opacity: 0.95;
-  }
+@utility eyebrow {
+  font-size: 0.6875rem;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--clay);
 }
 
 @layer base {
@@ -172,5 +123,21 @@
   body {
     background-color: var(--color-background);
     color: var(--color-foreground);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1,
+  h2,
+  h3,
+  .font-display {
+    font-family: var(--font-display);
+    font-weight: 300;
+    letter-spacing: -0.01em;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--clay);
+    outline-offset: 2px;
   }
 }
