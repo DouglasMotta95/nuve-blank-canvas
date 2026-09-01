@@ -30,7 +30,10 @@ function PedidoPage() {
   const { data: order, isLoading } = useQuery({
     queryKey: ["order", id],
     queryFn: () => getOrderPublic({ data: { order_id: id } }),
+    refetchInterval: 30_000,
+    refetchOnWindowFocus: true,
   });
+
 
   if (isLoading) return <div className="mx-auto h-[50vh] max-w-2xl animate-pulse bg-cream" />;
   if (!order)
