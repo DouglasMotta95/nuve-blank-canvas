@@ -254,3 +254,27 @@ export const subscribeNewsletter = createServerFn({ method: "POST" })
     await supabaseAdmin.from("newsletter_subscribers").upsert({ email: data.email }, { onConflict: "email" });
     return { ok: true };
   });
+
+export const trackOrder = createServerFn({ method: "POST" })
+  .inputValidator((d: unknown) =>
+    z
+      .object({
+        order_number: z.string().trim().min(3).max(40),
+        email: z.string().trim().email().max(160),
+      })
+      .parse(d),
+  )
+  .handler(async ({ data }) => {
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { data: order } = await supabaseAdmin
+      .from("orders")
+      .select(ORDER_SELECT + ", customer_email")
+      .ilike("order_number", data.order_number.replace(/\s/g, ""))
+      .maybeSingle();
+
+    if (!order || (order as any).customer_email?.toLowerCase() !== data.email.toLowerCase()) {
+      return { found: false as const };
+    }
+    const { customer_email: _omit, ...safe } = order as any;
+    return { found: true as const, order: { ...safe, events: await loadEvents(supabaseAdmin, safe.id) } };
+  });
