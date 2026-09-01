@@ -14,32 +14,31 @@ import g9 from "@/assets/img-20260831-wa0036.jpg.asset.json";
 import g10 from "@/assets/img-20260831-wa0037.jpg.asset.json";
 
 const GALLERY = [
-  { url: g1.url, alt: "NUVE Advanced Skin Care — a linha completa de séruns" },
+  { url: g1.url, alt: "NUVE Advanced Skin Care — linha de séruns" },
   { url: g2.url, alt: "Séruns NUVE GHK-Cu, 5 EM 1 e PDRN lado a lado" },
-  { url: g3.url, alt: "Séruns NUVE com suas embalagens e benefícios" },
+  { url: g3.url, alt: "Séruns NUVE com suas embalagens" },
   { url: g4.url, alt: "NUVE GHK-Cu e 5 EM 1 com as caixas originais" },
   { url: g5.url, alt: "NUVE 5 EM 1 Serum com respingos de água e embalagem" },
   { url: g6.url, alt: "NUVE PDRN Copper Peptide com a embalagem" },
   { url: g7.url, alt: "NUVE PDRN Copper Peptide em textura de gel rosa" },
   { url: g8.url, alt: "Frasco do NUVE 5 EM 1 Serum em fundo claro" },
-  { url: g9.url, alt: "NUVE 5 EM 1 Serum, sérum facial multifuncional 30ml" },
-  { url: g10.url, alt: "Mulheres aplicando o sérum NUVE GHK-Cu" },
+  { url: g9.url, alt: "NUVE 5 EM 1 Serum 30 ml" },
+  { url: g10.url, alt: "Mulheres aplicando sérum NUVE" },
 ];
-
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "NUVE Advanced Skin Care — Séruns de alta performance" },
+      { title: "NUVE Advanced Skin Care — Tecnologia, ativos e autocuidado" },
       {
         name: "description",
         content:
-          "Séruns com tecnologia japonesa: NUVE 5 EM 1, GHK-Cu e PDRN. R$ 149,90 cada e 10% OFF levando 2 ou mais.",
+          "Conheça NUVE 5 EM 1, GHK-Cu e PDRN + Peptídeo de Cobre. Skincare sofisticado, formulações desenvolvidas no Japão e 10% OFF levando 2 ou mais unidades elegíveis.",
       },
       { property: "og:title", content: "NUVE Advanced Skin Care" },
       {
         property: "og:description",
-        content: "Skincare premium com ativos de última geração. 10% OFF levando 2 ou mais unidades.",
+        content: "Tecnologia japonesa. Ativos selecionados. Skincare para a vida real.",
       },
     ],
   }),
@@ -47,10 +46,22 @@ export const Route = createFileRoute("/")({
 });
 
 const PILLARS = [
-  { title: "Tecnologia japonesa", text: "Formulações desenvolvidas com padrão asiático de pesquisa e pureza." },
-  { title: "Ativos de última geração", text: "PDRN, GHK-Cu, niacinamida e peptídeos em concentrações eficazes." },
-  { title: "Rotina simples", text: "Poucas etapas, resultado consistente. Skincare para a vida real." },
-  { title: "Fórmula vegana", text: "Livre de crueldade animal, parabenos e fragrâncias sintéticas pesadas." },
+  {
+    title: "Formulações desenvolvidas no Japão",
+    text: "Tecnologia e conhecimento em skincare traduzidos para uma rotina moderna de cuidados com a pele.",
+  },
+  {
+    title: "Ativos selecionados",
+    text: "Fórmulas pensadas para unir cuidado, praticidade e uma experiência sofisticada no dia a dia.",
+  },
+  {
+    title: "Menos complicação",
+    text: "Uma proposta de skincare mais simples, sem perder intenção, tecnologia e sofisticação.",
+  },
+  {
+    title: "Beleza para a vida real",
+    text: "Autocuidado que acompanha a rotina, com produtos que fazem sentido no uso diário.",
+  },
 ];
 
 function Home() {
@@ -59,71 +70,73 @@ function Home() {
   const { data: reviews } = useReviews();
   const hero = banners?.[0];
   const secondary = banners?.slice(1) ?? [];
+  const japaneseVisual = secondary[0]?.image_desktop ?? g1.url;
 
   return (
     <div className="nuve-reveal">
-      {/* HERO — foto oficial das três mulheres */}
-      <section className="bg-blush/50">
-        <div className="mx-auto grid max-w-6xl items-center gap-8 px-4 py-10 md:grid-cols-2 md:py-16">
+      {/* HERO — o primeiro banner cadastrado deve ser a foto oficial das três mulheres */}
+      <section className="overflow-hidden bg-blush/45">
+        <div className="mx-auto grid max-w-6xl items-center gap-8 px-4 py-8 md:grid-cols-2 md:py-14">
           <div className="order-2 md:order-1">
-            <p className="eyebrow">Advanced skin care</p>
-            <h1 className="mt-3 font-display text-[38px] leading-[1.05] text-ink md:text-[56px]">
+            <p className="eyebrow">NUVE Advanced Skin Care</p>
+            <h1 className="mt-3 max-w-[12ch] font-display text-[40px] leading-[0.98] text-ink sm:text-[48px] md:text-[60px]">
               {hero?.title ?? "Tecnologia japonesa. Ativos selecionados. Skincare para a vida real."}
             </h1>
-            <p className="mt-4 max-w-[42ch] text-[15px] leading-relaxed text-ash">
-              {hero?.subtitle ?? "Três séruns. Uma mesma proposta: realçar sua melhor versão todos os dias."}
+            <p className="mt-5 max-w-[46ch] text-[15px] leading-relaxed text-ash">
+              {hero?.subtitle ??
+                "A Nuve une a sofisticação do skincare japonês a fórmulas cuidadosamente desenvolvidas com ativos selecionados para transformar o cuidado com a pele em uma experiência simples, prática e especial."}
             </p>
             <div className="mt-7 flex flex-wrap gap-3">
-              <Link
-                to="/loja"
-                className="bg-ink px-8 py-4 text-[11px] uppercase tracking-[0.22em] text-ivory"
-              >
+              <Link to="/loja" className="bg-ink px-8 py-4 text-[11px] uppercase tracking-[0.22em] text-ivory">
                 Conheça os produtos
               </Link>
               <Link
-                to="/ativos"
+                to="/sobre"
                 className="border border-ink px-8 py-4 text-[11px] uppercase tracking-[0.22em] text-ink"
               >
-                Ativos & tecnologia
+                Conheça a NUVE
               </Link>
             </div>
             <p className="mt-5 text-[11px] uppercase tracking-[0.18em] text-clay">
               R$ 149,90 cada · 10% OFF levando 2 ou mais
             </p>
           </div>
+
           <div className="order-1 md:order-2">
-            {hero && (
+            <picture>
+              {hero?.image_mobile && <source media="(max-width: 767px)" srcSet={hero.image_mobile} />}
               <img
-                src={hero.image_desktop}
-                alt="Três mulheres sorrindo segurando os séruns NUVE Advanced Skin Care"
-                className="mx-auto w-full max-w-[560px] object-contain"
+                src={hero?.image_desktop ?? g1.url}
+                alt="Linha NUVE Advanced Skin Care"
+                className="mx-auto max-h-[680px] w-full object-contain"
                 width={1080}
                 height={1080}
+                fetchPriority="high"
               />
-            )}
+            </picture>
           </div>
         </div>
       </section>
 
       {/* Pilares */}
       <section className="border-y border-border bg-cream">
-        <div className="mx-auto grid max-w-6xl gap-6 px-4 py-10 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="mx-auto grid max-w-6xl gap-7 px-4 py-10 sm:grid-cols-2 lg:grid-cols-4">
           {PILLARS.map((p) => (
-            <div key={p.title}>
-              <h2 className="font-display text-xl text-ink">{p.title}</h2>
-              <p className="mt-1 text-sm leading-relaxed text-ash">{p.text}</p>
+            <div key={p.title} className="border-t border-clay/35 pt-4">
+              <h2 className="font-display text-xl leading-tight text-ink">{p.title}</h2>
+              <p className="mt-2 text-sm leading-relaxed text-ash">{p.text}</p>
             </div>
           ))}
         </div>
       </section>
 
       {/* Produtos */}
-      <section className="mx-auto max-w-6xl px-4 py-16">
+      <section className="mx-auto max-w-6xl px-4 py-16 md:py-20">
         <div className="text-center">
           <p className="eyebrow">A linha</p>
-          <h2 className="mt-2 font-display text-4xl text-ink">Três séruns, um ritual</h2>
-          <p className="mx-auto mt-3 max-w-[52ch] text-sm leading-relaxed text-ash">
-            Cada fórmula responde a uma necessidade específica da pele. Combine dois e receba 10% OFF automático.
+          <h2 className="mt-2 font-display text-4xl text-ink md:text-5xl">Três séruns. Três formas de cuidar.</h2>
+          <p className="mx-auto mt-4 max-w-[58ch] text-sm leading-relaxed text-ash">
+            Escolha a fórmula que mais combina com sua rotina ou combine dois produtos e receba 10% OFF automático quando elegível.
           </p>
         </div>
         <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
@@ -133,39 +146,72 @@ function Home() {
         </div>
       </section>
 
-      {/* Carrossel automático da linha */}
-      <section className="border-y border-border bg-cream/60 py-14">
+      {/* Japão — seção fixa para não depender de copy de banner */}
+      <section className="overflow-hidden bg-[#2b2528] text-ivory">
+        <div className="mx-auto grid max-w-6xl items-center md:grid-cols-2">
+          <div className="order-2 px-5 py-12 sm:px-8 md:order-1 md:px-10 md:py-16">
+            <p className="text-[10px] uppercase tracking-[0.28em] text-champagne">Inspiração japonesa</p>
+            <h2 className="mt-3 max-w-[13ch] font-display text-4xl leading-[1.02] md:text-5xl">
+              Formulações desenvolvidas no Japão
+            </h2>
+            <p className="mt-5 max-w-[48ch] text-sm leading-relaxed text-ivory/75">
+              A NUVE nasce inspirada na sofisticação do skincare japonês, unindo tecnologia, conhecimento em formulação e ativos selecionados a uma rotina moderna de cuidados com a pele.
+            </p>
+            <p className="mt-3 max-w-[48ch] text-sm leading-relaxed text-ivory/75">
+              A proposta valoriza textura, experiência e cuidado contínuo — traduzidos para uma rotina mais simples, prática e sofisticada para a vida real.
+            </p>
+            <Link
+              to="/sobre"
+              className="mt-7 inline-block border-b border-champagne pb-1 text-[11px] uppercase tracking-[0.2em] text-champagne"
+            >
+              Descubra a história da NUVE
+            </Link>
+          </div>
+          <div className="order-1 bg-cream md:order-2">
+            <img
+              src={japaneseVisual}
+              alt="NUVE — tecnologia, formulação e inspiração japonesa"
+              loading="lazy"
+              className="h-full max-h-[660px] w-full object-contain"
+            />
+          </div>
+        </div>
+      </section>
+
+      {/* Galeria da linha */}
+      <section className="border-y border-border bg-cream/60 py-14 md:py-16">
         <div className="mx-auto max-w-5xl px-4">
           <div className="text-center">
-            <p className="eyebrow">Galeria</p>
-            <h2 className="mt-2 font-display text-4xl text-ink">A linha NUVE em detalhes</h2>
+            <p className="eyebrow">Universo NUVE</p>
+            <h2 className="mt-2 font-display text-4xl text-ink">A linha em detalhes</h2>
           </div>
-          <div className="mt-8 border border-border">
+          <div className="mt-8 overflow-hidden border border-border bg-card">
             <AutoCarousel slides={GALLERY} />
           </div>
         </div>
       </section>
 
-
-
-      {/* Banners editoriais */}
-      {secondary.map((b, i) => (
-        <section key={b.id} className={i % 2 === 0 ? "bg-cream" : "bg-blush/40"}>
+      {/* Banners editoriais restantes */}
+      {secondary.slice(1).map((b, i) => (
+        <section key={b.id} className={i % 2 === 0 ? "bg-ivory" : "bg-blush/35"}>
           <div
-            className={`mx-auto grid max-w-6xl items-center gap-8 px-4 py-14 md:grid-cols-2 ${
+            className={`mx-auto grid max-w-6xl items-center gap-8 px-4 py-14 md:grid-cols-2 md:py-16 ${
               i % 2 === 0 ? "" : "md:[&>*:first-child]:order-2"
             }`}
           >
-            <img
-              src={b.image_desktop}
-              alt={b.title ?? "NUVE Advanced Skin Care"}
-              loading="lazy"
-              className="w-full object-contain"
-            />
+            <picture>
+              {b.image_mobile && <source media="(max-width: 767px)" srcSet={b.image_mobile} />}
+              <img
+                src={b.image_desktop}
+                alt={b.title ?? "NUVE Advanced Skin Care"}
+                loading="lazy"
+                className="max-h-[620px] w-full object-contain"
+              />
+            </picture>
             <div>
               <p className="eyebrow">NUVE</p>
               <h2 className="mt-3 font-display text-3xl leading-tight text-ink md:text-4xl">{b.title}</h2>
-              <p className="mt-3 max-w-[44ch] text-sm leading-relaxed text-ash">{b.subtitle}</p>
+              <p className="mt-3 max-w-[46ch] text-sm leading-relaxed text-ash">{b.subtitle}</p>
               <Link
                 to="/loja"
                 className="mt-6 inline-block border-b border-clay pb-1 text-[11px] uppercase tracking-[0.2em] text-clay"
@@ -177,18 +223,18 @@ function Home() {
         </section>
       ))}
 
-      {/* Avaliações */}
+      {/* Avaliações reais, somente quando aprovadas e existentes */}
       {(reviews?.length ?? 0) > 0 && (
         <section className="mx-auto max-w-6xl px-4 py-16">
           <div className="text-center">
-            <p className="eyebrow">Quem usa</p>
-            <h2 className="mt-2 font-display text-4xl text-ink">Resultados que ficam na pele</h2>
+            <p className="eyebrow">Experiências NUVE</p>
+            <h2 className="mt-2 font-display text-4xl text-ink">O que nossas clientes contam</h2>
           </div>
           <div className="mt-10 grid gap-6 md:grid-cols-3">
             {(reviews ?? []).slice(0, 3).map((r: any) => (
               <figure key={r.id} className="border border-border bg-card p-6">
                 <div className="text-clay">{"★".repeat(r.rating)}</div>
-                <blockquote className="mt-3 text-sm leading-relaxed text-ash">"{r.comment}"</blockquote>
+                <blockquote className="mt-3 text-sm leading-relaxed text-ash">“{r.comment}”</blockquote>
                 <figcaption className="mt-4 text-[11px] uppercase tracking-[0.18em] text-ink">
                   {r.author_name}
                 </figcaption>
