@@ -61,13 +61,15 @@ function AdminConfig() {
     toast.success("Configuração salva.");
     qc.invalidateQueries({ queryKey: ["admin-settings"] });
     qc.invalidateQueries({ queryKey: ["social-proof"] });
+    qc.invalidateQueries({ queryKey: ["setting", "whatsapp"] });
   }
 
   return (
     <div className="space-y-8">
       <header>
         <h1 className="font-display text-3xl text-ink">Configurações da loja</h1>
-        <p className="mt-1 text-sm text-ash">Notificações de prova social e avisos de pedido.</p>
+        <p className="mt-1 text-sm text-ash">Atendimento no WhatsApp, prova social e avisos de pedido.</p>
+
       </header>
 
       <section className="border border-border bg-card p-5">
