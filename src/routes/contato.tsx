@@ -34,6 +34,12 @@ function Contato() {
       <p className="mt-3 text-sm leading-relaxed text-ash">
         Atendimento de segunda a sexta, das 9h às 18h. Respondemos em até 1 dia útil.
       </p>
+      <p className="mt-2 text-sm text-ash">
+        E-mail:{" "}
+        <a href="mailto:nuveadvanced@gmail.com" className="text-ink underline underline-offset-4">
+          nuveadvanced@gmail.com
+        </a>
+      </p>
 
       <form
         className="mt-10 space-y-4"
@@ -44,10 +50,14 @@ function Contato() {
             toast.error(parsed.error.issues[0]?.message ?? "Revise os dados.");
             return;
           }
-          const text = `Olá! Meu nome é ${parsed.data.name} (${parsed.data.email}). ${parsed.data.message}`;
-          window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, "_blank", "noopener,noreferrer");
+          const body = `Nome: ${parsed.data.name}\nE-mail: ${parsed.data.email}\n\n${parsed.data.message}`;
+          window.location.href = `mailto:nuveadvanced@gmail.com?subject=${encodeURIComponent(
+            "Contato pelo site — NUVE Advanced",
+          )}&body=${encodeURIComponent(body)}`;
+          toast.success("Abrindo seu e-mail para enviar a mensagem.");
         }}
       >
+
         <label className="block">
           <span className="text-[11px] uppercase tracking-[0.16em] text-ash">Nome</span>
           <input

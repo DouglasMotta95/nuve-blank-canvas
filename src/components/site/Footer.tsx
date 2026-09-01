@@ -26,7 +26,14 @@ export function Footer() {
             >
               <Instagram className="size-4" /> @nuveadvanced
             </a>
+            <a
+              href="mailto:nuveadvanced@gmail.com"
+              className="mt-2 block text-sm text-ash hover:text-ink"
+            >
+              nuveadvanced@gmail.com
+            </a>
           </div>
+
 
           <nav className="flex flex-col gap-2 text-sm text-ash">
             <span className="eyebrow mb-2">Institucional</span>

@@ -15,6 +15,13 @@
       "when": 1788269980760,
       "tag": "0001_orders_tracking_code",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1788270520318,
+      "tag": "0002_auto_admin_owner_email",
+      "breakpoints": true
     }
   ]
 }
