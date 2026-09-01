@@ -29,6 +29,21 @@ set placement = case when r.rn = 1 then 'hero' else 'editorial' end
 from remaining r
 where b.id = r.id;
 
+-- Give the About page its own editable media slot without taking an existing
+-- Home image away. The client can replace this copy independently in admin.
+insert into public.banners (
+  title, subtitle, cta_label, cta_link, image_desktop, image_mobile,
+  image_fit, sort_order, active, placement, alt_text
+)
+select
+  'A marca NUVE', subtitle, null, null, image_desktop, image_mobile,
+  image_fit, 1, true, 'about', 'NUVE Advance Skincare — imagem institucional'
+from public.banners
+where placement = 'editorial'
+  and not exists (select 1 from public.banners where placement = 'about')
+order by sort_order
+limit 1;
+
 create index if not exists banners_placement_active_sort_idx
   on public.banners (placement, active, sort_order);
 create index if not exists product_images_product_active_sort_idx
