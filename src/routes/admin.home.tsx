@@ -80,7 +80,11 @@ function AdminHome() {
   }
 
   async function save() {
-    const { error } = await supabase.from("site_settings").upsert({ key: "home_content", value: form, updated_at: new Date().toISOString() }, { onConflict: "key" });
+    const { error } = await supabase.from("site_settings").upsert({
+      key: "home_content",
+      value: form as never,
+      updated_at: new Date().toISOString(),
+    }, { onConflict: "key" });
     if (error) return toast.error("Não foi possível salvar a página inicial.");
     toast.success("Página inicial atualizada.");
     setDraft(null);
