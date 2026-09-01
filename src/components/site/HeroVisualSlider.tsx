@@ -27,23 +27,24 @@ export function HeroVisualSlider({ slides }: { slides: HeroVisual[] }) {
 
   return (
     <div
-      className="relative mx-auto w-full max-w-[680px] overflow-hidden rounded-[2px] bg-cream shadow-[0_24px_70px_-48px_rgba(55,30,35,0.55)]"
+      className="relative mx-auto w-full max-w-[760px] overflow-hidden bg-cream"
       aria-roledescription="carrossel"
       aria-label="Campanhas NUVE"
     >
-      <div className="relative aspect-[16/10] sm:aspect-[16/9]">
+      <div className="relative aspect-[16/9] w-full">
         {usable.map((slide, index) => (
           <picture
             key={slide.id}
-            className={`absolute inset-0 transition-[opacity,transform] duration-1000 ease-out ${
-              index === active ? "z-10 scale-100 opacity-100" : "z-0 scale-[1.015] opacity-0"
+            className={`absolute inset-0 flex items-center justify-center transition-opacity duration-1000 ease-out ${
+              index === active ? "z-10 opacity-100" : "z-0 opacity-0"
             }`}
             aria-hidden={index !== active}
           >
+            {slide.image_mobile && <source media="(max-width: 639px)" srcSet={slide.image_mobile} />}
             <img
               src={slide.image_desktop}
               alt={slide.title ? `${slide.title} — NUVE Advanced Skin Care` : "NUVE Advanced Skin Care"}
-              className="size-full object-cover object-center"
+              className="block size-full object-contain object-center"
               width={1440}
               height={810}
               fetchPriority={index === 0 ? "high" : "auto"}
