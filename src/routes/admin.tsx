@@ -23,6 +23,7 @@ const LINKS = [
   { to: "/admin/estoque", label: "Estoque" },
   { to: "/admin/home", label: "Página inicial" },
   { to: "/admin/banners", label: "Imagens e banners" },
+  { to: "/admin/avaliacoes", label: "Avaliações" },
   { to: "/admin/site", label: "Dados do site" },
   { to: "/admin/cupons", label: "Cupons" },
   { to: "/admin/configuracoes", label: "Configurações" },
