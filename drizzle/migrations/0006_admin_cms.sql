@@ -8,23 +8,26 @@ alter table public.banners
 alter table public.product_images
   add column if not exists active boolean not null default true;
 
--- Preserve the current editorial intent while stopping every banner from
--- automatically being reused in the hero. Existing rows are classified by
--- their current sort order only once during migration.
-with ranked as (
+-- Stop every active banner from being reused in the hero. Classify the
+-- existing NUVE content by meaning first, then keep only the first remaining
+-- banner as hero and treat other unmatched banners as editorial.
+update public.banners
+set placement = case
+  when title ilike '%japão%' then 'japan'
+  when title ilike '%ciência%' or title ilike '%tecnologia em cada fórmula%' then 'science'
+  else placement
+end
+where placement = 'hero';
+
+with remaining as (
   select id, row_number() over (order by sort_order, created_at, id) as rn
   from public.banners
+  where placement = 'hero'
 )
 update public.banners b
-set placement = case r.rn
-  when 1 then 'hero'
-  when 2 then 'japan'
-  when 3 then 'science'
-  else 'editorial'
-end
-from ranked r
-where b.id = r.id
-  and b.placement = 'hero';
+set placement = case when r.rn = 1 then 'hero' else 'editorial' end
+from remaining r
+where b.id = r.id;
 
 create index if not exists banners_placement_active_sort_idx
   on public.banners (placement, active, sort_order);
