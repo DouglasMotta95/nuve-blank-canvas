@@ -449,6 +449,7 @@ export type Database = {
           alt: string | null
           fit: string
           id: string
+          is_before_after: boolean
           is_cover: boolean
           product_id: string
           sort_order: number
@@ -458,6 +459,7 @@ export type Database = {
           alt?: string | null
           fit?: string
           id?: string
+          is_before_after?: boolean
           is_cover?: boolean
           product_id: string
           sort_order?: number
@@ -467,6 +469,7 @@ export type Database = {
           alt?: string | null
           fit?: string
           id?: string
+          is_before_after?: boolean
           is_cover?: boolean
           product_id?: string
           sort_order?: number
