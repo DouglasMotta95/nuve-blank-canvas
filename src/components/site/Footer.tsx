@@ -4,6 +4,22 @@ import { Instagram } from "lucide-react";
 import { toast } from "sonner";
 import { subscribeNewsletter } from "@/lib/orders.functions";
 
+const INSTAGRAM_URL = "https://www.instagram.com/nuve_serum?igsi=MWF0eGxhdmp0MXloMg==";
+const TIKTOK_URL = "https://www.tiktok.com/@nuveadvanced";
+
+function TikTokIcon({ className = "" }: { className?: string }) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      aria-hidden="true"
+      className={className}
+      fill="currentColor"
+    >
+      <path d="M14.5 3c.3 1.7 1.3 3 2.8 3.9.9.5 1.8.7 2.7.8v3.1c-1.8 0-3.5-.6-4.9-1.7v6.2a6.5 6.5 0 1 1-5.6-6.4v3.2a3.4 3.4 0 1 0 2.4 3.2V3h3.3Z" />
+    </svg>
+  );
+}
+
 export function Footer() {
   const [email, setEmail] = useState("");
   const [busy, setBusy] = useState(false);
@@ -18,14 +34,28 @@ export function Footer() {
             <p className="mt-4 max-w-[34ch] text-sm leading-relaxed text-ash">
               Skincare de alta performance com tecnologia japonesa e ativos de última geração.
             </p>
-            <a
-              href="https://instagram.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="mt-4 inline-flex items-center gap-2 text-sm text-ash hover:text-ink"
-            >
-              <Instagram className="size-4" /> @nuveadvanced
-            </a>
+
+            <div className="mt-4 flex flex-col items-start gap-2">
+              <a
+                href={INSTAGRAM_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Abrir Instagram da NUVE"
+                className="inline-flex items-center gap-2 text-sm text-ash transition-colors hover:text-ink"
+              >
+                <Instagram className="size-4" /> Instagram
+              </a>
+              <a
+                href={TIKTOK_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Abrir TikTok da NUVE"
+                className="inline-flex items-center gap-2 text-sm text-ash transition-colors hover:text-ink"
+              >
+                <TikTokIcon className="size-4" /> TikTok
+              </a>
+            </div>
+
             <a
               href="mailto:nuveadvanced@gmail.com"
               className="mt-2 block text-sm text-ash hover:text-ink"
@@ -34,7 +64,6 @@ export function Footer() {
             </a>
           </div>
 
-
           <nav className="flex flex-col gap-2 text-sm text-ash">
             <span className="eyebrow mb-2">Institucional</span>
             <Link to="/sobre" className="hover:text-ink">A Marca</Link>
@@ -42,7 +71,6 @@ export function Footer() {
             <Link to="/faq" className="hover:text-ink">Perguntas frequentes</Link>
             <Link to="/rastreio" className="hover:text-ink">Rastrear pedido</Link>
             <Link to="/contato" className="hover:text-ink">Contato</Link>
-
           </nav>
 
           <nav className="flex flex-col gap-2 text-sm text-ash">
