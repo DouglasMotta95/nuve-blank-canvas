@@ -4,22 +4,22 @@ import { useBanners } from "@/lib/catalog";
 export const Route = createFileRoute("/sobre")({
   head: () => ({
     meta: [
-      { title: "A Marca — NUVE Advanced Skin Care" },
+      { title: "A Marca — NUVE Advance Skincare" },
       {
         name: "description",
         content:
-          "Conheça a NUVE Advanced Skin Care: skincare premium com tecnologia japonesa, ativos de última geração e rotina simples.",
+          "Conheça a NUVE Advance Skincare: skincare premium com tecnologia japonesa, ativos selecionados e uma rotina simples.",
       },
-      { property: "og:title", content: "A Marca — NUVE Advanced Skin Care" },
-      { property: "og:description", content: "Tecnologia japonesa e ativos selecionados em três séruns." },
+      { property: "og:title", content: "A Marca — NUVE Advance Skincare" },
+      { property: "og:description", content: "Tecnologia japonesa e ativos selecionados em skincare NUVE." },
     ],
   }),
   component: Sobre,
 });
 
 function Sobre() {
-  const { data: banners } = useBanners();
-  const image = banners?.[1]?.image_desktop ?? banners?.[0]?.image_desktop;
+  const { data: aboutBanners } = useBanners("about");
+  const about = aboutBanners?.[0];
 
   return (
     <div className="mx-auto max-w-4xl px-4 py-14">
@@ -28,18 +28,21 @@ function Sobre() {
         Skincare de alta performance, sem excessos
       </h1>
       <p className="mt-5 text-[15px] leading-relaxed text-ash">
-        A NUVE Advanced Skin Care nasceu de uma inquietação simples: por que uma rotina eficaz precisa ter dez
+        A NUVE Advance Skincare nasceu de uma inquietação simples: por que uma rotina eficaz precisa ter dez
         etapas? Nossas fórmulas foram desenvolvidas com padrão japonês de pesquisa — pureza de ativos, texturas
         leves e concentrações que respeitam a barreira cutânea.
       </p>
 
-      {image && (
-        <img
-          src={image}
-          alt="Produtos NUVE Advanced Skin Care em composição editorial"
-          loading="lazy"
-          className="mt-10 w-full object-contain"
-        />
+      {about?.image_desktop && (
+        <picture className="mt-10 block w-full">
+          {about.image_mobile && <source media="(max-width: 639px)" srcSet={about.image_mobile} />}
+          <img
+            src={about.image_desktop}
+            alt={about.alt_text ?? about.title ?? "Produtos NUVE Advance Skincare em composição editorial"}
+            loading="lazy"
+            className="w-full object-contain"
+          />
+        </picture>
       )}
 
       <div className="mt-12 grid gap-8 md:grid-cols-3">
@@ -52,13 +55,13 @@ function Sobre() {
         <div>
           <h2 className="font-display text-2xl text-ink">Simplicidade</h2>
           <p className="mt-2 text-sm leading-relaxed text-ash">
-            Um sérum resolve o que antes exigia cinco frascos. Menos etapas, mais constância.
+            Uma proposta pensada para simplificar a rotina e favorecer a constância no cuidado diário.
           </p>
         </div>
         <div>
-          <h2 className="font-display text-2xl text-ink">Consciência</h2>
+          <h2 className="font-display text-2xl text-ink">Experiência</h2>
           <p className="mt-2 text-sm leading-relaxed text-ash">
-            Fórmulas veganas, cruelty free e embalagens pensadas para durar todo o tratamento.
+            Texturas e fórmulas desenvolvidas para transformar o skincare em um ritual prático e sofisticado.
           </p>
         </div>
       </div>
