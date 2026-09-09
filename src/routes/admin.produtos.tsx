@@ -112,9 +112,18 @@ function ProductEditor({ product, onSaved }: { product: any; onSaved: () => void
   async function save() {
     const price = toCents(form.price);
     const stock = Number.parseInt(form.stock, 10);
-    if (!price || price <= 0) return toast.error("Preço inválido.");
-    if (!Number.isInteger(stock) || stock < 0) return toast.error("Estoque inválido.");
-    if (!form.name.trim() || !form.slug.trim() || !form.sku.trim()) return toast.error("Nome, link e SKU são obrigatórios.");
+    if (!price || price <= 0) {
+      toast.error("Preço inválido.");
+      return;
+    }
+    if (!Number.isInteger(stock) || stock < 0) {
+      toast.error("Estoque inválido.");
+      return;
+    }
+    if (!form.name.trim() || !form.slug.trim() || !form.sku.trim()) {
+      toast.error("Nome, link e SKU são obrigatórios.");
+      return;
+    }
     setSaving(true);
     const { error } = await supabase.from("products").update({
       name: form.name.trim().slice(0, 120), sku: form.sku.trim().slice(0, 40),
@@ -128,7 +137,10 @@ function ProductEditor({ product, onSaved }: { product: any; onSaved: () => void
       active: form.active, featured: form.featured, updated_at: new Date().toISOString(),
     }).eq("id", product.id);
     setSaving(false);
-    if (error) return toast.error("Não foi possível salvar. Confira o link e o SKU.");
+    if (error) {
+      toast.error("Não foi possível salvar. Confira o link e o SKU.");
+      return;
+    }
     toast.success("Produto atualizado.");
     onSaved();
   }
@@ -172,25 +184,40 @@ function ImageManager({ productId, images, onChanged }: { productId: string; ima
 
   async function patch(id: string, values: Record<string, unknown>) {
     const { error } = await supabase.from("product_images").update(values as never).eq("id", id);
-    if (error) return toast.error("Não foi possível atualizar a foto.");
+    if (error) {
+      toast.error("Não foi possível atualizar a foto.");
+      return;
+    }
     onChanged();
   }
   async function setCover(id: string) {
     const { error } = await supabase.from("product_images").update({ is_cover: false }).eq("product_id", productId);
-    if (error) return toast.error("Não foi possível alterar a capa.");
+    if (error) {
+      toast.error("Não foi possível alterar a capa.");
+      return;
+    }
     await patch(id, { is_cover: true, active: true });
     toast.success("Capa definida.");
   }
   async function remove(id: string) {
     if (!window.confirm("Remover esta foto?")) return;
     const { error } = await supabase.from("product_images").delete().eq("id", id);
-    if (error) return toast.error("Não foi possível remover.");
+    if (error) {
+      toast.error("Não foi possível remover.");
+      return;
+    }
     toast.success("Foto removida."); onChanged();
   }
   async function addUrl(url: string, isBeforeAfter = false) {
-    if (!/^(https?:\/\/|\/)/.test(url)) return toast.error("Informe um endereço de imagem válido.");
+    if (!/^(https?:\/\/|\/)/.test(url)) {
+      toast.error("Informe um endereço de imagem válido.");
+      return;
+    }
     const { error } = await supabase.from("product_images").insert({ product_id: productId, url, sort_order: (sorted.at(-1)?.sort_order ?? -1) + 1, is_cover: sorted.length === 0, is_before_after: isBeforeAfter, active: true } as never);
-    if (error) return toast.error("Não foi possível adicionar a foto.");
+    if (error) {
+      toast.error("Não foi possível adicionar a foto.");
+      return;
+    }
     toast.success("Foto adicionada."); onChanged();
   }
   async function uploadFile(file: File) {

@@ -3,6 +3,7 @@ import { useBanners, useProducts, useReviews, useSetting } from "@/lib/catalog";
 import { ProductCard } from "@/components/site/ProductCard";
 import { AutoCarousel } from "@/components/site/AutoCarousel";
 import { HeroVisualSlider } from "@/components/site/HeroVisualSlider";
+import { VipListSection } from "@/components/site/VipListSection";
 import g1 from "@/assets/img-20260831-wa0026.jpg.asset.json";
 
 const DEFAULT_PILLARS = [
@@ -27,6 +28,7 @@ type HomeContent = {
   reviews_title?: string;
   show_pillars?: boolean;
   show_products?: boolean;
+  show_vip?: boolean;
   show_japan?: boolean;
   show_line_details?: boolean;
   show_editorial?: boolean;
@@ -101,6 +103,8 @@ function Home() {
           <div className="mt-10 grid gap-6 sm:grid-cols-2 xl:grid-cols-3">{featuredProducts.map((product) => <ProductCard key={product.id} product={product} />)}</div>
         </section>
       )}
+
+      {home?.show_vip !== false && <VipListSection />}
 
       {home?.show_japan !== false && japan && (
         <section className="overflow-hidden bg-[#2b2528] text-ivory">

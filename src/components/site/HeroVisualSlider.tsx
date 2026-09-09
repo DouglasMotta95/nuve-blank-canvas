@@ -26,6 +26,7 @@ export function HeroVisualSlider({ slides }: { slides: HeroVisual[] }) {
   if (usable.length === 0) return null;
 
   const current = usable[active] ?? usable[0];
+  if (!current) return null;
 
   return (
     <div

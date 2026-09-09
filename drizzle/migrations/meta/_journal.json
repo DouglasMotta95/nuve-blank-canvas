@@ -36,6 +36,13 @@
       "when": 1788271321022,
       "tag": "0004_order_tracking_and_stock_reservation",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1788965252781,
+      "tag": "0005_vip_waitlist",
+      "breakpoints": true
     }
   ]
 }

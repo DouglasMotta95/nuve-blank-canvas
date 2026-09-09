@@ -72,7 +72,10 @@ export function Footer() {
               className="mt-3 flex flex-col gap-2 sm:flex-row xl:flex-col 2xl:flex-row"
               onSubmit={async (e) => {
                 e.preventDefault();
-                if (!email.includes("@")) return toast.error("Informe um e-mail válido.");
+                if (!email.includes("@")) {
+                  toast.error("Informe um e-mail válido.");
+                  return;
+                }
                 setBusy(true);
                 try {
                   await subscribeNewsletter({ data: { email: email.trim() } });

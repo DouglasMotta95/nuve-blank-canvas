@@ -64,8 +64,14 @@ function ReviewEditor({ review, onChanged }: { review: ReviewRow; onChanged: () 
 
   async function save() {
     const rating = Number.parseInt(form.rating, 10);
-    if (!form.author_name.trim()) return toast.error("Informe o nome da cliente.");
-    if (!Number.isInteger(rating) || rating < 1 || rating > 5) return toast.error("A nota deve ficar entre 1 e 5.");
+    if (!form.author_name.trim()) {
+      toast.error("Informe o nome da cliente.");
+      return;
+    }
+    if (!Number.isInteger(rating) || rating < 1 || rating > 5) {
+      toast.error("A nota deve ficar entre 1 e 5.");
+      return;
+    }
     setSaving(true);
     try {
       const { error } = await supabase.from("reviews").update({

@@ -23,15 +23,21 @@ import { Route as RastreioRouteImport } from './routes/rastreio'
 import { Route as SobreRouteImport } from './routes/sobre'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as AdminAuditoriaRouteImport } from './routes/admin.auditoria'
+import { Route as AdminAvaliacoesRouteImport } from './routes/admin.avaliacoes'
 import { Route as AdminBannersRouteImport } from './routes/admin.banners'
 import { Route as AdminConfiguracoesRouteImport } from './routes/admin.configuracoes'
 import { Route as AdminCuponsRouteImport } from './routes/admin.cupons'
 import { Route as AdminEstoqueRouteImport } from './routes/admin.estoque'
+import { Route as AdminHomeRouteImport } from './routes/admin.home'
+import { Route as AdminKitsRouteImport } from './routes/admin.kits'
+import { Route as AdminListaVipRouteImport } from './routes/admin.lista-vip'
 import { Route as AdminPedidosRouteImport } from './routes/admin.pedidos'
 import { Route as AdminProdutosRouteImport } from './routes/admin.produtos'
+import { Route as AdminSiteRouteImport } from './routes/admin.site'
 import { Route as PedidoIdRouteImport } from './routes/pedido.$id'
 import { Route as PoliticasSlugRouteImport } from './routes/politicas.$slug'
 import { Route as ProdutoSlugRouteImport } from './routes/produto.$slug'
+import { Route as AdminProdutosNovoRouteImport } from './routes/admin.produtos_.novo'
 import { Route as ApiPublicMidiaSplatRouteImport } from './routes/api/public/midia/$'
 import { Route as ApiPublicWebhooksMercadopagoRouteImport } from './routes/api/public/webhooks/mercadopago'
 
@@ -105,6 +111,11 @@ const AdminAuditoriaRoute = AdminAuditoriaRouteImport.update({
   path: '/auditoria',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminAvaliacoesRoute = AdminAvaliacoesRouteImport.update({
+  id: '/avaliacoes',
+  path: '/avaliacoes',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminBannersRoute = AdminBannersRouteImport.update({
   id: '/banners',
   path: '/banners',
@@ -125,6 +136,21 @@ const AdminEstoqueRoute = AdminEstoqueRouteImport.update({
   path: '/estoque',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminHomeRoute = AdminHomeRouteImport.update({
+  id: '/home',
+  path: '/home',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminKitsRoute = AdminKitsRouteImport.update({
+  id: '/kits',
+  path: '/kits',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminListaVipRoute = AdminListaVipRouteImport.update({
+  id: '/lista-vip',
+  path: '/lista-vip',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminPedidosRoute = AdminPedidosRouteImport.update({
   id: '/pedidos',
   path: '/pedidos',
@@ -133,6 +159,11 @@ const AdminPedidosRoute = AdminPedidosRouteImport.update({
 const AdminProdutosRoute = AdminProdutosRouteImport.update({
   id: '/produtos',
   path: '/produtos',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminSiteRoute = AdminSiteRouteImport.update({
+  id: '/site',
+  path: '/site',
   getParentRoute: () => AdminRoute,
 } as any)
 const PedidoIdRoute = PedidoIdRouteImport.update({
@@ -149,6 +180,11 @@ const ProdutoSlugRoute = ProdutoSlugRouteImport.update({
   id: '/produto/$slug',
   path: '/produto/$slug',
   getParentRoute: () => rootRouteImport,
+} as any)
+const AdminProdutosNovoRoute = AdminProdutosNovoRouteImport.update({
+  id: '/produtos_/novo',
+  path: '/produtos/novo',
+  getParentRoute: () => AdminRoute,
 } as any)
 const ApiPublicMidiaSplatRoute = ApiPublicMidiaSplatRouteImport.update({
   id: '/api/public/midia/$',
@@ -176,16 +212,22 @@ export interface FileRoutesByFullPath {
   '/rastreio': typeof RastreioRoute
   '/sobre': typeof SobreRoute
   '/admin/auditoria': typeof AdminAuditoriaRoute
+  '/admin/avaliacoes': typeof AdminAvaliacoesRoute
   '/admin/banners': typeof AdminBannersRoute
   '/admin/configuracoes': typeof AdminConfiguracoesRoute
   '/admin/cupons': typeof AdminCuponsRoute
   '/admin/estoque': typeof AdminEstoqueRoute
+  '/admin/home': typeof AdminHomeRoute
+  '/admin/kits': typeof AdminKitsRoute
+  '/admin/lista-vip': typeof AdminListaVipRoute
   '/admin/pedidos': typeof AdminPedidosRoute
   '/admin/produtos': typeof AdminProdutosRoute
+  '/admin/site': typeof AdminSiteRoute
   '/pedido/$id': typeof PedidoIdRoute
   '/politicas/$slug': typeof PoliticasSlugRoute
   '/produto/$slug': typeof ProdutoSlugRoute
   '/admin/': typeof AdminIndexRoute
+  '/admin/produtos/novo': typeof AdminProdutosNovoRoute
   '/api/public/midia/$': typeof ApiPublicMidiaSplatRoute
   '/api/public/webhooks/mercadopago': typeof ApiPublicWebhooksMercadopagoRoute
 }
@@ -202,16 +244,22 @@ export interface FileRoutesByTo {
   '/rastreio': typeof RastreioRoute
   '/sobre': typeof SobreRoute
   '/admin/auditoria': typeof AdminAuditoriaRoute
+  '/admin/avaliacoes': typeof AdminAvaliacoesRoute
   '/admin/banners': typeof AdminBannersRoute
   '/admin/configuracoes': typeof AdminConfiguracoesRoute
   '/admin/cupons': typeof AdminCuponsRoute
   '/admin/estoque': typeof AdminEstoqueRoute
+  '/admin/home': typeof AdminHomeRoute
+  '/admin/kits': typeof AdminKitsRoute
+  '/admin/lista-vip': typeof AdminListaVipRoute
   '/admin/pedidos': typeof AdminPedidosRoute
   '/admin/produtos': typeof AdminProdutosRoute
+  '/admin/site': typeof AdminSiteRoute
   '/pedido/$id': typeof PedidoIdRoute
   '/politicas/$slug': typeof PoliticasSlugRoute
   '/produto/$slug': typeof ProdutoSlugRoute
   '/admin': typeof AdminIndexRoute
+  '/admin/produtos/novo': typeof AdminProdutosNovoRoute
   '/api/public/midia/$': typeof ApiPublicMidiaSplatRoute
   '/api/public/webhooks/mercadopago': typeof ApiPublicWebhooksMercadopagoRoute
 }
@@ -230,16 +278,22 @@ export interface FileRoutesById {
   '/rastreio': typeof RastreioRoute
   '/sobre': typeof SobreRoute
   '/admin/auditoria': typeof AdminAuditoriaRoute
+  '/admin/avaliacoes': typeof AdminAvaliacoesRoute
   '/admin/banners': typeof AdminBannersRoute
   '/admin/configuracoes': typeof AdminConfiguracoesRoute
   '/admin/cupons': typeof AdminCuponsRoute
   '/admin/estoque': typeof AdminEstoqueRoute
+  '/admin/home': typeof AdminHomeRoute
+  '/admin/kits': typeof AdminKitsRoute
+  '/admin/lista-vip': typeof AdminListaVipRoute
   '/admin/pedidos': typeof AdminPedidosRoute
   '/admin/produtos': typeof AdminProdutosRoute
+  '/admin/site': typeof AdminSiteRoute
   '/pedido/$id': typeof PedidoIdRoute
   '/politicas/$slug': typeof PoliticasSlugRoute
   '/produto/$slug': typeof ProdutoSlugRoute
   '/admin/': typeof AdminIndexRoute
+  '/admin/produtos_/novo': typeof AdminProdutosNovoRoute
   '/api/public/midia/$': typeof ApiPublicMidiaSplatRoute
   '/api/public/webhooks/mercadopago': typeof ApiPublicWebhooksMercadopagoRoute
 }
@@ -259,16 +313,22 @@ export interface FileRouteTypes {
     | '/rastreio'
     | '/sobre'
     | '/admin/auditoria'
+    | '/admin/avaliacoes'
     | '/admin/banners'
     | '/admin/configuracoes'
     | '/admin/cupons'
     | '/admin/estoque'
+    | '/admin/home'
+    | '/admin/kits'
+    | '/admin/lista-vip'
     | '/admin/pedidos'
     | '/admin/produtos'
+    | '/admin/site'
     | '/pedido/$id'
     | '/politicas/$slug'
     | '/produto/$slug'
     | '/admin/'
+    | '/admin/produtos/novo'
     | '/api/public/midia/$'
     | '/api/public/webhooks/mercadopago'
   fileRoutesByTo: FileRoutesByTo
@@ -285,16 +345,22 @@ export interface FileRouteTypes {
     | '/rastreio'
     | '/sobre'
     | '/admin/auditoria'
+    | '/admin/avaliacoes'
     | '/admin/banners'
     | '/admin/configuracoes'
     | '/admin/cupons'
     | '/admin/estoque'
+    | '/admin/home'
+    | '/admin/kits'
+    | '/admin/lista-vip'
     | '/admin/pedidos'
     | '/admin/produtos'
+    | '/admin/site'
     | '/pedido/$id'
     | '/politicas/$slug'
     | '/produto/$slug'
     | '/admin'
+    | '/admin/produtos/novo'
     | '/api/public/midia/$'
     | '/api/public/webhooks/mercadopago'
   id:
@@ -312,16 +378,22 @@ export interface FileRouteTypes {
     | '/rastreio'
     | '/sobre'
     | '/admin/auditoria'
+    | '/admin/avaliacoes'
     | '/admin/banners'
     | '/admin/configuracoes'
     | '/admin/cupons'
     | '/admin/estoque'
+    | '/admin/home'
+    | '/admin/kits'
+    | '/admin/lista-vip'
     | '/admin/pedidos'
     | '/admin/produtos'
+    | '/admin/site'
     | '/pedido/$id'
     | '/politicas/$slug'
     | '/produto/$slug'
     | '/admin/'
+    | '/admin/produtos_/novo'
     | '/api/public/midia/$'
     | '/api/public/webhooks/mercadopago'
   fileRoutesById: FileRoutesById
@@ -446,6 +518,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminAuditoriaRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/avaliacoes': {
+      id: '/admin/avaliacoes'
+      path: '/avaliacoes'
+      fullPath: '/admin/avaliacoes'
+      preLoaderRoute: typeof AdminAvaliacoesRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/banners': {
       id: '/admin/banners'
       path: '/banners'
@@ -474,6 +553,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminEstoqueRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/home': {
+      id: '/admin/home'
+      path: '/home'
+      fullPath: '/admin/home'
+      preLoaderRoute: typeof AdminHomeRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/kits': {
+      id: '/admin/kits'
+      path: '/kits'
+      fullPath: '/admin/kits'
+      preLoaderRoute: typeof AdminKitsRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/lista-vip': {
+      id: '/admin/lista-vip'
+      path: '/lista-vip'
+      fullPath: '/admin/lista-vip'
+      preLoaderRoute: typeof AdminListaVipRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/pedidos': {
       id: '/admin/pedidos'
       path: '/pedidos'
@@ -486,6 +586,13 @@ declare module '@tanstack/react-router' {
       path: '/produtos'
       fullPath: '/admin/produtos'
       preLoaderRoute: typeof AdminProdutosRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/site': {
+      id: '/admin/site'
+      path: '/site'
+      fullPath: '/admin/site'
+      preLoaderRoute: typeof AdminSiteRouteImport
       parentRoute: typeof AdminRoute
     }
     '/pedido/$id': {
@@ -509,6 +616,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProdutoSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/produtos_/novo': {
+      id: '/admin/produtos_/novo'
+      path: '/produtos/novo'
+      fullPath: '/admin/produtos/novo'
+      preLoaderRoute: typeof AdminProdutosNovoRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/api/public/midia/$': {
       id: '/api/public/midia/$'
       path: '/api/public/midia/$'
@@ -528,24 +642,36 @@ declare module '@tanstack/react-router' {
 
 interface AdminRouteChildren {
   AdminAuditoriaRoute: typeof AdminAuditoriaRoute
+  AdminAvaliacoesRoute: typeof AdminAvaliacoesRoute
   AdminBannersRoute: typeof AdminBannersRoute
   AdminConfiguracoesRoute: typeof AdminConfiguracoesRoute
   AdminCuponsRoute: typeof AdminCuponsRoute
   AdminEstoqueRoute: typeof AdminEstoqueRoute
+  AdminHomeRoute: typeof AdminHomeRoute
+  AdminKitsRoute: typeof AdminKitsRoute
+  AdminListaVipRoute: typeof AdminListaVipRoute
   AdminPedidosRoute: typeof AdminPedidosRoute
   AdminProdutosRoute: typeof AdminProdutosRoute
+  AdminSiteRoute: typeof AdminSiteRoute
   AdminIndexRoute: typeof AdminIndexRoute
+  AdminProdutosNovoRoute: typeof AdminProdutosNovoRoute
 }
 
 const AdminRouteChildren: AdminRouteChildren = {
   AdminAuditoriaRoute: AdminAuditoriaRoute,
+  AdminAvaliacoesRoute: AdminAvaliacoesRoute,
   AdminBannersRoute: AdminBannersRoute,
   AdminConfiguracoesRoute: AdminConfiguracoesRoute,
   AdminCuponsRoute: AdminCuponsRoute,
   AdminEstoqueRoute: AdminEstoqueRoute,
+  AdminHomeRoute: AdminHomeRoute,
+  AdminKitsRoute: AdminKitsRoute,
+  AdminListaVipRoute: AdminListaVipRoute,
   AdminPedidosRoute: AdminPedidosRoute,
   AdminProdutosRoute: AdminProdutosRoute,
+  AdminSiteRoute: AdminSiteRoute,
   AdminIndexRoute: AdminIndexRoute,
+  AdminProdutosNovoRoute: AdminProdutosNovoRoute,
 }
 
 const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
