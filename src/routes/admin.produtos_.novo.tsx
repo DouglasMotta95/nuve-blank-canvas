@@ -5,7 +5,7 @@ import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { uploadMedia } from "@/lib/media.functions";
 
-export const Route = createFileRoute("/admin/produtos/novo")({
+export const Route = createFileRoute("/admin/produtos_/novo")({
   head: () => ({ meta: [{ title: "Novo produto — Painel NUVE" }, { name: "robots", content: "noindex,nofollow" }] }),
   component: NovoProduto,
 });
