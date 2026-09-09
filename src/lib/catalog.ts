@@ -65,12 +65,12 @@ export type Banner = {
 const SELECT = "*, product_images(id,url,alt,sort_order,is_cover,fit,is_before_after)";
 
 function normalize(row: Record<string, unknown>): Product {
-  const rawImages = Array.isArray(row.product_images) ? row.product_images : [];
+  const rawImages = Array.isArray(row["product_images"]) ? row["product_images"] : [];
   return {
     ...row,
-    benefits: Array.isArray(row.benefits) ? row.benefits : [],
-    actives: Array.isArray(row.actives) ? row.actives : [],
-    how_to_use: Array.isArray(row.how_to_use) ? row.how_to_use : [],
+    benefits: Array.isArray(row["benefits"]) ? row["benefits"] : [],
+    actives: Array.isArray(row["actives"]) ? row["actives"] : [],
+    how_to_use: Array.isArray(row["how_to_use"]) ? row["how_to_use"] : [],
     product_images: (rawImages as ProductImage[]).sort((a, b) => a.sort_order - b.sort_order),
   } as Product;
 }
