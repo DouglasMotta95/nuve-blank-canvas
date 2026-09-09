@@ -28,6 +28,7 @@ type HomeContent = {
   reviews_title?: string;
   show_pillars?: boolean;
   show_products?: boolean;
+  show_vip?: boolean;
   show_japan?: boolean;
   show_line_details?: boolean;
   show_editorial?: boolean;

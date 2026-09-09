@@ -30,6 +30,7 @@ import { Route as AdminCuponsRouteImport } from './routes/admin.cupons'
 import { Route as AdminEstoqueRouteImport } from './routes/admin.estoque'
 import { Route as AdminHomeRouteImport } from './routes/admin.home'
 import { Route as AdminKitsRouteImport } from './routes/admin.kits'
+import { Route as AdminListaVipRouteImport } from './routes/admin.lista-vip'
 import { Route as AdminPedidosRouteImport } from './routes/admin.pedidos'
 import { Route as AdminProdutosRouteImport } from './routes/admin.produtos'
 import { Route as AdminSiteRouteImport } from './routes/admin.site'
@@ -145,6 +146,11 @@ const AdminKitsRoute = AdminKitsRouteImport.update({
   path: '/kits',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminListaVipRoute = AdminListaVipRouteImport.update({
+  id: '/lista-vip',
+  path: '/lista-vip',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminPedidosRoute = AdminPedidosRouteImport.update({
   id: '/pedidos',
   path: '/pedidos',
@@ -213,6 +219,7 @@ export interface FileRoutesByFullPath {
   '/admin/estoque': typeof AdminEstoqueRoute
   '/admin/home': typeof AdminHomeRoute
   '/admin/kits': typeof AdminKitsRoute
+  '/admin/lista-vip': typeof AdminListaVipRoute
   '/admin/pedidos': typeof AdminPedidosRoute
   '/admin/produtos': typeof AdminProdutosRoute
   '/admin/site': typeof AdminSiteRoute
@@ -244,6 +251,7 @@ export interface FileRoutesByTo {
   '/admin/estoque': typeof AdminEstoqueRoute
   '/admin/home': typeof AdminHomeRoute
   '/admin/kits': typeof AdminKitsRoute
+  '/admin/lista-vip': typeof AdminListaVipRoute
   '/admin/pedidos': typeof AdminPedidosRoute
   '/admin/produtos': typeof AdminProdutosRoute
   '/admin/site': typeof AdminSiteRoute
@@ -277,6 +285,7 @@ export interface FileRoutesById {
   '/admin/estoque': typeof AdminEstoqueRoute
   '/admin/home': typeof AdminHomeRoute
   '/admin/kits': typeof AdminKitsRoute
+  '/admin/lista-vip': typeof AdminListaVipRoute
   '/admin/pedidos': typeof AdminPedidosRoute
   '/admin/produtos': typeof AdminProdutosRoute
   '/admin/site': typeof AdminSiteRoute
@@ -311,6 +320,7 @@ export interface FileRouteTypes {
     | '/admin/estoque'
     | '/admin/home'
     | '/admin/kits'
+    | '/admin/lista-vip'
     | '/admin/pedidos'
     | '/admin/produtos'
     | '/admin/site'
@@ -342,6 +352,7 @@ export interface FileRouteTypes {
     | '/admin/estoque'
     | '/admin/home'
     | '/admin/kits'
+    | '/admin/lista-vip'
     | '/admin/pedidos'
     | '/admin/produtos'
     | '/admin/site'
@@ -374,6 +385,7 @@ export interface FileRouteTypes {
     | '/admin/estoque'
     | '/admin/home'
     | '/admin/kits'
+    | '/admin/lista-vip'
     | '/admin/pedidos'
     | '/admin/produtos'
     | '/admin/site'
@@ -555,6 +567,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminKitsRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/lista-vip': {
+      id: '/admin/lista-vip'
+      path: '/lista-vip'
+      fullPath: '/admin/lista-vip'
+      preLoaderRoute: typeof AdminListaVipRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/pedidos': {
       id: '/admin/pedidos'
       path: '/pedidos'
@@ -630,6 +649,7 @@ interface AdminRouteChildren {
   AdminEstoqueRoute: typeof AdminEstoqueRoute
   AdminHomeRoute: typeof AdminHomeRoute
   AdminKitsRoute: typeof AdminKitsRoute
+  AdminListaVipRoute: typeof AdminListaVipRoute
   AdminPedidosRoute: typeof AdminPedidosRoute
   AdminProdutosRoute: typeof AdminProdutosRoute
   AdminSiteRoute: typeof AdminSiteRoute
@@ -646,6 +666,7 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminEstoqueRoute: AdminEstoqueRoute,
   AdminHomeRoute: AdminHomeRoute,
   AdminKitsRoute: AdminKitsRoute,
+  AdminListaVipRoute: AdminListaVipRoute,
   AdminPedidosRoute: AdminPedidosRoute,
   AdminProdutosRoute: AdminProdutosRoute,
   AdminSiteRoute: AdminSiteRoute,
