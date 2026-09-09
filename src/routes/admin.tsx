@@ -26,6 +26,7 @@ const LINKS = [
   { to: "/admin/banners", label: "Imagens e banners" },
   { to: "/admin/avaliacoes", label: "Avaliações" },
   { to: "/admin/site", label: "Informações do site" },
+  { to: "/admin/lista-vip", label: "Lista VIP" },
   { to: "/admin/cupons", label: "Cupons" },
   { to: "/admin/configuracoes", label: "Configurações" },
   { to: "/admin/auditoria", label: "Auditoria" },
