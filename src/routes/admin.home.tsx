@@ -85,7 +85,10 @@ function AdminHome() {
       value: form as never,
       updated_at: new Date().toISOString(),
     }, { onConflict: "key" });
-    if (error) return toast.error("Não foi possível salvar a página inicial.");
+    if (error) {
+      toast.error("Não foi possível salvar a página inicial.");
+      return;
+    }
     toast.success("Página inicial atualizada.");
     setDraft(null);
     qc.invalidateQueries({ queryKey: ["admin-home-content"] });

@@ -64,9 +64,18 @@ function NovoProduto() {
     const sku = form.sku.trim();
     const price = toCents(form.price);
     const stock = Number.parseInt(form.stock, 10);
-    if (!name || !slug || !sku) return toast.error("Nome, link do produto e SKU são obrigatórios.");
-    if (!price || price <= 0) return toast.error("Informe um preço válido.");
-    if (!Number.isInteger(stock) || stock < 0) return toast.error("Informe um estoque válido.");
+    if (!name || !slug || !sku) {
+      toast.error("Nome, link do produto e SKU são obrigatórios.");
+      return;
+    }
+    if (!price || price <= 0) {
+      toast.error("Informe um preço válido.");
+      return;
+    }
+    if (!Number.isInteger(stock) || stock < 0) {
+      toast.error("Informe um estoque válido.");
+      return;
+    }
 
     setSaving(true);
     let createdProductId: string | null = null;

@@ -87,7 +87,10 @@ function AdminBanners() {
   }
 
   async function createBanner() {
-    if (!newFile) return toast.error("Escolha uma imagem para criar o conteúdo.");
+    if (!newFile) {
+      toast.error("Escolha uma imagem para criar o conteúdo.");
+      return;
+    }
     setCreating(true);
     try {
       const uploaded = await uploadFile(newFile);
@@ -180,7 +183,10 @@ function BannerEditor({ banner, onChanged, uploadFile }: { banner: BannerRow; on
       active: form.active,
     };
     const { error } = await supabase.from("banners").update(payload as never).eq("id", banner.id);
-    if (error) return toast.error("Não foi possível salvar este conteúdo.");
+    if (error) {
+      toast.error("Não foi possível salvar este conteúdo.");
+      return;
+    }
     toast.success("Alterações salvas.");
     onChanged();
   }
@@ -206,7 +212,10 @@ function BannerEditor({ banner, onChanged, uploadFile }: { banner: BannerRow; on
 
   async function removeMobile() {
     const { error } = await supabase.from("banners").update({ image_mobile: null }).eq("id", banner.id);
-    if (error) return toast.error("Não foi possível remover a imagem mobile.");
+    if (error) {
+      toast.error("Não foi possível remover a imagem mobile.");
+      return;
+    }
     toast.success("Imagem mobile removida.");
     onChanged();
   }
@@ -214,7 +223,10 @@ function BannerEditor({ banner, onChanged, uploadFile }: { banner: BannerRow; on
   async function removeBanner() {
     if (!window.confirm("Remover este conteúdo do site?")) return;
     const { error } = await supabase.from("banners").delete().eq("id", banner.id);
-    if (error) return toast.error("Não foi possível remover.");
+    if (error) {
+      toast.error("Não foi possível remover.");
+      return;
+    }
     toast.success("Conteúdo removido.");
     onChanged();
   }

@@ -87,10 +87,19 @@ function AdminKits() {
   async function createKit() {
     const name = draft.name.trim();
     const slug = draft.slug.trim().toLowerCase().replace(/[^a-z0-9-]+/g, "-").replace(/^-+|-+$/g, "");
-    if (!name || !slug) return toast.error("Nome e link do kit são obrigatórios.");
-    if (draft.product_slugs.length < 2) return toast.error("Escolha pelo menos 2 produtos para o kit.");
+    if (!name || !slug) {
+      toast.error("Nome e link do kit são obrigatórios.");
+      return;
+    }
+    if (draft.product_slugs.length < 2) {
+      toast.error("Escolha pelo menos 2 produtos para o kit.");
+      return;
+    }
     const percentOff = Number(draft.percent_off);
-    if (!Number.isFinite(percentOff) || percentOff < 0 || percentOff > 100) return toast.error("Desconto inválido.");
+    if (!Number.isFinite(percentOff) || percentOff < 0 || percentOff > 100) {
+      toast.error("Desconto inválido.");
+      return;
+    }
 
     setCreating(true);
     try {
@@ -186,10 +195,19 @@ function KitEditor({ kit, products, onChanged }: { kit: KitRow; products: Produc
   }
 
   async function save() {
-    if (!form.name.trim() || !form.slug.trim()) return toast.error("Nome e link do kit são obrigatórios.");
-    if (form.product_slugs.length < 2) return toast.error("Escolha pelo menos 2 produtos.");
+    if (!form.name.trim() || !form.slug.trim()) {
+      toast.error("Nome e link do kit são obrigatórios.");
+      return;
+    }
+    if (form.product_slugs.length < 2) {
+      toast.error("Escolha pelo menos 2 produtos.");
+      return;
+    }
     const percentOff = Number(form.percent_off);
-    if (!Number.isFinite(percentOff) || percentOff < 0 || percentOff > 100) return toast.error("Desconto inválido.");
+    if (!Number.isFinite(percentOff) || percentOff < 0 || percentOff > 100) {
+      toast.error("Desconto inválido.");
+      return;
+    }
     setBusy(true);
     try {
       const payload = {
@@ -232,7 +250,10 @@ function KitEditor({ kit, products, onChanged }: { kit: KitRow; products: Produc
   async function remove() {
     if (!window.confirm("Excluir este kit?")) return;
     const { error } = await supabase.from("kits").delete().eq("id", kit.id);
-    if (error) return toast.error("Não foi possível excluir o kit.");
+    if (error) {
+      toast.error("Não foi possível excluir o kit.");
+      return;
+    }
     toast.success("Kit excluído.");
     onChanged();
   }
